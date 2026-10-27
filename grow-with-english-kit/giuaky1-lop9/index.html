@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>body{margin:0}</style></head><body>
+<title>Kiểm tra giữa kỳ I · Lớp 9</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap">
+<style>
+/* Layout: một cột hẹp như tờ bài tập; hàng nhóm bài và hàng bài con cuộn ngang; mỗi bài nộp một lần rồi khóa */
+:root{
+  --bg:#f1f5f3; --card:#ffffff; --ink:#1c2b33; --mute:#5b6b73; --line:#d6e0dc;
+  --brand:#0b7a75; --brand-ink:#ffffff; --hi:#fff1b8; --hi-line:#e2c14a;
+  --ok:#17703f; --ok-bg:#e2f4e9; --bad:#a8321d; --bad-bg:#fde8e3; --chip:#eaf1ee;
+  --f-display:"Baloo 2","Be Vietnam Pro",system-ui,sans-serif;
+  --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#11191c; --card:#1a2529; --ink:#e6eeea; --mute:#9fb1ab; --line:#2d3b40;
+  --brand:#46c4bb; --brand-ink:#06201e; --hi:#3a3418; --hi-line:#8a742a;
+  --ok:#7ddba5; --ok-bg:#17382a; --bad:#ffa593; --bad-bg:#3d1f1a; --chip:#243237; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11191c; --card:#1a2529; --ink:#e6eeea; --mute:#9fb1ab; --line:#2d3b40;
+  --brand:#46c4bb; --brand-ink:#06201e; --hi:#3a3418; --hi-line:#8a742a;
+  --ok:#7ddba5; --ok-bg:#17382a; --bad:#ffa593; --bad-bg:#3d1f1a; --chip:#243237; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--f-body);
+  padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.banner{background:var(--brand);color:var(--brand-ink);border-radius:16px;padding:18px 20px}
+.banner small{font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.85;font-size:12px}
+.banner h1{font:700 26px/1.2 var(--f-display);margin:4px 0 2px;text-wrap:balance}
+.banner p{margin:0;opacity:.9}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+.info{display:grid;grid-template-columns:2fr 1fr;gap:10px}
+.info label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;min-width:0}
+.info input{font:inherit;font-weight:400;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);min-width:0}
+.rule{grid-column:1/-1;margin:2px 0 0;color:var(--mute);font-size:13px}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+@media(max-width:560px){.info{grid-template-columns:1fr}}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.tab{flex:0 0 auto;text-align:left;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:8px 12px;font:inherit;cursor:pointer;min-width:112px}
+.tab b{display:block;font-size:13px}
+.tab span{font-size:12px;color:var(--mute)}
+.tab.on{border-color:var(--brand);box-shadow:inset 0 0 0 1px var(--brand)}
+.tab.done span{color:var(--ok);font-weight:600}
+.tabs.sub .tab{min-width:96px;padding:6px 10px;border-radius:10px;background:var(--chip)}
+.tabs.sub .tab.on{background:var(--card)}
+.sechead h2{font:700 22px/1.2 var(--f-display);margin:0}
+.sechead p{margin:2px 0 0;color:var(--mute);font-size:13px}
+.instr{background:var(--chip);border-radius:10px;padding:10px 12px;font-size:14px;margin-top:10px}
+.tip{background:var(--hi);border:1px solid var(--hi-line);border-radius:12px;padding:10px 14px;font-size:14px;overflow-x:auto}
+.tip b{display:block;margin-bottom:2px}
+.theory p{margin:6px 0}
+.theory table{margin:6px 0;min-width:420px}
+.theory th,.theory td{border:1px solid var(--hi-line);padding:5px 8px;font-size:13px;vertical-align:top}
+.q{border-top:1px dashed var(--line);padding-top:14px;margin-top:14px}
+.q:first-of-type{margin-top:0}
+.q.miss{border:1.5px solid var(--bad);border-radius:10px;padding:10px;background:var(--bad-bg)}
+.warn{color:var(--bad);font-weight:600;font-size:13px;margin-top:6px}
+.qn{display:inline-grid;place-items:center;min-width:26px;height:26px;border-radius:8px;background:var(--hi);font-weight:700;font-size:13px;margin-right:8px;padding:0 4px;color:var(--ink)}
+.qt{margin:0 0 8px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{font:inherit;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 12px;cursor:pointer;text-align:left;min-width:0;max-width:100%}
+.opt b{color:var(--brand);margin-right:4px}
+.opt:hover:not(:disabled){border-color:var(--brand)}
+.opt.sel{border-color:var(--brand);background:var(--chip)}
+.opt.right{border-color:var(--ok);background:var(--ok-bg)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg);text-decoration:line-through}
+.opt:disabled{cursor:default}
+u{text-underline-offset:3px}
+.fb{margin-top:10px;border-radius:10px;padding:10px 12px;font-size:14px;display:flex;flex-direction:column;gap:3px}
+.fb.ok{background:var(--ok-bg);color:var(--ok)} .fb.no{background:var(--bad-bg);color:var(--bad)} .fb.neu{background:var(--chip);color:var(--ink)}
+.fb div{color:var(--ink)} .fb strong{font-size:14px}
+.fb .vn{color:var(--mute);font-style:italic}
+.gl{margin-top:4px;padding-top:6px;border-top:1px solid var(--line);display:grid;gap:2px;font-size:13px}
+.gl span{color:var(--mute)} .gl .c{color:var(--ok);font-weight:600}
+.passage{background:var(--chip);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.passage h3{font:700 16px var(--f-display);margin:0 0 4px}
+.passage p{margin:6px 0}
+.passage .pvi{color:var(--mute);font-style:italic;font-size:14px;border-top:1px dashed var(--line);margin-top:8px;padding-top:6px}
+.blank{display:inline-block;min-width:44px;text-align:center;border-bottom:2px solid var(--brand);color:var(--brand);font-weight:700;margin:0 2px}
+.txt{font:inherit;width:100%;max-width:340px;padding:8px 10px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+textarea.txt{max-width:none;min-height:64px;resize:vertical}
+select.txt{max-width:260px}
+.txt:disabled{opacity:1;color:var(--ink)}
+.txt.right{border-color:var(--ok);background:var(--ok-bg)} .txt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px}
+.btn{font:600 15px var(--f-body);background:var(--brand);color:var(--brand-ink);border:0;border-radius:10px;padding:10px 18px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--brand);border:1.5px solid var(--brand)}
+.note{color:var(--mute);font-size:13px}
+.score{font:700 20px var(--f-display);color:var(--brand)}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute)}
+.scroll{overflow-x:auto}
+.sk{padding:10px 0;border-top:1px dashed var(--line)}
+.skh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.skh b{flex:1 1 90px}
+.pill{font-size:12px;font-weight:600;padding:2px 10px;border-radius:999px}
+.pill.ok{background:var(--ok-bg);color:var(--ok)} .pill.mid{background:var(--hi);color:var(--ink)} .pill.no{background:var(--bad-bg);color:var(--bad)}
+.bar{height:8px;background:var(--chip);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--brand)}
+.bar.ok i{background:var(--ok)} .bar.mid i{background:var(--hi-line)} .bar.no i{background:var(--bad)}
+.sum{background:var(--chip);border-radius:10px;padding:10px 12px;margin:10px 0 4px;font-size:14px}
+.sk p{margin:6px 0 0}
+.vrow.rev td:first-child{box-shadow:inset 3px 0 0 var(--bad)}
+.vrow td{font-size:14px}
+.vsearch{font:inherit;width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);margin:8px 0}
+textarea.rep{width:100%;min-height:200px;font:13px/1.5 ui-monospace,Menlo,Consolas,monospace;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;max-width:90vw;z-index:20}
+</style>
+
+<div class="wrap">
+  <header class="banner">
+    <small>Grow with English · Ms. Minh Thư</small>
+    <h1>Kiểm tra giữa kỳ I · Lớp 9</h1>
+    <p>2 đề luyện (31 câu và 40 câu). Nộp từng phần để xem đáp án, giải thích và nhận xét kỹ năng.</p>
+  </header>
+
+  <section class="card info">
+    <label for="sName">Họ và tên học sinh *<input id="sName" placeholder="VD: Nguyễn Minh Anh" autocomplete="off"></label>
+    <label for="sClass">Lớp *<input id="sClass" placeholder="VD: 12A1" autocomplete="off"></label>
+    <p class="rule">Phải <b>làm đủ tất cả các câu</b> của bài thì mới bấm được <b>Nộp bài này</b>. Mỗi bài chỉ nộp được 1 lần và không sửa lại được. Điểm và nhận xét sẽ tự gửi về cô sau mỗi lần nộp.</p>
+  </section>
+
+  <nav class="tabs" id="tabs" aria-label="Nhóm bài"></nav>
+  <nav class="tabs sub" id="subtabs" aria-label="Các bài trong nhóm"></nav>
+  <main id="main" class="wrap" style="gap:14px"></main>
+</div>
+<div id="toast" hidden></div>
+
+<script>
+var DATA=(function(){
+/* Đề kiểm tra giữa HKI lớp 9 (file "(26.10) TEST_ GRADE 9 _ GIỮA HKI.docx"). File gốc không có đáp án: đáp án dưới đây do giáo viên/Claude giải. */
+var LL='ABCD';
+function M(n,p,o,a,sk,tp,ex,alt){var q={t:'mcq',n:n,p:p,o:o,g:['','','',''],a:LL.indexOf(a),sk:sk,tp:tp,ex:ex};if(alt)q.alt=alt.split('').map(function(c){return LL.indexOf(c)});return q}
+function F(n,p,a,sk,tp,ex,ph){return {t:'fill',n:n,p:p,a:a,sk:sk,tp:tp,ex:ex,ph:ph}}
+function T(n,p,model,ex,ph){return {t:'trans',n:n,p:p,model:model,ex:ex,sk:'wr',tp:'',ph:ph||'Em viết câu trả lời của mình'}}
+function B(n){return '<span class="blank">('+n+') ______</span>'}
+function S(id,grp,title,sub,instr,sk,qs,groups,selfcheck){
+  var s={id:id,grp:grp,title:title,sub:sub,instr:instr,sk:sk,selfcheck:!!selfcheck,qs:qs,groups:[]};
+  (groups||[]).forEach(function(g,gi){
+    var idx=[];qs.forEach(function(q,i){if(q.n>=g.from&&q.n<=g.to){q.gi=gi;idx.push(i)}});
+    s.groups.push({i:gi,title:g.title||'',html:g.html,vi:'',qs:idx});
+  });
+  return s;
+}
+var D1='Đề 1 (31 câu)', D2='Đề 2 (40 câu)';
+var secs=[];
+
+/* ================= ĐỀ 1 ================= */
+secs.push(S('d1p','',
+ 'Phát âm','Phát âm & trọng âm','Câu 1–2: chọn từ có phần gạch chân phát âm khác. Câu 3–4: chọn từ có trọng âm chính khác.','pa',[
+ M(1,'Chọn từ có phần gạch chân phát âm khác:',['visit<u>ed</u>','hand<u>ed</u>','congest<u>ed</u>','preserv<u>ed</u>'],'D','pa','đuôi -ed (câu 1)','Đuôi -ed sau âm /t/, /d/ đọc /ɪd/: visited, handed, congested. preserved đọc /d/.'),
+ M(2,'Chọn từ có phần gạch chân phát âm khác:',['garb<u>a</u>ge','distr<u>a</u>ction','b<u>a</u>lance','h<u>a</u>ndicraft'],'A','pa','âm a (câu 2)','garbage /ˈɡɑːbɪdʒ/: a đọc /ɑː/. distraction, balance, handicraft: a đọc /æ/.'),
+ M(3,'Chọn từ có trọng âm chính khác:',['suburb','delight','helpline','workshop'],'B','pa','trọng âm 2 âm tiết (câu 3)','delight /dɪˈlaɪt/ nhấn âm 2. suburb, helpline, workshop nhấn âm 1.'),
+ M(4,'Chọn từ có trọng âm chính khác:',['handicraft','collector','department','opinion'],'A','pa','trọng âm 3 âm tiết (câu 4)','handicraft /ˈhændikrɑːft/ nhấn âm 1. collector, department, opinion nhấn âm 2.')
+]));
+secs.push(S('d1g','',
+ 'Từ vựng – Ngữ pháp','Chọn đáp án đúng','Chọn đáp án đúng để hoàn thành mỗi câu.','np',[
+ M(5,'We need to decide ______ to visit the floating market in the Mekong Delta, in the morning or in the afternoon.',['when','what','how','where'],'A','np','từ để hỏi + to V (câu 5)','Phần sau hỏi thời gian "in the morning or in the afternoon" → <b>when</b> + to V.'),
+ M(6,'We should not throw trash in the river to ______ water pollution.',['carry out','hand down','cut down on','find out'],'C','tv','cut down on (câu 6)','<b>cut down on</b> = cắt giảm. carry out = thực hiện; hand down = truyền lại; find out = tìm ra.'),
+ M(7,'The ______ the computer is, the ______ the price you have to pay.',['more modern – higher','moderner – higher','more modern – more high','moderner – more high'],'A','np','so sánh kép (câu 7)','So sánh kép: The + so sánh hơn ..., the + so sánh hơn ... modern (2 âm tiết) → <b>more modern</b>; high (1 âm tiết) → <b>higher</b>.'),
+ M(8,'Teenagers ______ drink coke if they don\'t want to gain weight.',['should','shouldn\'t','can','can\'t'],'B','np','should/shouldn\'t (câu 8)','<b>shouldn\'t</b> = không nên: không nên uống nước ngọt nếu không muốn tăng cân.'),
+ M(9,'If Johnny ______ more, he ______ healthier.',['exercised / might feel','will exercise / feel','exercises / might feel','exercises / feels'],'C','np','câu điều kiện loại 1 (câu 9)','Điều kiện loại 1: If + hiện tại đơn (<b>exercises</b>), mệnh đề chính will/may/might + V (<b>might feel</b>).'),
+ M(10,'I haven\'t decided ______ to do first tomorrow.',['when','what','where','how'],'B','np','từ để hỏi + to V (câu 10)','"to do" còn thiếu tân ngữ (làm <i>cái gì</i>) → <b>what</b> + to V.'),
+ M(11,'<b>A:</b> Can you open the door, please?<br><b>B:</b> ______.',['I beg your pardon.','Go ahead.','Go away.','You\'re welcome.'],'B','gt','đáp lời đề nghị (câu 11)','<b>Go ahead</b> = cứ làm đi / được thôi, dùng để đồng ý. I beg your pardon = xin nhắc lại; Go away = đi đi; You\'re welcome = không có gì.')
+]));
+secs.push(S('d1v','',
+ 'Đồng nghĩa – Trái nghĩa','Từ vựng','Câu 12–13: chọn từ GẦN NGHĨA nhất với phần gạch chân. Câu 14–15: chọn từ TRÁI NGHĨA với phần gạch chân.','tv',[
+ M(12,'(Gần nghĩa) Lan Anh <u><b>arrived at</b></u> Trieu Le Dinh\'s wedding in China despite her sickness.',['keen on','surprised at','turned up','looked forward'],'C','tv','arrive at = turn up (câu 12)','arrive at = <b>turn up</b> (đến, xuất hiện). keen on = thích; surprised at = ngạc nhiên về; look forward = mong đợi.'),
+ M(13,'(Gần nghĩa) I have just <u><b>accomplished</b></u> my assignment, so I can go out for a walk.',['managed','finished','put','delayed'],'B','tv','accomplish = finish (câu 13)','accomplish = <b>finish</b> (hoàn thành). manage = xoay xở; put = đặt; delay = trì hoãn.'),
+ M(14,'(Trái nghĩa) I think we should make a greater effort to <u><b>preserve</b></u> our traditional handicraft villages.',['destroy','store','arrange','keep'],'A','tv','preserve ≠ destroy (câu 14)','preserve = bảo tồn ≠ <b>destroy</b> = phá huỷ. store = cất giữ; arrange = sắp xếp; keep = giữ (gần nghĩa).'),
+ M(15,'(Trái nghĩa) It\'s clear that the artisan put a great deal of care and <u><b>attention</b></u> into the new product.',['concentration','function','distraction','attraction'],'C','tv','attention ≠ distraction (câu 15)','attention = sự chú ý ≠ <b>distraction</b> = sự xao nhãng. concentration = sự tập trung (gần nghĩa); function = chức năng; attraction = sự thu hút.')
+]));
+secs.push(S('d1r1','',
+ 'Đọc điền từ','Đọc hiểu','Đọc đoạn văn và chọn từ phù hợp nhất cho mỗi chỗ trống (16–20).','rd',[
+ M(16,'Chỗ trống (16)',['amenities','features','difficulties','inconveniences'],'A','rd','đọc điền từ – câu 16','<b>amenities</b> = tiện ích (trường học, bệnh viện, khu giải trí). features = đặc điểm; difficulties, inconveniences = khó khăn, bất tiện (không phải ưu điểm).'),
+ M(17,'Chỗ trống (17)',['weather','nature','atmosphere','environment'],'D','rd','đọc điền từ – câu 17','A more diverse <b>environment</b> = môi trường đa dạng, mang lại nhiều trải nghiệm văn hoá. Chấp nhận cả atmosphere (bầu không khí). weather = thời tiết; nature = thiên nhiên.','C'),
+ M(18,'Chỗ trống (18)',['air','noise','water','land'],'A','rd','đọc điền từ – câu 18','Ô nhiễm ảnh hưởng tới sức khoẻ cư dân thành phố → <b>air</b> pollution (ô nhiễm không khí).'),
+ M(19,'Chỗ trống (19)',['low','medium','high','safe'],'C','rd','đọc điền từ – câu 19','The <b>high</b> cost of living = chi phí sinh hoạt cao, khớp với "high rent and expensive services".'),
+ M(20,'Chỗ trống (20)',['disadvantages','risks','benefits','threats'],'C','rd','đọc điền từ – câu 20','"Despite these challenges" → người ta vẫn chọn thành phố vì nhiều <b>benefits</b> (lợi ích).')
+],[{from:16,to:20,title:'City life',html:'<p>Living in a city has many benefits and challenges. One of the main advantages is the availability of '+B(16)+' such as schools, hospitals, and entertainment centers. Cities often provide better job opportunities and higher salaries compared to rural areas. Additionally, cities have a more diverse '+B(17)+' offering various cultural experiences and cuisines. However, city life also has its downsides. One significant issue is '+B(18)+' pollution, which can affect residents\' health. Traffic congestion is another common problem, causing long commuting times and stress. The '+B(19)+' cost of living in cities, including high rent and expensive services, can also be a challenge for many people.</p><p>Despite these challenges, many people choose to live in cities because of the numerous '+B(20)+' offer. In conclusion, city life has both positive and negative aspects, and individuals must weigh these factors to decide if it suits their lifestyle.</p>'}]));
+
+var STRESS='<p>Practical stress management can help students deal with their worries and become more productive, competent and efficient. First of all, students must be able to design and stick to a timetable. Choose a relaxing break between work and study, even if it\'s just taking out time to breathe. In addition, a healthy lifestyle is essential for students. Let\'s drink more water as well as take out time to get some air and exercise. Furthermore, organization is very important in academic life for dealing with stress. By keeping academic notes organized, turning in assignments on time, and keeping track of all deadlines, stress can be reduced to a great extent. Stress can also get worse if a person feels lonely. Therefore, by letting out all your thoughts to someone you trust, you immediately feel a lot better. However, if you feel extremely stressed out, take a break and do something you love. Whether it is painting or listening to music, doing something you enjoy can cheer up your mood and distract you from a stressor. It\'s about time that we students accept that we can achieve just as much in life without all the stress.</p>';
+secs.push(S('d1r2','',
+ 'Đọc – trả lời ngắn','Tự đối chiếu','Đọc đoạn văn và trả lời ngắn các câu hỏi 21–23. Viết xong bấm xem đáp án mẫu để tự đối chiếu.','rd',[
+ T(21,'What can students do to lead a healthy lifestyle?','They can drink more water and take time to get some air and exercise.','Dựa vào câu "Let\'s drink more water as well as take out time to get some air and exercise."'),
+ T(22,'Can they achieve just as much in life without all the stress?','Yes, they can.','Câu cuối bài: "...we can achieve just as much in life without all the stress."'),
+ T(23,'Why is organization important in academic life?','Because it helps students deal with stress: keeping notes organized, turning in assignments on time and keeping track of deadlines can reduce stress to a great extent.','Dựa vào câu "By keeping academic notes organized, ... stress can be reduced to a great extent."')
+],[{from:21,to:23,title:'Stress management',html:STRESS}],true));
+secs.push(S('d1r3','',
+ 'Đọc – trắc nghiệm','Đọc hiểu','Đọc lại đoạn văn và chọn đáp án đúng cho câu 24–25.','rd',[
+ M(24,'Practical stress management can help students ______.',['deal with stress','have more time','face up to the worst situation','think critically'],'A','rd','đọc hiểu – câu 24','Câu đầu bài: "help students deal with their worries" → <b>deal with stress</b>.'),
+ M(25,'Which of the following sentences is TRUE?',['You should stay alone when being under pressure.','When you feel lonely, you should grab someone to talk.','The more lonely you are, the more stress you can have.','It is believed that stress can control itself.'],'C','rd','đọc hiểu – câu 25','Bài viết: "Stress can also get worse if a person feels lonely" → càng cô đơn càng căng thẳng (C). B gần ý "letting out all your thoughts to someone you trust" nên cũng được chấp nhận. A, D sai.','B')
+],[{from:24,to:25,title:'Stress management',html:STRESS}]));
+secs.push(S('d1w1','',
+ 'Viết – từ loại','Dạng đúng của từ','Viết dạng đúng của từ trong ngoặc.','wr',[
+ F(26,'A good night\'s sleep will improve your <span class="blank">______</span>. (concentrate)','concentration','tv','từ loại: concentration (câu 26)','Sau tính từ sở hữu "your" cần danh từ: concentrate (v) → <b>concentration</b> (n) = sự tập trung.','Nhập dạng đúng của từ'),
+ F(27,'Teens should learn to be <span class="blank">______</span> when making a presentation. (confidence)','confident','tv','từ loại: confident (câu 27)','Sau "be" cần tính từ: confidence (n) → <b>confident</b> (adj) = tự tin.','Nhập dạng đúng của từ')
+]));
+secs.push(S('d1w2','',
+ 'Viết lại câu','Tự đối chiếu','Hoàn thành câu thứ hai sao cho nghĩa tương tự câu thứ nhất, bắt đầu bằng từ cho sẵn. Viết xong bấm xem đáp án mẫu để tự đối chiếu.','wr',[
+ T(28,'You speak English much; your English will be good.<br>→ The more …','The more you speak English, the better your English will be.','So sánh kép: The more + S + V, the + so sánh hơn + S + V. good → better.','Viết tiếp: The more …'),
+ T(29,'I decided to reduce fast food and start cooking my own meals.<br>→ I decided to cut …','I decided to cut down on fast food and start cooking my own meals.','reduce = <b>cut down on</b> (cắt giảm).','Viết tiếp: I decided to cut …'),
+ T(30,'They are wondering where they can buy traditional handicrafts.<br>→ They are wondering where to …','They are wondering where to buy traditional handicrafts.','Từ để hỏi + to V thay cho mệnh đề "where they can buy".','Viết tiếp: They are wondering where to …'),
+ T(31,'Study hard and you will get good marks in this middle term test.<br>→ If you …','If you study hard, you will get good marks in this middle term test.','Câu mệnh lệnh + and + will → điều kiện loại 1: If + hiện tại đơn, will + V.','Viết tiếp: If you …')
+],null,true));
+secs.slice(0).forEach(function(s){s.grp=D1});
+
+/* ================= ĐỀ 2 ================= */
+var d2=[];
+d2.push(S('d2p',D2,
+ 'Phát âm','Phát âm & trọng âm','Câu 1–2: chọn từ có phần gạch chân phát âm khác. Câu 3–4: chọn từ có trọng âm chính khác.','pa',[
+ M(1,'Chọn từ có phần gạch chân phát âm khác:',['wind<u>ow</u>','d<u>ow</u>ntown','p<u>ow</u>er','cr<u>ow</u>ded'],'A','pa','âm ow (câu 1)','window /ˈwɪndəʊ/: ow đọc /əʊ/. downtown, power, crowded: ow đọc /aʊ/.'),
+ M(2,'Chọn từ có phần gạch chân phát âm khác:',['<u>a</u>ccomplish','<u>a</u>dditional','<u>a</u>nxiety','<u>a</u>ssignment'],'C','pa','âm a đầu từ (câu 2)','anxiety /æŋˈzaɪəti/: a đọc /æ/. accomplish, additional, assignment: a đọc /ə/.'),
+ M(3,'Chọn từ có trọng âm chính khác:',['community','delivery','amenity','optimistic'],'D','pa','trọng âm 4 âm tiết (câu 3)','optimistic /ˌɒptɪˈmɪstɪk/ nhấn âm 3. community, delivery, amenity nhấn âm 2.'),
+ M(4,'Chọn từ có trọng âm chính khác:',['metro','suburb','delay','mental'],'C','pa','trọng âm 2 âm tiết (câu 4)','delay /dɪˈleɪ/ nhấn âm 2. metro, suburb, mental nhấn âm 1.')
+]));
+d2.push(S('d2g',D2,
+ 'Từ vựng – Ngữ pháp','Chọn đáp án đúng','Chọn đáp án đúng cho mỗi câu.','np',[
+ M(5,'We need to ______ our use of plastic to help the environment.',['look for','cut down on','remind','get on (well) with'],'B','tv','cut down on (câu 5)','<b>cut down on</b> = cắt giảm. look for = tìm kiếm; remind = nhắc nhở; get on well with = hoà hợp với.'),
+ M(6,'There are too many ______ in this classroom; it\'s hard for me to pay attention to the lesson.',['difficulties','distractions','obstacles','omissions'],'B','tv','distraction (câu 6)','<b>distractions</b> = những thứ gây xao nhãng, khiến khó tập trung. difficulties = khó khăn; obstacles = trở ngại; omissions = sự bỏ sót.'),
+ M(7,'It is often more ______ to live in the downtown than in the suburbs.',['quite','peaceful','convenient','silent'],'C','tv','convenient (câu 7)','Sống ở trung tâm thường <b>convenient</b> (tiện lợi) hơn ngoại ô. quite là trạng từ; peaceful, silent (yên tĩnh) không đúng với khu trung tâm.'),
+ M(8,'They\'re not sure ______ to contact for support with the community event.',['what','who','why','which'],'B','np','từ để hỏi + to V (câu 8)','Liên hệ <i>ai</i> → <b>who</b> + to V.'),
+ M(9,'To most people, ______ living means both physical and mental health are functioning well together.',['healthy','unhealthy','health','healthily'],'A','tv','healthy living (câu 9)','Trước danh từ "living" cần tính từ mang nghĩa tích cực → <b>healthy</b> living = lối sống lành mạnh.'),
+ M(10,'James and Nga are cleaning up the school yard.<br><b>Nga:</b> "Could you give me a hand with these rubbish bins, James?"<br><b>James:</b> "______"',['Certainly. Where do you want to put them?','Yes, go ahead.','Sure. I don\'t like them much.','I couldn\'t. They\'re over there.'],'A','gt','đáp lời nhờ giúp đỡ (câu 10)','Nga nhờ giúp → James đồng ý và hỏi thêm: <b>Certainly. Where do you want to put them?</b> "Go ahead" dùng để cho phép; C, D không hợp lý.'),
+ M(11,'If you ______ time for relaxation, you will avoid feeling overwhelmed.',['will make','make','should make','must make'],'B','np','câu điều kiện loại 1 (câu 11)','Điều kiện loại 1: If + hiện tại đơn (<b>make</b>), will + V.'),
+ M(12,'______ the traffic is, ______ the commute becomes for workers.',['The more smooth / the easier','The smoother / the better','The smooth / the good','The most smooth / the best'],'B','np','so sánh kép (câu 12)','So sánh kép: <b>The smoother</b> ..., <b>the better</b> ... smooth 1 âm tiết → smoother (không dùng more smooth).')
+]));
+d2.push(S('d2a',D2,
+ 'Thông báo','Đọc điền từ','Đọc thông báo và chọn đáp án đúng cho mỗi chỗ trống (13–16).','rd',[
+ M(13,'Chỗ trống (13)',['excited','excitement','exciting','excite'],'A','np','tính từ -ed/-ing (câu 13)','be <b>excited</b> to V = hào hứng làm gì (cảm xúc của người).'),
+ M(14,'Chỗ trống (14)',['an','a','the','Ø'],'B','np','mạo từ (câu 14)','<b>a</b> + danh từ đếm được số ít, "wonderful" bắt đầu bằng phụ âm.'),
+ M(15,'Chỗ trống (15)',['or','but','and','so'],'A','np','liên từ (câu 15)','Liệt kê các lựa chọn: singing, dancing, <b>or</b> playing an instrument.'),
+ M(16,'Chỗ trống (16)',['accepted','forbidden','necessity','optionally'],'A','rd','đọc điền từ – câu 16','donations are <b>accepted</b> = tiền ủng hộ được nhận (bị động be + V3). forbidden = bị cấm (sai nghĩa).')
+],[{from:13,to:16,title:'Announcement: School Talent Show',html:'<p>Dear Students and Parents,</p><p>We are '+B(13)+' to announce that our annual School Talent Show will take place on October 10th in the main hall. This is '+B(14)+' wonderful opportunity for students to showcase their talents, whether it\'s singing, dancing, '+B(15)+' playing an instrument.</p><p>The show will begin at 6 PM, and we encourage everyone to come and support our talented students. Admission is free, but donations are '+B(16)+' to support future school events.</p><p>Sincerely,</p>'}]));
+d2.push(S('d2l',D2,
+ 'Sắp xếp thư','Viết','Câu 17: chọn thứ tự đúng của các câu để tạo thành lá thư. Câu 18: chọn câu kết thư phù hợp nhất.','wr',[
+ M(17,'Chọn thứ tự đúng của a, b, c:',['a-b-c','c-a-b','a-c-b','c-b-a'],'D','wr','sắp xếp thư (câu 17)','Từ nối chỉ thứ tự: <b>Firstly</b> (c) → <b>In addition</b> (b) → <b>Last but not least</b> (a).'),
+ M(18,'Chọn câu kết thư phù hợp nhất:',['Thank you for your attention to this important matter.','If you are interested in participating, please contact us for more details.','We hope everyone enjoys the new playground equipment.','This concludes our monthly financial report.'],'B','wr','câu kết thư (câu 18)','Thư mời tham gia dự án → kết bằng lời mời liên hệ: <b>If you are interested in participating, please contact us for more details.</b> C, D không liên quan.')
+],[{from:17,to:18,title:'Dear Community Members,',html:'<p>We would like to inform you about an exciting new community project in our neighborhood that aims to bring people together and make our surroundings greener and cleaner.</p><p>_______________________</p><p>a. Last but not least, volunteers are needed to help with planting, watering, and regular maintenance throughout the year.</p><p>b. In addition, the garden will be located behind the local library, and the first planting day is scheduled for Saturday, August 14th. We hope many families and young people will join us on this meaningful day.</p><p>c. Firstly, we are excited to announce a new community garden project starting next month, which will provide a relaxing space for everyone to enjoy nature and learn about plants.</p>'}]));
+d2.push(S('d2r1',D2,
+ 'Đọc điền từ','Đọc hiểu','Đọc đoạn văn và chọn đáp án đúng cho mỗi chỗ trống (19–24).','rd',[
+ M(19,'Chỗ trống (19)',['the','a','an','Ø'],'B','np','mạo từ (câu 19)','make our town <b>a</b> cleaner ... place: "place" là danh từ đếm được số ít, "cleaner" bắt đầu bằng phụ âm.'),
+ M(20,'Chỗ trống (20)',['but','and','but also','nor'],'C','np','not only ... but also (câu 20)','Cấu trúc <b>not only ... but also</b> = không những ... mà còn.'),
+ M(21,'Chỗ trống (21)',['collect','donate','exchange','deliver'],'B','tv','donate (câu 21)','<b>donate</b> = quyên góp quần áo, đồ chơi, sách cho trẻ em vùng khó khăn. collect (thu gom) cũng hợp lý nên được chấp nhận.','A'),
+ M(22,'Chỗ trống (22)',['green space','community house','public park','sports club'],'A','rd','đọc điền từ – câu 22','Dự án khuyến khích trồng thêm cây và hoa → <b>green space</b> (không gian xanh).'),
+ M(23,'Chỗ trống (23)',['happiness','success','surprise','experience'],'A','rd','đọc điền từ – câu 23','bring greater <b>happiness</b> to our hometown = mang lại niềm vui cho quê hương; câu sau: "Everyone feels happy...".'),
+ M(24,'Chỗ trống (24)',['for','on','in','to'],'D','np','contribute to (câu 24)','<b>contribute to</b> + V-ing = góp phần vào việc gì.')
+],[{from:19,to:24,title:'Our Community Projects',html:'<p>Our community always tries to make our town '+B(19)+' cleaner and more beautiful place to live. Every year, volunteers organize charity sales and clean-up campaigns to support local families in need and protect the environment. These meaningful activities not only help people who are less fortunate '+B(20)+' bring neighbours closer together.</p><p>Besides these events, we often '+B(21)+' used clothes, toys, and books for children from disadvantaged areas. Last year, our charity fair was very successful and helped more than one hundred students. This year, we are planning to start a new '+B(22)+' project in the park near the river. The aim is to encourage residents to plant more trees and flowers, creating a fresh and happy environment for everyone.</p><p>Local schools are also taking part in the project by designing posters and holding contests about environmental protection. We hope that these activities will make our community greener, cleaner, and more beautiful. Working together will surely bring greater '+B(23)+' to our hometown and inspire others to do the same. Everyone feels happy when they contribute '+B(24)+' building a better community because it creates a sense of togetherness among people.</p>'}]));
+d2.push(S('d2w',D2,
+ 'Câu đồng nghĩa – Dựng câu','Viết','Câu 25–26: chọn câu gần nghĩa nhất với câu gốc. Câu 27–28: chọn câu được viết đúng từ các từ gợi ý.','wr',[
+ M(25,'We had no food left; nevertheless, we continued to walk.',['We had lost our food; nevertheless, we continued to walk.','We had run out of food; nevertheless, we continued to walk.','We had run with our food; nevertheless, we continued to walk.','We couldn\'t buy more food; nevertheless, we continued to walk.'],'B','wr','câu đồng nghĩa (câu 25)','have no food left = <b>run out of food</b> (hết thức ăn).'),
+ M(26,'I don\'t know how I can get to the swimming pool.',['I don\'t know how I to get to the swimming pool.','I don\'t know how should I go to the swimming pool.','I don\'t know how to get to the swimming pool.','I find which is the nearest swimming pool.'],'C','np','từ để hỏi + to V (câu 26)','how I can get = <b>how to get</b> (từ để hỏi + to V).'),
+ M(27,'you/ want/ take part/ contest/ you/ fill/ this form.',['If you want take part contest, you must filling this form.','You must take part in the contest if you want fill this form.','If you want to taking part in the contest, you must fill this form.','If you want to take part in the contest, you must fill in this form.'],'D','wr','dựng câu (câu 27)','want <b>to</b> V; take part <b>in</b>; must + V nguyên mẫu; fill <b>in</b> a form.'),
+ M(28,'There/ be/ many tall buildings/ city/ so/ it/ crowded/ busy.',['There are many tall buildings in the city, so it is very crowded and busy.','There are many tall buildings in the city, because it is very crowded and busy.','There are many tall buildings in the city, but it is very crowded and busy.','There are many tall buildings in the city, although it is very crowded and busy.'],'A','wr','dựng câu (câu 28)','Gợi ý có "so" (vì vậy, chỉ kết quả) → A.')
+]));
+d2.push(S('d2s',D2,
+ 'Biển báo','Đọc hiểu','Đọc biển báo/thông báo và chọn đáp án đúng.','rd',[
+ M(29,'What does the sign say?<br><img src="bien-bao-camera.png" alt="Biển báo: SECURITY CAMERA IN USE – WARNING" style="max-width:260px;width:100%;margin-top:8px;border-radius:8px">',['Security cameras are not being used in this area.','Security cameras are watching and recording in this area.','There are no security cameras around this building.','Security cameras are only active during the night.'],'B','rd','biển báo (câu 29)','"SECURITY CAMERA IN USE" = camera an ninh <b>đang hoạt động</b>, quan sát và ghi hình khu vực này.'),
+ M(30,'What does the sign say?<br><b>"Please recycle paper and plastic in the bins provided."</b>',['Throw paper and plastic in any trash can.','You should recycle paper and plastic in special bins.','Do not recycle paper and plastic.','Use the recycling bins only for glass.'],'B','rd','biển báo (câu 30)','Yêu cầu tái chế giấy và nhựa vào thùng được đặt sẵn → nên tái chế trong <b>thùng riêng</b>.')
+]));
+var TEEN='<p>Teenagers can maintain a balanced lifestyle by exercising regularly, eating healthily, and taking enough rest. Physical activity is essential for keeping the body fit and strong. It may include cycling, swimming, playing sports, or simply walking to school. Teens are advised to do at least two types of physical activity several times a week to stay energetic and confident.</p><p>Healthy eating also plays a <b>vital</b> role in a teenager\'s life. The body needs food to produce energy and support brain development. A balanced diet should contain the five main food groups: fruit, vegetables, meat, dairy products, and a small amount of sugary foods. Eating properly not only helps maintain a healthy weight but also improves concentration and overall fitness.</p><p>Finally, rest and sleep are both important for good health. Sleep allows the body to repair and recharge itself, while rest helps the mind relax. Activities such as reading, listening to music, or going on a trip can help teenagers <b>relieve</b> stress and regain positive energy for study and daily life.</p>';
+d2.push(S('d2r2',D2,
+ 'Đọc hiểu','Đọc hiểu','Đọc đoạn văn và chọn đáp án đúng cho câu 31–36.','rd',[
+ M(31,'What is the main idea of the passage?',['Teenagers should focus only on studying.','Teenagers need exercise, healthy food, and rest for a balanced life.','Eating sugary food helps teenagers relax.','Sleep is more important than exercise.'],'B','rd','ý chính (câu 31)','Câu đầu bài nêu ý chính: exercising regularly, eating healthily, and taking enough rest.'),
+ M(32,'Which of the following activities is mentioned as a form of exercise?',['Watching TV.','Cycling.','Reading books.','Playing video games.'],'B','rd','chi tiết (câu 32)','"It may include <b>cycling</b>, swimming, playing sports..."'),
+ M(33,'What are the five main food groups mentioned in the passage?',['Fruit, vegetables, meat, dairy, and sugary foods.','Bread, fruit, dairy, fish, and coffee.','Vegetables, candy, meat, milk, and chips.','Fruit, water, rice, meat, and oil.'],'A','rd','chi tiết (câu 33)','"fruit, vegetables, meat, dairy products, and a small amount of sugary foods".'),
+ M(34,'According to the passage, why should teenagers rest?',['To relax their mind and relieve stress.','To save energy for the next day.','To have more time for homework.','To eat and drink more.'],'A','rd','chi tiết (câu 34)','"rest helps the mind relax ... relieve stress".'),
+ M(35,'The word "vital" in paragraph 2 is CLOSEST in meaning to ______.',['important','unusual','easy','expensive'],'A','tv','vital = important (câu 35)','vital = <b>important</b> (quan trọng, thiết yếu).'),
+ M(36,'The word "relieve" in paragraph 3 is OPPOSITE in meaning to ______.',['reduce','decrease','increase','avoid'],'C','tv','relieve ≠ increase (câu 36)','relieve = làm giảm bớt ≠ <b>increase</b> = tăng lên.')
+],[{from:31,to:36,title:'A balanced lifestyle',html:TEEN}]));
+var HELPER=['despite the weather','He is a delivery person in my neighborhood','I really appreciate his manner','He sometimes asks me about my study'];
+d2.push(S('d2c',D2,
+ 'Điền câu vào đoạn','Đọc hiểu','Chọn cụm từ/câu phù hợp nhất cho mỗi chỗ trống (37–40). Mỗi phương án dùng một lần.','rd',[
+ M(37,'Chỗ trống (37)',HELPER,'B','rd','điền câu – câu 37','Câu mở đầu giới thiệu Mr. Nam là ai: <b>He is a delivery person in my neighborhood.</b>'),
+ M(38,'Chỗ trống (38)',HELPER,'D','rd','điền câu – câu 38','Tiếp ý "friendly": chú còn <b>hỏi han việc học của em</b>.'),
+ M(39,'Chỗ trống (39)',HELPER,'A','rd','điền câu – câu 39','Chăm chỉ, có trách nhiệm: giao hàng <b>despite the weather</b> (bất kể thời tiết).'),
+ M(40,'Chỗ trống (40)',HELPER,'C','rd','điền câu – câu 40','Sau ví dụ phải quay lại giao lần hai → <b>I really appreciate his manner</b> (em rất trân trọng cách làm việc của chú).')
+],[{from:37,to:40,title:'My favorite community helper',html:'<p>My favorite community helper is Mr. Nam. '+B(37)+'. He is a friendly person. Whenever he delivers something to us, he smiles happily. '+B(38)+'. In addition, he is hard-working and responsible. He delivers goods to my family and other families in the neighborhood '+B(39)+'. Sometimes, he has to return twice to deliver us a parcel because we are not at home. '+B(40)+'. In general, Mr. Nam is a very dedicated community helper who makes our life easy and comfortable.</p>'}]));
+
+return {secs:secs.concat(d2),vocab:{words:[],phrases:[]},tips:{
+ pa:'Ôn cách đọc đuôi -ed, các âm a/ow và quy tắc trọng âm từ 2–4 âm tiết.',
+ tv:'Ôn từ vựng Unit 1–3 (local community, city life, healthy living), cụm động từ và từ loại.',
+ np:'Ôn từ để hỏi + to V, so sánh kép, câu điều kiện loại 1, should/shouldn\'t, mạo từ.',
+ gt:'Ôn mẫu câu nhờ giúp đỡ, xin phép và cách đáp lại.',
+ rd:'Đọc cả câu chứa chỗ trống, gạch chân từ khoá trong câu hỏi rồi tìm trong bài.',
+ wr:'Ôn từ nối (Firstly, In addition, Last but not least) và các mẫu viết lại câu.'}};
+})();
+var SHEET_URL = ''; // Dán link Web app của Google Apps Script vào đây khi đưa bài lên mạng
+var UNIT = 'Giữa kỳ I - Lớp 9';
+var SECTIONS = DATA.secs, VOCAB = DATA.vocab;
+var SKILLS = {
+ pa:{n:'Phát âm',tip:'Luyện lại quy tắc phát âm và trọng âm, nghe mẫu từng từ.'},
+ tv:{n:'Từ vựng',tip:'Học lại bảng từ vựng, đặt câu với mỗi từ cần ôn.'},
+ np:{n:'Ngữ pháp',tip:'Xem lại công thức sai khiến (have/get), làm thêm bài cùng dạng.'},
+ gt:{n:'Giao tiếp',tip:'Đọc lại mẫu hội thoại.'},
+ rd:{n:'Đọc hiểu',tip:'Xác định loại từ cần điền, đọc cả câu trước khi chọn.'},
+ wr:{n:'Viết',tip:'Chú ý từ nối và thứ tự ý khi sắp xếp đoạn văn.'},
+ ls:{n:'Nghe',tip:'Đọc câu hỏi trước khi nghe.'}
+};
+if(DATA.tips) for(var tk in DATA.tips) SKILLS[tk].tip=DATA.tips[tk];
+var SK_ORDER = ['pa','tv','np','gt','rd','wr','ls'];
+var LEAD = {ex1:'Chọn từ có phần gạch chân phát âm khác với ba từ còn lại.', ex2:'Chọn từ có trọng âm chính khác với ba từ còn lại.', ex5:'Sắp xếp các câu sau thành đoạn văn hợp lý:'};
+var HAS_VOCAB = VOCAB.words.length+VOCAB.phrases.length>0;
+var HOME = HAS_VOCAB?'ref':SECTIONS[0].id;
+var S = {cur:HOME, ans:{}, done:{}, score:{}, warn:{}};
+var $ = function(id){return document.getElementById(id)};
+var L = ['A','B','C','D'];
+function key(s,i){return s+'-'+i}
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function plain(t){return String(t).replace(/<[^>]+>/g,'')}
+function secById(id){return SECTIONS.filter(function(s){return s.id===id})[0]}
+function norm(t){return String(t||'').toLowerCase().replace(/\s+/g,' ').trim()}
+function toast(m){var t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(function(){t.hidden=true},2600)}
+function scored(sec){return sec.qs.filter(function(q){return q.t!=='trans'})}
+function secLabel(s){return s.grp+' - '+s.title}
+
+var GROUPS = [];
+SECTIONS.forEach(function(s){ if(GROUPS.indexOf(s.grp)<0) GROUPS.push(s.grp) });
+
+function answered(sec,i){
+  var q=sec.qs[i], a=S.ans[key(sec.id,i)];
+  if(q.t==='mcq') return a!==undefined;
+  return norm(a)!=='';
+}
+function missingList(sec){var m=[];sec.qs.forEach(function(q,i){ if(!answered(sec,i)) m.push(i) });return m}
+function isRight(sec,i){
+  var q=sec.qs[i], a=S.ans[key(sec.id,i)];
+  if(q.t==='mcq') return a===q.a || (q.alt||[]).indexOf(a)>=0;
+  if(q.t==='fill'||q.t==='sel') return norm(a)===norm(q.a)||(q.alts||[]).some(function(x){return norm(a)===norm(x)});
+  return false;
+}
+
+/* ---------- Nhận xét theo kỹ năng ---------- */
+function stats(ids){
+  var st={};
+  SECTIONS.forEach(function(s){
+    if(!S.done[s.id]||(ids&&ids.indexOf(s.id)<0)) return;
+    s.qs.forEach(function(q,i){
+      if(q.t==='trans') return;
+      var o=st[q.sk]=st[q.sk]||{got:0,max:0,miss:[]};
+      o.max++;
+      if(isRight(s,i)) o.got++; else if(q.tp && o.miss.indexOf(q.tp)<0) o.miss.push(q.tp);
+    });
+  });
+  return st;
+}
+function lvl(p){return p>=80?['Tốt','ok']:(p>=50?['Khá, cần ôn thêm','mid']:['Cần cải thiện','no'])}
+function pct(o){return Math.round(o.got/o.max*100)}
+function clip(a,n){return a.length>n? a.slice(0,n).join('; ')+'; … (+'+(a.length-n)+')' : a.join('; ')}
+function commentText(st){
+  var good=[],weak=[],lines=[];
+  SK_ORDER.forEach(function(k){ if(!st[k]) return; var p=pct(st[k]);
+    if(p>=80) good.push(SKILLS[k].n); else { weak.push(SKILLS[k].n); lines.push(SKILLS[k].n+' ('+p+'%): cần ôn '+clip(st[k].miss,6)+'.'); } });
+  var t='';
+  if(good.length) t+='Làm tốt: '+good.join(', ')+'. ';
+  if(weak.length) t+='Cần cải thiện: '+weak.join(', ')+'. '+lines.join(' ');
+  else if(good.length) t+='Chưa có phần nào cần ôn lại.';
+  return t.trim();
+}
+function feedbackHTML(st){
+  var h='', any=false;
+  SK_ORDER.forEach(function(k){
+    if(!st[k]) return; any=true;
+    var o=st[k], p=pct(o), l=lvl(p);
+    h+='<div class="sk"><div class="skh"><b>'+SKILLS[k].n+'</b><span class="pill '+l[1]+'">'+l[0]+'</span><span>'+o.got+'/'+o.max+'</span></div><div class="bar '+l[1]+'"><i style="width:'+p+'%"></i></div>';
+    if(o.miss.length) h+='<p class="note"><b>Cần ôn:</b> '+esc(clip(o.miss,8))+'. '+esc(SKILLS[k].tip)+'</p>';
+    h+='</div>';
+  });
+  if(!any) return '<p class="note">Nộp một bài để xem nhận xét.</p>';
+  return '<div class="sum">'+esc(commentText(st))+'</div>'+h;
+}
+
+/* ---------- Gửi kết quả ---------- */
+function payload(latestId){
+  var secs=[],tot=0,max=0;
+  SECTIONS.forEach(function(s){ if(S.done[s.id]&&!s.selfcheck){var m=scored(s).length;secs.push({id:s.id,title:secLabel(s),score:S.score[s.id],max:m});tot+=S.score[s.id];max+=m} });
+  var st=stats(), sk=[]; SK_ORDER.forEach(function(k){ if(st[k]) sk.push({k:k,n:SKILLS[k].n,got:st[k].got,max:st[k].max}) });
+  var lt=latestId?secById(latestId):null;
+  return {ts:new Date().toISOString(),name:$('sName').value.trim(),cls:$('sClass').value.trim(),unit:UNIT,latest:(lt&&!lt.selfcheck)?latestId:null,sections:secs,total:tot,max:max,pct:max?Math.round(tot/max*100):0,skills:sk,comment:commentText(st)};
+}
+function sendResult(latestId,manual){
+  if(!SHEET_URL){ if(manual) toast('Bản xem thử chưa gắn Google Sheet. Em dùng Sao chép kết quả nhé.'); return }
+  try{
+    fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload(latestId))})
+      .then(function(){toast('Đã gửi kết quả cho cô.')},function(){toast('Chưa gửi được. Em bấm Sao chép kết quả rồi gửi Zalo nhé.')});
+  }catch(e){toast('Chưa gửi được. Em bấm Sao chép kết quả rồi gửi Zalo nhé.')}
+}
+
+/* ---------- Giao diện ---------- */
+function groupOf(id){ if(id==='ref')return 'Bảng từ vựng'; if(id==='sum')return 'Tổng kết'; return secById(id).grp }
+function renderTabs(){
+  var cg=groupOf(S.cur), h='';
+  if(HAS_VOCAB) h+='<button class="tab'+(cg==='Bảng từ vựng'?' on':'')+'" data-act="tab" data-id="ref"><b>Bảng từ vựng</b><span>'+VOCAB.words.length+' từ · '+VOCAB.phrases.length+' cụm</span></button>';
+  GROUPS.forEach(function(g){
+    var ss=SECTIONS.filter(function(s){return s.grp===g}), d=ss.filter(function(s){return S.done[s.id]}).length;
+    h+='<button class="tab'+(cg===g?' on':'')+(d===ss.length?' done':'')+'" data-act="grp" data-g="'+esc(g)+'"><b>'+esc(g)+'</b><span>'+d+'/'+ss.length+' bài đã nộp</span></button>';
+  });
+  h+='<button class="tab'+(cg==='Tổng kết'?' on':'')+'" data-act="tab" data-id="sum"><b>★ Tổng kết</b><span>Điểm và nhận xét</span></button>';
+  $('tabs').innerHTML=h;
+  var sh='';
+  if(GROUPS.indexOf(cg)>=0){
+    SECTIONS.filter(function(s){return s.grp===cg}).forEach(function(s){
+      var d=S.done[s.id], sc=S.score[s.id], n=scored(s).length;
+      sh+='<button class="tab'+(S.cur===s.id?' on':'')+(d?' done':'')+'" data-act="tab" data-id="'+s.id+'"><b>'+esc(s.title)+'</b><span>'+(d?(s.selfcheck?'✓ Đã xem':'✓ '+sc+'/'+n):('đã làm '+(s.qs.length-missingList(s).length)+'/'+s.qs.length))+'</span></button>';
+    });
+  }
+  $('subtabs').innerHTML=sh; $('subtabs').hidden=!sh;
+}
+
+function groupHTML(sec,g,done){
+  var h='<div class="passage">'+(g.title?'<h3>'+esc(g.title)+'</h3>':'')+g.html;
+  if(done && g.vi) h+='<div class="pvi"><b>Dịch bài đọc:</b> '+esc(g.vi)+'</div>';
+  return h+'</div>';
+}
+
+function qHTML(sec,q,i){
+  var k=key(sec.id,i), done=S.done[sec.id], h='';
+  if(q.gi!==undefined){ var g=sec.groups[q.gi]; if(g.qs[0]===i) h+=groupHTML(sec,g,done); }
+  var ok=done&&isRight(sec,i), wn=!done&&(S.warn[sec.id]||[]).indexOf(i)>=0;
+  h+='<div class="q'+(wn?' miss':'')+'" data-qi="'+i+'" data-sid="'+sec.id+'"><p class="qt"><span class="qn">'+q.n+'</span>';
+  if(q.t==='mcq'){
+    var lead=LEAD[sec.id]||'';
+    h+=(lead&&!q.p?lead:(lead?lead+'<br>':'')+(q.p||'Chọn đáp án đúng:'))+'</p><div class="opts">';
+    q.o.forEach(function(o,oi){
+      var c='opt';
+      if(done){ if(oi===q.a||(q.alt||[]).indexOf(oi)>=0) c+=' right'; else if(S.ans[k]===oi) c+=' wrong'; }
+      else if(S.ans[k]===oi) c+=' sel';
+      h+='<button class="'+c+'" data-act="pick" data-s="'+sec.id+'" data-q="'+i+'" data-o="'+oi+'"'+(done?' disabled':'')+'><b>'+L[oi]+'.</b>'+o+'</button>';
+    });
+    h+='</div>';
+  } else if(q.t==='fill'){
+    h+=q.p+'</p><input class="txt'+(done?(ok?' right':' wrong'):'')+'" id="in-'+k+'" data-k="'+k+'" value="'+esc(S.ans[k]||'')+'" placeholder="'+esc(q.ph||'Nhập dạng đúng của động từ')+'" autocomplete="off" autocapitalize="off"'+(done?' disabled':'')+'>';
+  } else if(q.t==='sel'){
+    h+=q.p+'</p><select class="txt'+(done?(ok?' right':' wrong'):'')+'" id="in-'+k+'" data-k="'+k+'"'+(done?' disabled':'')+'><option value="">— chọn từ —</option>';
+    q.bank.forEach(function(w){h+='<option value="'+esc(w)+'"'+(S.ans[k]===w?' selected':'')+'>'+esc(w)+'</option>'});
+    h+='</select>';
+  } else {
+    h+=q.p+'</p><textarea class="txt" id="in-'+k+'" data-k="'+k+'" placeholder="'+esc(q.ph||'Em viết bản dịch của mình')+'" '+(done?'disabled':'')+'>'+esc(S.ans[k]||'')+'</textarea>';
+  }
+  if(wn) h+='<div class="warn">Câu này chưa trả lời. Em cần làm đủ mọi câu mới nộp được.</div>';
+  if(done){
+    if(q.t==='trans'){
+      h+='<div class="fb neu"><div><b>Đáp án mẫu (em tự đối chiếu):</b> '+esc(q.model)+'</div>'+(q.ex?'<div><b>Giải thích:</b> '+q.ex+'</div>':'')+'</div>';
+    } else {
+      var mine, right;
+      if(q.t==='mcq'){ mine=S.ans[k]===undefined?'(bỏ trống)':L[S.ans[k]]+'. '+plain(q.o[S.ans[k]]); right=L[q.a]+'. '+plain(q.o[q.a]); }
+      else { mine=S.ans[k]?S.ans[k]:'(bỏ trống)'; right=q.a; }
+      h+='<div class="fb '+(ok?'ok':'no')+'"><strong>'+(ok?'✓ Đúng':'✗ Chưa đúng')+'</strong>';
+      if(!ok) h+='<div>Em chọn/viết: <i>'+esc(mine)+'</i></div><div>Đáp án: <b>'+esc(right)+'</b></div>';
+      if(q.ex) h+='<div><b>Giải thích:</b> '+q.ex+'</div>';
+      if(q.vi) h+='<div class="vn"><b>Dịch câu:</b> '+esc(q.vi)+'</div>';
+      if(q.t==='mcq' && q.g.some(function(x){return x})){
+        h+='<div class="gl">';
+        q.o.forEach(function(o,oi){ var cor=(oi===q.a); h+='<div'+(cor?' class="c"':'')+'><b>'+L[oi]+'.</b> '+o+(q.g[oi]?' <span>— '+esc(q.g[oi])+'</span>':'')+'</div>' });
+        h+='</div>';
+      }
+      h+='</div>';
+    }
+  }
+  return h+'</div>';
+}
+
+function renderSection(sec){
+  var done=S.done[sec.id], n=scored(sec).length;
+  var h='<section class="card sechead"><h2>'+esc(sec.grp)+' · '+esc(sec.title)+'</h2><p>'+esc(sec.sub)+' · '+sec.qs.length+' câu'+(sec.selfcheck?' · tự đối chiếu, không tính điểm':'')+'</p><div class="instr">'+esc(sec.instr)+'</div></section>';
+  if(sec.tip) h+='<div class="tip"><b>Kiến thức trọng tâm</b>'+sec.tip+'</div>';
+  h+='<section class="card">';
+  sec.qs.forEach(function(q,i){h+=qHTML(sec,q,i)});
+  h+='<div class="actions">';
+  if(done) h+= sec.selfcheck ? '<span class="score">Đã xem đáp án mẫu</span>' : '<span class="score">'+S.score[sec.id]+'/'+n+' điểm · đã nộp</span>';
+  else h+='<button class="btn" data-act="submit" data-s="'+sec.id+'">'+(sec.selfcheck?'Xem đáp án mẫu':'Nộp bài này')+'</button><span class="note" id="cnt">Đã làm '+(sec.qs.length-missingList(sec).length)+'/'+sec.qs.length+' câu. '+(sec.selfcheck?'Em viết hết các câu trước rồi mới xem đáp án mẫu.':'Phải làm đủ mọi câu mới nộp được. Nộp xong không sửa lại được.')+'</span>';
+  h+='</div>';
+  if(done && !sec.selfcheck) h+='<div style="margin-top:12px"><b>Nhận xét bài này</b>'+feedbackHTML(stats([sec.id]))+'</div>';
+  h+='</section>';
+  return h;
+}
+
+function revSet(){
+  var r=[]; SECTIONS.forEach(function(s){ if(!S.done[s.id]) return; s.qs.forEach(function(q,i){ if(q.sk==='tv' && q.tp && !isRight(s,i)) r.push(norm(q.tp)) }) });
+  return r;
+}
+function renderRef(){
+  var rev=revSet();
+  function isRev(w){w=norm(w);return rev.some(function(t){return t===w||t.indexOf(w)===0||w.indexOf(t)===0})}
+  var h='<section class="card sechead"><h2>Bảng từ vựng</h2><p>'+VOCAB.words.length+' từ và '+VOCAB.phrases.length+' cụm từ của bài. Từ có thanh đỏ là từ em đã làm sai trong các bài đã nộp.</p><input id="vq" class="vsearch" placeholder="Tìm từ hoặc nghĩa…" autocomplete="off"></section>';
+  h+='<section class="card"><div class="scroll"><table id="vt"><thead><tr><th>Từ vựng</th><th>Loại</th><th>Phiên âm</th><th>Nghĩa</th><th>Ví dụ</th></tr></thead><tbody>';
+  VOCAB.words.forEach(function(w){ h+='<tr class="vrow'+(isRev(w[0])?' rev':'')+'"><td><b>'+esc(w[0])+'</b></td><td>'+esc(w[1])+'</td><td>'+esc(w[2])+'</td><td>'+esc(w[3])+'</td><td><i>'+esc(w[4])+'</i></td></tr>' });
+  VOCAB.phrases.forEach(function(w){ h+='<tr class="vrow'+(isRev(w[0])?' rev':'')+'"><td><b>'+esc(w[0])+'</b></td><td>cụm</td><td></td><td>'+esc(w[1])+'</td><td><i>'+esc(w[2])+'</i></td></tr>' });
+  return h+'</tbody></table></div></section>';
+}
+
+function report(){
+  var p=payload(null), t=UNIT+'\nHọc sinh: '+(p.name||'(chưa nhập tên)')+' | Lớp: '+(p.cls||'(chưa nhập lớp)')+'\n';
+  SECTIONS.forEach(function(s){
+    if(s.selfcheck) return;
+    if(S.done[s.id]){ var wrong=[];s.qs.forEach(function(q,i){if(!isRight(s,i))wrong.push(i+1)});
+      t+='\n'+secLabel(s)+': '+S.score[s.id]+'/'+scored(s).length+(wrong.length?' - Sai câu: '+wrong.join(', '):' - Đúng hết'); }
+    else t+='\n'+secLabel(s)+': chưa nộp';
+  });
+  t+='\n\nTỔNG: '+p.total+'/'+p.max+' ('+p.pct+'%)\nNHẬN XÉT: '+p.comment;
+  return t;
+}
+function renderSummary(){
+  var p=payload(null), rows='';
+  SECTIONS.forEach(function(s){
+    if(s.selfcheck) return; var d=S.done[s.id];
+    rows+='<tr><td>'+esc(secLabel(s))+'</td><td>'+(d?S.score[s.id]+'/'+scored(s).length:'—')+'</td><td>'+(d?'Đã nộp':'Chưa nộp')+'</td></tr>';
+  });
+  var h='<section class="card sechead"><h2>Tổng kết</h2><p>Điểm từng bài và nhận xét theo kỹ năng của các bài đã nộp.</p></section>';
+  h+='<section class="card"><div class="scroll"><table><thead><tr><th>Bài</th><th>Điểm</th><th>Trạng thái</th></tr></thead><tbody>'+rows+'</tbody></table></div><p class="score" style="margin:10px 0 0">Tổng: '+p.total+'/'+p.max+(p.max?' ('+p.pct+'%)':'')+'</p></section>';
+  h+='<section class="card"><b>Điểm và nhận xét theo kỹ năng</b>'+feedbackHTML(stats())+'</section>';
+  h+='<section class="card"><b>Gửi kết quả cho giáo viên</b><p class="note" style="margin:4px 0 8px">'+(SHEET_URL?'Kết quả đã tự gửi về bảng tính của cô sau mỗi lần nộp. Bấm Gửi lại nếu mạng bị lỗi.':'Bản xem thử chưa gắn Google Sheet. Bấm Sao chép rồi dán vào Zalo gửi cô.')+'</p><textarea class="rep" id="rep" readonly>'+esc(report())+'</textarea><div class="actions"><button class="btn" data-act="send">Gửi kết quả cho cô</button><button class="btn ghost" data-act="copy">Sao chép kết quả</button><button class="btn ghost" data-act="reset">Làm lại từ đầu</button></div></section>';
+  return h;
+}
+
+function render(){
+  renderTabs();
+  $('main').innerHTML = S.cur==='ref' ? renderRef() : (S.cur==='sum' ? renderSummary() : renderSection(secById(S.cur)));
+}
+
+function submitSec(id){
+  var sec=secById(id);
+  if(!sec.selfcheck && (!$('sName').value.trim()||!$('sClass').value.trim())){toast('Em nhập Họ tên và Lớp trước khi nộp nhé.');$('sName').focus();return}
+  var miss=missingList(sec);
+  if(miss.length){
+    S.warn[id]=miss; render();
+    var f=document.querySelector('.q.miss'); if(f&&f.scrollIntoView) f.scrollIntoView({behavior:'smooth',block:'center'});
+    toast('Còn '+miss.length+' câu chưa làm: câu '+miss.slice(0,8).map(function(x){return x+1}).join(', ')+(miss.length>8?'…':'')+'. Em làm đủ rồi mới nộp nhé.');
+    return;
+  }
+  S.warn[id]=[];
+  var sc=0; sec.qs.forEach(function(q,i){ if(q.t!=='trans' && isRight(sec,i)) sc++ });
+  S.done[id]=true; S.score[id]=sc; render(); window.scrollTo({top:0,behavior:'smooth'});
+  if(sec.selfcheck){toast('Đây là đáp án mẫu, em tự đối chiếu bài của mình.');return}
+  toast('Đã nộp: '+sc+'/'+scored(sec).length+' câu đúng.');
+  sendResult(id,false);
+}
+
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-act]'); if(!b) return;
+  var a=b.dataset.act, s=b.dataset.s, q=b.dataset.q, k=s?key(s,q):'';
+  if(a==='tab'){S.cur=b.dataset.id;render();window.scrollTo({top:0})}
+  else if(a==='grp'){
+    var ss=SECTIONS.filter(function(x){return x.grp===b.dataset.g});
+    var nx=ss.filter(function(x){return !S.done[x.id]})[0]||ss[0];
+    S.cur=nx.id;render();window.scrollTo({top:0});
+  }
+  else if(a==='pick'){ if(S.done[s])return; S.ans[k]=+b.dataset.o; S.warn[s]=(S.warn[s]||[]).filter(function(x){return x!==+q}); render() }
+  else if(a==='submit') submitSec(s);
+  else if(a==='send') sendResult(null,true);
+  else if(a==='copy'){
+    var ta=$('rep'); ta.select();
+    try{navigator.clipboard.writeText(ta.value).then(function(){toast('Đã sao chép kết quả.')},function(){toast('Đã chọn sẵn văn bản, hãy sao chép thủ công.')})}
+    catch(x){toast('Đã chọn sẵn văn bản, hãy sao chép thủ công.')}
+  }
+  else if(a==='reset'){S={cur:HOME,ans:{},done:{},score:{},warn:{}};render();window.scrollTo({top:0})}
+});
+document.addEventListener('input',function(e){
+  var t=e.target;
+  if(t.dataset&&t.dataset.k){
+    S.ans[t.dataset.k]=t.value;
+    var box=t.closest('.q');
+    if(box&&box.dataset.sid){
+      var sid=box.dataset.sid, qi=+box.dataset.qi;
+      if(norm(t.value)!==''){ S.warn[sid]=(S.warn[sid]||[]).filter(function(x){return x!==qi}); box.classList.remove('miss'); var w=box.querySelector('.warn'); if(w) w.remove(); }
+      var c=$('cnt'), sc=secById(sid); if(c&&sc) c.textContent='Đã làm '+(sc.qs.length-missingList(sc).length)+'/'+sc.qs.length+' câu. '+(sc.selfcheck?'Em viết hết các câu trước rồi mới xem đáp án mẫu.':'Phải làm đủ mọi câu mới nộp được. Nộp xong không sửa lại được.');
+    }
+  }
+  if(t.id==='vq'){
+    var v=norm(t.value); var rs=document.querySelectorAll('#vt tbody tr');
+    for(var i=0;i<rs.length;i++) rs[i].hidden = v && norm(rs[i].textContent).indexOf(v)<0;
+  }
+});
+render();
+</script>
+
+</body></html>

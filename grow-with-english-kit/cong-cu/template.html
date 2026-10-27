@@ -139,9 +139,12 @@ var SKILLS = {
  wr:{n:'Viết',tip:'Chú ý từ nối và thứ tự ý khi sắp xếp đoạn văn.'},
  ls:{n:'Nghe',tip:'Đọc câu hỏi trước khi nghe.'}
 };
+if(DATA.tips) for(var tk in DATA.tips) SKILLS[tk].tip=DATA.tips[tk];
 var SK_ORDER = ['pa','tv','np','gt','rd','wr','ls'];
 var LEAD = {ex1:'Chọn từ có phần gạch chân phát âm khác với ba từ còn lại.', ex2:'Chọn từ có trọng âm chính khác với ba từ còn lại.', ex5:'Sắp xếp các câu sau thành đoạn văn hợp lý:'};
-var S = {cur:'ref', ans:{}, done:{}, score:{}, warn:{}};
+var HAS_VOCAB = VOCAB.words.length+VOCAB.phrases.length>0;
+var HOME = HAS_VOCAB?'ref':SECTIONS[0].id;
+var S = {cur:HOME, ans:{}, done:{}, score:{}, warn:{}};
 var $ = function(id){return document.getElementById(id)};
 var L = ['A','B','C','D'];
 function key(s,i){return s+'-'+i}
@@ -165,7 +168,7 @@ function missingList(sec){var m=[];sec.qs.forEach(function(q,i){ if(!answered(se
 function isRight(sec,i){
   var q=sec.qs[i], a=S.ans[key(sec.id,i)];
   if(q.t==='mcq') return a===q.a || (q.alt||[]).indexOf(a)>=0;
-  if(q.t==='fill'||q.t==='sel') return norm(a)===norm(q.a);
+  if(q.t==='fill'||q.t==='sel') return norm(a)===norm(q.a)||(q.alts||[]).some(function(x){return norm(a)===norm(x)});
   return false;
 }
 
@@ -229,7 +232,7 @@ function sendResult(latestId,manual){
 function groupOf(id){ if(id==='ref')return 'Bảng từ vựng'; if(id==='sum')return 'Tổng kết'; return secById(id).grp }
 function renderTabs(){
   var cg=groupOf(S.cur), h='';
-  h+='<button class="tab'+(cg==='Bảng từ vựng'?' on':'')+'" data-act="tab" data-id="ref"><b>Bảng từ vựng</b><span>32 từ · 3 cụm</span></button>';
+  if(HAS_VOCAB) h+='<button class="tab'+(cg==='Bảng từ vựng'?' on':'')+'" data-act="tab" data-id="ref"><b>Bảng từ vựng</b><span>'+VOCAB.words.length+' từ · '+VOCAB.phrases.length+' cụm</span></button>';
   GROUPS.forEach(function(g){
     var ss=SECTIONS.filter(function(s){return s.grp===g}), d=ss.filter(function(s){return S.done[s.id]}).length;
     h+='<button class="tab'+(cg===g?' on':'')+(d===ss.length?' done':'')+'" data-act="grp" data-g="'+esc(g)+'"><b>'+esc(g)+'</b><span>'+d+'/'+ss.length+' bài đã nộp</span></button>';
@@ -268,24 +271,25 @@ function qHTML(sec,q,i){
     });
     h+='</div>';
   } else if(q.t==='fill'){
-    h+=q.p+'</p><input class="txt'+(done?(ok?' right':' wrong'):'')+'" id="in-'+k+'" data-k="'+k+'" value="'+esc(S.ans[k]||'')+'" placeholder="Nhập dạng đúng của động từ" autocomplete="off" autocapitalize="off"'+(done?' disabled':'')+'>';
+    h+=q.p+'</p><input class="txt'+(done?(ok?' right':' wrong'):'')+'" id="in-'+k+'" data-k="'+k+'" value="'+esc(S.ans[k]||'')+'" placeholder="'+esc(q.ph||'Nhập dạng đúng của động từ')+'" autocomplete="off" autocapitalize="off"'+(done?' disabled':'')+'>';
   } else if(q.t==='sel'){
     h+=q.p+'</p><select class="txt'+(done?(ok?' right':' wrong'):'')+'" id="in-'+k+'" data-k="'+k+'"'+(done?' disabled':'')+'><option value="">— chọn từ —</option>';
     q.bank.forEach(function(w){h+='<option value="'+esc(w)+'"'+(S.ans[k]===w?' selected':'')+'>'+esc(w)+'</option>'});
     h+='</select>';
   } else {
-    h+=q.p+'</p><textarea class="txt" id="in-'+k+'" data-k="'+k+'" placeholder="Em viết bản dịch của mình" '+(done?'disabled':'')+'>'+esc(S.ans[k]||'')+'</textarea>';
+    h+=q.p+'</p><textarea class="txt" id="in-'+k+'" data-k="'+k+'" placeholder="'+esc(q.ph||'Em viết bản dịch của mình')+'" '+(done?'disabled':'')+'>'+esc(S.ans[k]||'')+'</textarea>';
   }
   if(wn) h+='<div class="warn">Câu này chưa trả lời. Em cần làm đủ mọi câu mới nộp được.</div>';
   if(done){
     if(q.t==='trans'){
-      h+='<div class="fb neu"><div><b>Đáp án mẫu (em tự đối chiếu):</b> '+esc(q.model)+'</div></div>';
+      h+='<div class="fb neu"><div><b>Đáp án mẫu (em tự đối chiếu):</b> '+esc(q.model)+'</div>'+(q.ex?'<div><b>Giải thích:</b> '+q.ex+'</div>':'')+'</div>';
     } else {
       var mine, right;
       if(q.t==='mcq'){ mine=S.ans[k]===undefined?'(bỏ trống)':L[S.ans[k]]+'. '+plain(q.o[S.ans[k]]); right=L[q.a]+'. '+plain(q.o[q.a]); }
       else { mine=S.ans[k]?S.ans[k]:'(bỏ trống)'; right=q.a; }
       h+='<div class="fb '+(ok?'ok':'no')+'"><strong>'+(ok?'✓ Đúng':'✗ Chưa đúng')+'</strong>';
       if(!ok) h+='<div>Em chọn/viết: <i>'+esc(mine)+'</i></div><div>Đáp án: <b>'+esc(right)+'</b></div>';
+      if(q.ex) h+='<div><b>Giải thích:</b> '+q.ex+'</div>';
       if(q.vi) h+='<div class="vn"><b>Dịch câu:</b> '+esc(q.vi)+'</div>';
       if(q.t==='mcq' && q.g.some(function(x){return x})){
         h+='<div class="gl">';
@@ -306,7 +310,7 @@ function renderSection(sec){
   sec.qs.forEach(function(q,i){h+=qHTML(sec,q,i)});
   h+='<div class="actions">';
   if(done) h+= sec.selfcheck ? '<span class="score">Đã xem đáp án mẫu</span>' : '<span class="score">'+S.score[sec.id]+'/'+n+' điểm · đã nộp</span>';
-  else h+='<button class="btn" data-act="submit" data-s="'+sec.id+'">'+(sec.selfcheck?'Xem đáp án mẫu':'Nộp bài này')+'</button><span class="note" id="cnt">Đã làm '+(sec.qs.length-missingList(sec).length)+'/'+sec.qs.length+' câu. '+(sec.selfcheck?'Em viết hết bản dịch trước rồi mới xem đáp án.':'Phải làm đủ mọi câu mới nộp được. Nộp xong không sửa lại được.')+'</span>';
+  else h+='<button class="btn" data-act="submit" data-s="'+sec.id+'">'+(sec.selfcheck?'Xem đáp án mẫu':'Nộp bài này')+'</button><span class="note" id="cnt">Đã làm '+(sec.qs.length-missingList(sec).length)+'/'+sec.qs.length+' câu. '+(sec.selfcheck?'Em viết hết các câu trước rồi mới xem đáp án mẫu.':'Phải làm đủ mọi câu mới nộp được. Nộp xong không sửa lại được.')+'</span>';
   h+='</div>';
   if(done && !sec.selfcheck) h+='<div style="margin-top:12px"><b>Nhận xét bài này</b>'+feedbackHTML(stats([sec.id]))+'</div>';
   h+='</section>';
@@ -320,7 +324,7 @@ function revSet(){
 function renderRef(){
   var rev=revSet();
   function isRev(w){w=norm(w);return rev.some(function(t){return t===w||t.indexOf(w)===0||w.indexOf(t)===0})}
-  var h='<section class="card sechead"><h2>Bảng từ vựng</h2><p>32 từ và 3 cụm từ của Unit 6. Từ có thanh đỏ là từ em đã làm sai trong các bài đã nộp.</p><input id="vq" class="vsearch" placeholder="Tìm từ hoặc nghĩa…" autocomplete="off"></section>';
+  var h='<section class="card sechead"><h2>Bảng từ vựng</h2><p>'+VOCAB.words.length+' từ và '+VOCAB.phrases.length+' cụm từ của bài. Từ có thanh đỏ là từ em đã làm sai trong các bài đã nộp.</p><input id="vq" class="vsearch" placeholder="Tìm từ hoặc nghĩa…" autocomplete="off"></section>';
   h+='<section class="card"><div class="scroll"><table id="vt"><thead><tr><th>Từ vựng</th><th>Loại</th><th>Phiên âm</th><th>Nghĩa</th><th>Ví dụ</th></tr></thead><tbody>';
   VOCAB.words.forEach(function(w){ h+='<tr class="vrow'+(isRev(w[0])?' rev':'')+'"><td><b>'+esc(w[0])+'</b></td><td>'+esc(w[1])+'</td><td>'+esc(w[2])+'</td><td>'+esc(w[3])+'</td><td><i>'+esc(w[4])+'</i></td></tr>' });
   VOCAB.phrases.forEach(function(w){ h+='<tr class="vrow'+(isRev(w[0])?' rev':'')+'"><td><b>'+esc(w[0])+'</b></td><td>cụm</td><td></td><td>'+esc(w[1])+'</td><td><i>'+esc(w[2])+'</i></td></tr>' });
@@ -369,7 +373,7 @@ function submitSec(id){
   S.warn[id]=[];
   var sc=0; sec.qs.forEach(function(q,i){ if(q.t!=='trans' && isRight(sec,i)) sc++ });
   S.done[id]=true; S.score[id]=sc; render(); window.scrollTo({top:0,behavior:'smooth'});
-  if(sec.selfcheck){toast('Đây là đáp án mẫu, em tự đối chiếu bài dịch của mình.');return}
+  if(sec.selfcheck){toast('Đây là đáp án mẫu, em tự đối chiếu bài của mình.');return}
   toast('Đã nộp: '+sc+'/'+scored(sec).length+' câu đúng.');
   sendResult(id,false);
 }
@@ -391,7 +395,7 @@ document.addEventListener('click',function(e){
     try{navigator.clipboard.writeText(ta.value).then(function(){toast('Đã sao chép kết quả.')},function(){toast('Đã chọn sẵn văn bản, hãy sao chép thủ công.')})}
     catch(x){toast('Đã chọn sẵn văn bản, hãy sao chép thủ công.')}
   }
-  else if(a==='reset'){S={cur:'ref',ans:{},done:{},score:{},warn:{}};render();window.scrollTo({top:0})}
+  else if(a==='reset'){S={cur:HOME,ans:{},done:{},score:{},warn:{}};render();window.scrollTo({top:0})}
 });
 document.addEventListener('input',function(e){
   var t=e.target;
@@ -401,7 +405,7 @@ document.addEventListener('input',function(e){
     if(box&&box.dataset.sid){
       var sid=box.dataset.sid, qi=+box.dataset.qi;
       if(norm(t.value)!==''){ S.warn[sid]=(S.warn[sid]||[]).filter(function(x){return x!==qi}); box.classList.remove('miss'); var w=box.querySelector('.warn'); if(w) w.remove(); }
-      var c=$('cnt'), sc=secById(sid); if(c&&sc) c.textContent='Đã làm '+(sc.qs.length-missingList(sc).length)+'/'+sc.qs.length+' câu. '+(sc.selfcheck?'Em viết hết bản dịch trước rồi mới xem đáp án.':'Phải làm đủ mọi câu mới nộp được. Nộp xong không sửa lại được.');
+      var c=$('cnt'), sc=secById(sid); if(c&&sc) c.textContent='Đã làm '+(sc.qs.length-missingList(sc).length)+'/'+sc.qs.length+' câu. '+(sc.selfcheck?'Em viết hết các câu trước rồi mới xem đáp án mẫu.':'Phải làm đủ mọi câu mới nộp được. Nộp xong không sửa lại được.');
     }
   }
   if(t.id==='vq'){
