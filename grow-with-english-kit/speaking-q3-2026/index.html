@@ -5,31 +5,34 @@
 <style>
 /* Cùng bộ màu với trang bài tập Unit; mỗi câu: nghe câu hỏi → tự ghi âm → mới mở bài mẫu */
 :root{
-  --bg:#f1f5f3; --card:#ffffff; --ink:#1c2b33; --mute:#5b6b73; --line:#d6e0dc;
-  --brand:#0b7a75; --brand-ink:#ffffff; --hi:#fff1b8; --hi-line:#e2c14a;
-  --ok:#17703f; --ok-bg:#e2f4e9; --bad:#a8321d; --bad-bg:#fde8e3; --chip:#eaf1ee;
-  --c1:#e07a3c; --c1b:#fdf0e8; --c2:#2f9e6e; --c2b:#e6f5ee; --c3:#3a4a6b; --c3b:#e6e9f1; --c4:#d0567f; --c4b:#fbe9ef;
+  --bg:#f7f6f0; --card:#ffffff; --ink:#22301c; --mute:#5d6957; --line:#e2e4d8;
+  --brand:#3f6e2a; --brand-ink:#ffffff; --hi:#fde5d3; --hi-line:#e8a274; --green:#5a923f; --orange:#e8742f;
+  --ok:#17703f; --ok-bg:#e3f1dc; --bad:#b0391a; --bad-bg:#fde8e3; --chip:#eef4e8;
+  --c1:#e8742f; --c1b:#fdf0e8; --c2:#5a923f; --c2b:#eaf3e3; --c3:#3a4a6b; --c3b:#e6e9f1; --c4:#d0567f; --c4b:#fbe9ef;
   --f-display:"Baloo 2","Be Vietnam Pro",system-ui,sans-serif;
   --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#11191c; --card:#1a2529; --ink:#e6eeea; --mute:#9fb1ab; --line:#2d3b40;
-  --brand:#46c4bb; --brand-ink:#06201e; --hi:#3a3418; --hi-line:#8a742a;
-  --ok:#7ddba5; --ok-bg:#17382a; --bad:#ffa593; --bad-bg:#3d1f1a; --chip:#243237;
-  --c1b:#3a2618; --c2b:#16332a; --c3:#9fb0d6; --c3b:#232b3d; --c4b:#3a1c27; color-scheme:dark}}
+  --bg:#131a11; --card:#1b2418; --ink:#e7eee2; --mute:#a3b09b; --line:#2e3a29;
+  --brand:#8cc56b; --brand-ink:#0f1f08; --hi:#3e2b1d; --hi-line:#a8643a; --green:#8cc56b; --orange:#f0965c;
+  --ok:#8fd99b; --ok-bg:#1b3a22; --bad:#ffa593; --bad-bg:#3d1f1a; --chip:#232f1f;
+  --c1b:#3a2618; --c2b:#1f3318; --c3:#9fb0d6; --c3b:#232b3d; --c4b:#3a1c27; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#11191c; --card:#1a2529; --ink:#e6eeea; --mute:#9fb1ab; --line:#2d3b40;
-  --brand:#46c4bb; --brand-ink:#06201e; --hi:#3a3418; --hi-line:#8a742a;
-  --ok:#7ddba5; --ok-bg:#17382a; --bad:#ffa593; --bad-bg:#3d1f1a; --chip:#243237;
-  --c1b:#3a2618; --c2b:#16332a; --c3:#9fb0d6; --c3b:#232b3d; --c4b:#3a1c27; color-scheme:dark}
+  --bg:#131a11; --card:#1b2418; --ink:#e7eee2; --mute:#a3b09b; --line:#2e3a29;
+  --brand:#8cc56b; --brand-ink:#0f1f08; --hi:#3e2b1d; --hi-line:#a8643a; --green:#8cc56b; --orange:#f0965c;
+  --ok:#8fd99b; --ok-bg:#1b3a22; --bad:#ffa593; --bad-bg:#3d1f1a; --chip:#232f1f;
+  --c1b:#3a2618; --c2b:#1f3318; --c3:#9fb0d6; --c3b:#232b3d; --c4b:#3a1c27; color-scheme:dark}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 var(--f-body);
   padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
-.banner{background:var(--brand);color:var(--brand-ink);border-radius:16px;padding:18px 20px}
-.banner small{font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.85;font-size:12px}
-.banner h1{font:700 26px/1.2 var(--f-display);margin:4px 0 2px}
-.banner p{margin:0;opacity:.9}
+.banner{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 20px 18px}
+.brandrow{display:flex;align-items:center;gap:10px;padding-bottom:8px;margin-bottom:10px;border-bottom:3px solid var(--orange);font:italic 700 15px/1.2 "Times New Roman",Georgia,serif}
+.brandrow img{width:40px;height:40px;object-fit:contain;border-radius:8px;flex:0 0 auto}
+.brandrow .gwe{color:var(--green)} .brandrow .msm{color:var(--orange);margin-left:auto;text-align:right}
+
+.banner h1{color:var(--brand);font:700 26px/1.2 var(--f-display);margin:4px 0 2px}
+.banner p{margin:0;color:var(--mute)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
 .info{display:grid;grid-template-columns:2fr 1fr;gap:10px}
 .info label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;min-width:0}
@@ -91,7 +94,7 @@ audio{height:36px;max-width:100%}
 textarea{font:inherit;width:100%;min-height:90px;padding:9px 11px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);resize:vertical;margin-top:8px}
 /* sơ đồ tư duy */
 .mm{display:grid;gap:10px;margin-top:10px}
-.mm .root{justify-self:start;background:#e8effc;border:2px solid #3b6fd1;color:#1c2b33;border-radius:12px;padding:8px 14px;font-weight:700}
+.mm .root{justify-self:start;background:var(--chip);border:2px solid var(--brand);color:var(--ink);border-radius:12px;padding:8px 14px;font-weight:700}
 .br{display:grid;grid-template-columns:130px 1fr;gap:8px;align-items:start}
 .br>.k{border:2px solid;border-radius:10px;padding:6px 10px;font-weight:700;text-align:center}
 .br ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
@@ -114,7 +117,7 @@ textarea{font:inherit;width:100%;min-height:90px;padding:9px 11px;border:1.5px s
 </style></head><body>
 <div class="wrap">
   <header class="banner">
-    <small>Grow with English · Ms. Minh Thư</small>
+    <div class="brandrow"><img src="../logo.png" alt="Logo Grow with English"><span class="gwe">Grow with English</span><span class="msm">Tiếng Anh Ms. Minh Thư</span></div>
     <h1>IELTS Speaking · Topic 1: Time Management</h1>
     <p>Forecast Quý 3/2026 · Band mục tiêu 7.0. Học từ vựng, tự nói và ghi âm, rồi mới so với bài mẫu.</p>
   </header>
