@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Word Form Chuyên Anh 9</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap">
+<style>
+/* Mỗi mục 30 câu: điền đủ → nộp (gửi điểm + từ sai về Sheet) → hiện đáp án, nghĩa, giải thích; "Làm lại để ôn" không gửi lại */
+:root{
+  --bg:#f7f6f0; --card:#ffffff; --ink:#22301c; --mute:#5d6957; --line:#e2e4d8;
+  --brand:#3f6e2a; --brand-ink:#ffffff; --hi:#fde5d3; --hi-line:#e8a274; --green:#5a923f; --orange:#e8742f;
+  --ok:#17703f; --ok-bg:#e3f1dc; --bad:#b0391a; --bad-bg:#fde8e3; --chip:#eef4e8;
+  --f-display:"Baloo 2","Be Vietnam Pro",system-ui,sans-serif;
+  --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#131a11; --card:#1b2418; --ink:#e7eee2; --mute:#a3b09b; --line:#2e3a29;
+  --brand:#8cc56b; --brand-ink:#0f1f08; --hi:#3e2b1d; --hi-line:#a8643a; --green:#8cc56b; --orange:#f0965c;
+  --ok:#8fd99b; --ok-bg:#1b3a22; --bad:#ffa593; --bad-bg:#3d1f1a; --chip:#232f1f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#131a11; --card:#1b2418; --ink:#e7eee2; --mute:#a3b09b; --line:#2e3a29;
+  --brand:#8cc56b; --brand-ink:#0f1f08; --hi:#3e2b1d; --hi-line:#a8643a; --green:#8cc56b; --orange:#f0965c;
+  --ok:#8fd99b; --ok-bg:#1b3a22; --bad:#ffa593; --bad-bg:#3d1f1a; --chip:#232f1f; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 var(--f-body);
+  padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.banner{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 20px 18px}
+.brandrow{display:flex;align-items:center;gap:10px;padding-bottom:8px;margin-bottom:10px;border-bottom:3px solid var(--orange);font:italic 700 15px/1.2 "Times New Roman",Georgia,serif}
+.brandrow img{width:40px;height:40px;object-fit:contain;border-radius:8px;flex:0 0 auto}
+.brandrow .gwe{color:var(--green)} .brandrow .msm{color:var(--orange);margin-left:auto;text-align:right}
+.banner h1{color:var(--brand);font:700 26px/1.2 var(--f-display);margin:4px 0 2px}
+.banner p{margin:0;color:var(--mute)}
+.back{display:inline-block;font-size:13px;font-weight:600;color:var(--brand);text-decoration:none}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+.info{display:grid;grid-template-columns:2fr 1fr;gap:10px}
+.info label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;min-width:0}
+.info input{font:inherit;font-weight:400;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);min-width:0}
+.rule{grid-column:1/-1;margin:2px 0 0;color:var(--mute);font-size:13px}
+@media(max-width:560px){.info{grid-template-columns:1fr}}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.tab{flex:0 0 auto;text-align:left;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:8px 12px;font:inherit;cursor:pointer;min-width:112px}
+.tab b{display:block;font-size:13px}.tab span{font-size:12px;color:var(--mute)}
+.tab.on{border-color:var(--brand);box-shadow:inset 0 0 0 1px var(--brand)}
+.tab.done span{color:var(--ok);font-weight:600}
+h2{font:700 22px/1.2 var(--f-display);margin:0}
+.lead{margin:4px 0 0;color:var(--mute);font-size:14px}
+.q{border-top:1px dashed var(--line);padding:12px 0 2px}
+.q:first-child{border-top:0;padding-top:4px}
+.qn{display:inline-grid;place-items:center;min-width:30px;height:24px;border-radius:7px;background:var(--hi);font-weight:700;font-size:12px;margin-right:6px;padding:0 4px}
+.qs{margin:0}
+.root{font-weight:700;color:var(--orange);white-space:nowrap}
+.blank{font:inherit;width:11em;max-width:100%;padding:2px 8px;border:0;border-bottom:2px solid var(--hi-line);background:var(--chip);color:var(--ink);border-radius:6px 6px 0 0}
+.blank:focus{outline:2px solid var(--brand);outline-offset:1px}
+.blank.ok{border-color:var(--ok);background:var(--ok-bg);color:var(--ok);font-weight:600}
+.blank.bad{border-color:var(--bad);background:var(--bad-bg);color:var(--bad);text-decoration:line-through}
+.ex{margin-top:8px;border-radius:10px;padding:9px 12px;font-size:14px;background:var(--ok-bg)}
+.ex.bad{background:var(--bad-bg)}
+.ex .ans{font-weight:700}
+.ex .ans b{color:var(--ok)}
+.ex.bad .ans b{color:var(--bad)}
+.ex p{margin:3px 0}
+.ex .vi{color:var(--mute);font-style:italic}
+.ex .note{font-size:13px;color:var(--orange)}
+.tag{display:inline-block;font-size:12px;font-weight:600;border-radius:6px;padding:0 6px;background:var(--card);border:1px solid var(--line);margin-left:4px}
+.btn{font:600 14px var(--f-body);background:var(--brand);color:var(--brand-ink);border:0;border-radius:10px;padding:10px 16px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--brand);border:1.5px solid var(--brand)}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:14px}
+.msg{font-size:13px;color:var(--mute)}
+.msg.warn{color:var(--bad);font-weight:600}
+.msg.ok{color:var(--ok);font-weight:600}
+.score{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.score .big{font:700 34px/1 var(--f-display);color:var(--brand)}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;color:var(--mute);font-weight:600}
+td.got{color:var(--bad);text-decoration:line-through}
+td.ans{color:var(--ok);font-weight:600}
+.tw{overflow-x:auto}
+</style></head>
+<body><div class="wrap">
+<header class="banner">
+  <div class="brandrow"><img src="../logo.png" alt="Logo Grow with English"><span class="gwe">Grow with English</span><span class="msm">Tiếng Anh Ms. Minh Thư</span></div>
+  <a class="back" href="../">← Trang bài tập</a>
+  <h1>Word Form · Chuyên Anh 9</h1>
+  <p>Viết dạng đúng của từ in hoa trong ngoặc. Mỗi mục 30 câu.</p>
+</header>
+
+<section class="card info">
+  <label>Họ và tên học sinh *<input id="sName" autocomplete="name" placeholder="VD: Nguyễn Minh Anh"></label>
+  <label>Lớp *<input id="sClass" placeholder="VD: 9 Chuyên Anh"></label>
+  <p class="rule">Điền đủ 30 câu mới nộp được. Lần nộp đầu tiên của mỗi mục được gửi cho cô (điểm và danh sách từ sai). Sau đó em có thể bấm <b>Làm lại để ôn</b> bao nhiêu lần tuỳ thích.</p>
+</section>
+
+<nav class="tabs" id="tabs" aria-label="Các mục"></nav>
+<section class="card" id="main"></section>
+</div>
+
+<script src="../config.js"></script>
+<script src="data-01.js"></script>
+<script>
+var SHEET_URL = window.GWE_SHEET_URL || '';
+var UNIT = 'Word Form Chuyên Anh 9';
+var PER = 30;
+var WF = window.WF || [];
+var NSEC = Math.ceil(WF.length / PER);
+var cur = 0;
+var S = {};   // S[sec] = {a:{idx:[..]}, done:bool, sent:bool, first:{score,max}, review:bool}
+
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+/* ---------- lưu trên máy học sinh ---------- */
+function save(){ try{ localStorage.setItem('gwe-wordform-chuyen9', JSON.stringify({S:S, cur:cur})); }catch(e){} }
+function load(){ try{ var o = JSON.parse(localStorage.getItem('gwe-wordform-chuyen9') || 'null'); if(o){ S = o.S || {}; cur = Math.min(o.cur || 0, NSEC - 1); } }catch(e){} }
+function saveWho(){ try{ localStorage.setItem('gwe-who', JSON.stringify({n:$('sName').value, c:$('sClass').value})); }catch(e){} }
+function loadWho(){ try{ var o = JSON.parse(localStorage.getItem('gwe-who') || 'null'); if(o){ $('sName').value = o.n || ''; $('sClass').value = o.c || ''; } }catch(e){} }
+function st(k){ return S[k] || (S[k] = {a:{}, done:false, sent:false}); }
+
+/* ---------- chấm: bỏ hoa/thường, dấu gạch nối, khoảng trắng, chính tả Anh–Mỹ ---------- */
+function norm(s){
+  return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[’‘]/g, "'").replace(/[\s\-–.]/g, '')
+    .replace(/is(e|es|ed|ing|ation|ations)$/, 'iz$1').replace(/our/g, 'or').replace(/artefact/, 'artifact');
+}
+function blanks(q){ return q[0].split('___').length - 1; }
+function keys(q){ return blanks(q) > 1 ? q[1][0].split(/\s*,\s*/).map(function(x){ return [x]; }) : [q[1]]; }
+function isRight(q, got){
+  var ks = keys(q);
+  return ks.every(function(alts, j){ var g = norm(got[j] || ''); return g && alts.some(function(a){ return norm(a) === g; }); });
+}
+
+/* ---------- giao diện ---------- */
+function secRange(k){ return [k * PER, Math.min(WF.length, (k + 1) * PER)]; }
+function renderTabs(){
+  var h = '';
+  for(var k = 0; k < NSEC; k++){
+    var r = secRange(k), s = S[k], sub = s && s.first ? 'Đã nộp ' + s.first.score + '/' + s.first.max : 'Câu ' + (r[0] + 1) + '–' + r[1];
+    h += '<button class="tab' + (k === cur ? ' on' : '') + (s && s.first ? ' done' : '') + '" data-k="' + k + '"><b>Mục ' + (k + 1) + '</b><span>' + sub + '</span></button>';
+  }
+  $('tabs').innerHTML = h;
+}
+
+function qHtml(i, s){
+  var q = WF[i], got = s.a[i] || [], j = 0, show = s.done;
+  var right = show && isRight(q, got);
+  var parts = esc(q[0]).split('___');
+  var body = parts[0];
+  for(var p = 1; p < parts.length; p++){
+    var v = got[j] || '';
+    body += '<input class="blank' + (show ? (right ? ' ok' : ' bad') : '') + '" data-i="' + i + '" data-j="' + j + '" value="' + esc(v) + '" autocomplete="off" autocapitalize="off" spellcheck="false"' + (show ? ' readonly' : '') + ' aria-label="Câu ' + (i + 1) + ' chỗ trống ' + (j + 1) + '">' + parts[p];
+    j++;
+  }
+  var h = '<div class="q"><p class="qs"><span class="qn">' + (i + 1) + '</span>' + body + ' <span class="root">(' + esc(q[2]) + ')</span></p>';
+  if(show){
+    h += '<div class="ex' + (right ? '' : ' bad') + '"><p class="ans">' + (right ? '✓ Đúng: ' : '✗ Đáp án: ') + '<b>' + esc(q[1].join(' / ')) + '</b><span class="tag">' + esc(q[3]) + '</span> : ' + esc(q[4]) + '</p>'
+      + '<p>' + esc(q[5]) + '</p><p class="vi">' + esc(q[6]) + '</p>'
+      + (q[7] ? '<p class="note">Ghi chú: ' + esc(q[7]) + '</p>' : '') + '</div>';
+  }
+  return h + '</div>';
+}
+
+function wrongList(k){
+  var r = secRange(k), s = st(k), out = [];
+  for(var i = r[0]; i < r[1]; i++){
+    var got = s.a[i] || [];
+    if(!isRight(WF[i], got)) out.push({n:i + 1, root:WF[i][2], got:got.join(', '), ans:WF[i][1].join(' / '), type:WF[i][3], mean:WF[i][4]});
+  }
+  return out;
+}
+
+function render(){
+  renderTabs();
+  var k = cur, s = st(k), r = secRange(k), h = '';
+  h += '<h2>Mục ' + (k + 1) + ' · Câu ' + (r[0] + 1) + '–' + r[1] + '</h2>';
+  if(s.done){
+    var wl = wrongList(k), score = (r[1] - r[0]) - wl.length;
+    h += '<div class="score" style="margin-top:8px"><span class="big">' + score + '/' + (r[1] - r[0]) + '</span><span class="msg">' + (s.review ? 'Lần ôn lại' : 'Lần nộp chính') + (s.first ? ' · Điểm lần đầu gửi cô: ' + s.first.score + '/' + s.first.max : '') + '</span></div>';
+    h += '<p class="msg' + (s.sent ? ' ok' : '') + '" id="sendMsg">' + (s.sent ? '✓ Đã gửi kết quả và danh sách từ sai cho cô.' : (s.review ? '' : 'Đang gửi kết quả cho cô…')) + '</p>';
+    if(wl.length){
+      h += '<h3 style="margin:12px 0 0;font-size:16px">Từ em làm sai (' + wl.length + ')</h3><div class="tw"><table><tr><th>Câu</th><th>Từ gốc</th><th>Em điền</th><th>Đáp án</th><th>Nghĩa</th></tr>';
+      wl.forEach(function(w){ h += '<tr><td>' + w.n + '</td><td>' + esc(w.root) + '</td><td class="got">' + esc(w.got) + '</td><td class="ans">' + esc(w.ans) + '</td><td>' + esc(w.mean) + '</td></tr>'; });
+      h += '</table></div>';
+    } else h += '<p class="msg ok">Tuyệt vời, em đúng hết cả mục!</p>';
+    h += '<div class="row"><button class="btn ghost" data-act="redo">Làm lại để ôn</button>' + (k + 1 < NSEC ? '<button class="btn" data-act="next">Sang Mục ' + (k + 2) + ' →</button>' : '') + '</div>';
+    h += '<h3 style="margin:18px 0 0;font-size:16px">Đáp án chi tiết</h3>';
+  } else {
+    h += '<p class="lead">Điền dạng đúng của từ in hoa. Không cần viết hoa; gạch nối và chính tả Anh–Mỹ (‑ise/‑ize, ‑our/‑or) đều được chấp nhận.</p>';
+  }
+  h += '<div id="qs">';
+  for(var i = r[0]; i < r[1]; i++) h += qHtml(i, s);
+  h += '</div>';
+  if(!s.done) h += '<div class="row"><button class="btn" data-act="submit">Nộp bài Mục ' + (k + 1) + '</button><span class="msg" id="subMsg"></span></div>';
+  $('main').innerHTML = h;
+}
+
+/* ---------- gửi về Google Sheet ---------- */
+function send(k){
+  var s = st(k), r = secRange(k), wl = wrongList(k);
+  if(!SHEET_URL){ return; }
+  var payload = {type:'wordform', name:$('sName').value.trim(), cls:$('sClass').value.trim(), unit:UNIT,
+    section:'Mục ' + (k + 1) + ' (câu ' + (r[0] + 1) + '–' + r[1] + ')', score:s.first.score, max:s.first.max, wrong:wl};
+  fetch(SHEET_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(payload)})
+    .then(function(){ s.sent = true; save(); var m = $('sendMsg'); if(m && cur === k){ m.className = 'msg ok'; m.textContent = '✓ Đã gửi kết quả và danh sách từ sai cho cô.'; } })
+    .catch(function(){ var m = $('sendMsg'); if(m && cur === k){ m.className = 'msg warn'; m.innerHTML = 'Chưa gửi được (mất mạng?). <button class="btn ghost" data-act="resend">Gửi lại</button>'; } });
+}
+
+function submit(){
+  var k = cur, s = st(k), r = secRange(k), miss = [];
+  if(!$('sName').value.trim() || !$('sClass').value.trim()){ $('subMsg').className = 'msg warn'; $('subMsg').textContent = 'Em nhập họ tên và lớp ở trên trước nhé.'; $('sName').focus(); return; }
+  for(var i = r[0]; i < r[1]; i++){
+    var got = s.a[i] || [];
+    for(var j = 0; j < blanks(WF[i]); j++) if(!(got[j] || '').trim()){ miss.push(i + 1); break; }
+  }
+  if(miss.length){ $('subMsg').className = 'msg warn'; $('subMsg').textContent = 'Còn ' + miss.length + ' câu chưa điền: ' + miss.slice(0, 12).join(', ') + (miss.length > 12 ? '…' : ''); var el = document.querySelector('.blank[data-i="' + (miss[0] - 1) + '"]'); if(el) el.focus(); return; }
+  s.done = true;
+  var firstTime = !s.first;
+  if(firstTime){ var wl = wrongList(k); s.first = {score:(r[1] - r[0]) - wl.length, max:r[1] - r[0]}; s.review = false; }
+  save(); render(); window.scrollTo({top:$('main').offsetTop - 10, behavior:'smooth'});
+  if(firstTime) send(k);
+}
+
+document.addEventListener('input', function(e){
+  var t = e.target;
+  if(t.classList.contains('blank')){ var s = st(cur), i = +t.dataset.i; (s.a[i] = s.a[i] || [])[+t.dataset.j] = t.value; save(); }
+  if(t.id === 'sName' || t.id === 'sClass') saveWho();
+});
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Enter' && e.target.classList.contains('blank')){
+    e.preventDefault(); var all = [].slice.call(document.querySelectorAll('.blank:not([readonly])')), n = all.indexOf(e.target) + 1;
+    if(all[n]) all[n].focus();
+  }
+});
+document.addEventListener('click', function(e){
+  var tab = e.target.closest('.tab');
+  if(tab){ cur = +tab.dataset.k; save(); render(); return; }
+  var b = e.target.closest('[data-act]'); if(!b) return;
+  var a = b.dataset.act, s = st(cur);
+  if(a === 'submit') submit();
+  else if(a === 'redo'){ s.a = {}; s.done = false; s.review = true; save(); render(); window.scrollTo({top:$('main').offsetTop - 10, behavior:'smooth'}); }
+  else if(a === 'next'){ cur++; save(); render(); window.scrollTo({top:$('tabs').offsetTop - 10, behavior:'smooth'}); }
+  else if(a === 'resend') send(cur);
+});
+
+load(); loadWho(); render();
+// lần nộp đầu chưa gửi được (mất mạng, đóng trang) → gửi lại khi mở trang
+for(var k0 = 0; k0 < NSEC; k0++){ if(S[k0] && S[k0].first && !S[k0].sent && $('sName').value.trim()) send(k0); }
+</script>
+</body></html>

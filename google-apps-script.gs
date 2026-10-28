@@ -9,7 +9,9 @@
  */
 var AUDIO_ROOT = 'Grow with English - Bài nói';
 var AUDIO_HEAD = ['Thời gian', 'Họ tên', 'Lớp', 'Bài', 'Câu', 'Câu hỏi', 'Thời lượng (giây)', 'File ghi âm'];
-var SK_IDS = ['pa', 'tv', 'np', 'gt', 'rd', 'wr', 'ls'];
+var WF_HEAD = ['Thời gian', 'Họ tên', 'Lớp', 'Bài', 'Mục', 'Điểm', 'Tối đa', '%', 'Từ sai (từ gốc → đáp án)'];
+var WRONG_HEAD = ['Thời gian', 'Họ tên', 'Lớp', 'Bài', 'Mục', 'Câu', 'Từ gốc', 'HS điền', 'Đáp án', 'Loại từ', 'Nghĩa'];
+var SK_IDS =['pa', 'tv', 'np', 'gt', 'rd', 'wr', 'ls'];
 var OVERVIEW_HEAD = ['Họ tên', 'Lớp', 'Bài', 'Cập nhật', 'Tổng điểm', 'Tổng tối đa', '% chung',
   'Phát âm', 'Từ vựng', 'Ngữ pháp', 'Giao tiếp', 'Đọc hiểu', 'Viết', 'Nghe', 'Nhận xét'];
 var FIXED = OVERVIEW_HEAD.length;           // các cột bài tập nằm sau cột "Nhận xét"
@@ -45,6 +47,7 @@ function doPost(e) {
     var d = JSON.parse(e.postData.contents);
     var ss = SpreadsheetApp.getActiveSpreadsheet();
     if (d.type === 'audio') return saveAudio_(ss, d);
+    if (d.type === 'wordform') return saveWordForm_(ss, d);
     var now = new Date();
     var pct = (d.pct || 0) / 100;
     var secs = d.sections || [];
@@ -105,6 +108,25 @@ function saveAudio_(ss, d) {
   var sh = getSheet_(ss, 'Bai noi', AUDIO_HEAD);
   sh.appendRow([now, d.name, d.cls, d.unit, d.qid, d.question, d.secs, file.getUrl()]);
   sh.getRange(sh.getLastRow(), 1).setNumberFormat('dd/MM/yyyy HH:mm');
+  return ContentService.createTextOutput('ok');
+}
+
+// Bài Word Form (type 'wordform'): sheet "Word form" = mỗi lần nộp 1 dòng (điểm + các từ sai gộp 1 ô),
+// sheet "Tu sai" = mỗi từ sai 1 dòng để giáo viên lọc theo học sinh / từ gốc.
+function saveWordForm_(ss, d) {
+  var now = new Date();
+  var wrong = d.wrong || [];
+  var sum = getSheet_(ss, 'Word form', WF_HEAD);
+  sum.appendRow([now, d.name, d.cls, d.unit, d.section, d.score, d.max, (d.max ? d.score / d.max : ''),
+    wrong.map(function (w) { return w.root + ' → ' + w.ans; }).join('; ')]);
+  sum.getRange(sum.getLastRow(), 1).setNumberFormat('dd/MM/yyyy HH:mm');
+  sum.getRange(sum.getLastRow(), 8).setNumberFormat('0%');
+  if (wrong.length) {
+    var ws = getSheet_(ss, 'Tu sai', WRONG_HEAD);
+    var rows = wrong.map(function (w) { return [now, d.name, d.cls, d.unit, d.section, w.n, w.root, w.got, w.ans, w.type, w.mean]; });
+    ws.getRange(ws.getLastRow() + 1, 1, rows.length, WRONG_HEAD.length).setValues(rows);
+    ws.getRange(ws.getLastRow() - rows.length + 1, 1, rows.length, 1).setNumberFormat('dd/MM/yyyy HH:mm');
+  }
   return ContentService.createTextOutput('ok');
 }
 
