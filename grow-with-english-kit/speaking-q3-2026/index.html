@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>IELTS Speaking · Time Management</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap">
+<style>
+/* Cùng bộ màu với trang bài tập Unit; mỗi câu: nghe câu hỏi → tự ghi âm → mới mở bài mẫu */
+:root{
+  --bg:#f1f5f3; --card:#ffffff; --ink:#1c2b33; --mute:#5b6b73; --line:#d6e0dc;
+  --brand:#0b7a75; --brand-ink:#ffffff; --hi:#fff1b8; --hi-line:#e2c14a;
+  --ok:#17703f; --ok-bg:#e2f4e9; --bad:#a8321d; --bad-bg:#fde8e3; --chip:#eaf1ee;
+  --c1:#e07a3c; --c1b:#fdf0e8; --c2:#2f9e6e; --c2b:#e6f5ee; --c3:#3a4a6b; --c3b:#e6e9f1; --c4:#d0567f; --c4b:#fbe9ef;
+  --f-display:"Baloo 2","Be Vietnam Pro",system-ui,sans-serif;
+  --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#11191c; --card:#1a2529; --ink:#e6eeea; --mute:#9fb1ab; --line:#2d3b40;
+  --brand:#46c4bb; --brand-ink:#06201e; --hi:#3a3418; --hi-line:#8a742a;
+  --ok:#7ddba5; --ok-bg:#17382a; --bad:#ffa593; --bad-bg:#3d1f1a; --chip:#243237;
+  --c1b:#3a2618; --c2b:#16332a; --c3:#9fb0d6; --c3b:#232b3d; --c4b:#3a1c27; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11191c; --card:#1a2529; --ink:#e6eeea; --mute:#9fb1ab; --line:#2d3b40;
+  --brand:#46c4bb; --brand-ink:#06201e; --hi:#3a3418; --hi-line:#8a742a;
+  --ok:#7ddba5; --ok-bg:#17382a; --bad:#ffa593; --bad-bg:#3d1f1a; --chip:#243237;
+  --c1b:#3a2618; --c2b:#16332a; --c3:#9fb0d6; --c3b:#232b3d; --c4b:#3a1c27; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 var(--f-body);
+  padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.banner{background:var(--brand);color:var(--brand-ink);border-radius:16px;padding:18px 20px}
+.banner small{font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.85;font-size:12px}
+.banner h1{font:700 26px/1.2 var(--f-display);margin:4px 0 2px}
+.banner p{margin:0;opacity:.9}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.tab{flex:0 0 auto;text-align:left;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:8px 12px;font:inherit;cursor:pointer;min-width:104px}
+.tab b{display:block;font-size:13px}.tab span{font-size:12px;color:var(--mute)}
+.tab.on{border-color:var(--brand);box-shadow:inset 0 0 0 1px var(--brand)}
+.tab.done span{color:var(--ok);font-weight:600}
+h2{font:700 22px/1.2 var(--f-display);margin:0}
+.lead{margin:4px 0 0;color:var(--mute);font-size:14px}
+.instr{background:var(--chip);border-radius:10px;padding:10px 12px;font-size:14px;margin-top:10px}
+.btn{font:600 14px var(--f-body);background:var(--brand);color:var(--brand-ink);border:0;border-radius:10px;padding:9px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn.ghost{background:transparent;color:var(--brand);border:1.5px solid var(--brand)}
+.btn.rec{background:var(--bad);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.link{background:none;border:0;color:var(--mute);font:13px var(--f-body);text-decoration:underline;cursor:pointer;padding:0}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px}
+.q{border-top:1px dashed var(--line);padding-top:14px;margin-top:14px}
+.q:first-of-type{border-top:0;margin-top:0;padding-top:0}
+.qn{display:inline-grid;place-items:center;min-width:26px;height:26px;border-radius:8px;background:var(--hi);font-weight:700;font-size:13px;margin-right:8px;padding:0 4px}
+.qt{margin:0;font-weight:600}
+audio{height:36px;max-width:100%}
+.recinfo{font-size:13px;color:var(--mute)}
+.recinfo.live{color:var(--bad);font-weight:600}
+.sample{margin-top:10px;background:var(--ok-bg);border-radius:10px;padding:10px 12px}
+.sample p{margin:4px 0}
+.sample .h{font-weight:700;color:var(--ok);font-size:13px;text-transform:uppercase;letter-spacing:.05em}
+.sample b{background:var(--hi);border-radius:4px;padding:0 3px;font-weight:600}
+/* từ vựng */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.fc{border:1.5px solid var(--line);border-radius:12px;padding:12px;background:var(--card);cursor:pointer;min-height:118px;display:flex;flex-direction:column;gap:4px;text-align:left;font:inherit;color:inherit}
+.fc:hover{border-color:var(--brand)}
+.fc .w{font:700 18px/1.2 var(--f-display);color:var(--brand)}
+.fc .ipa{font-size:13px;color:var(--mute)}
+.fc .m{font-size:14px}
+.fc .vi{font-size:14px;font-weight:600}
+.fc.flip{background:var(--chip)}
+.say{border:0;background:var(--chip);color:var(--brand);border-radius:8px;padding:2px 8px;font:600 12px var(--f-body);cursor:pointer;align-self:flex-start;margin-top:auto}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.opt{font:inherit;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:6px 12px;cursor:pointer}
+.opt.sel{border-color:var(--brand);background:var(--chip)}
+.opt.right{border-color:var(--ok);background:var(--ok-bg)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg);text-decoration:line-through}
+.blank{display:inline-block;min-width:60px;border-bottom:2px solid var(--brand);margin:0 2px}
+.score{font:700 20px var(--f-display);color:var(--brand)}
+/* part 2 */
+.cue{border:2px solid var(--ink);border-radius:12px;padding:14px 16px}
+.cue h3{font:700 18px/1.3 var(--f-display);margin:0 0 6px}
+.cue ul{margin:4px 0 0;padding-left:20px}
+.timer{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:12px;background:var(--chip);border-radius:12px;padding:12px 14px}
+.clock{font:700 34px/1 var(--f-display);font-variant-numeric:tabular-nums;min-width:96px}
+.phase{font-weight:600}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;flex:1 1 160px}
+.bar i{display:block;height:100%;background:var(--brand);width:0}
+textarea{font:inherit;width:100%;min-height:90px;padding:9px 11px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);resize:vertical;margin-top:8px}
+/* sơ đồ tư duy */
+.mm{display:grid;gap:10px;margin-top:10px}
+.mm .root{justify-self:start;background:#e8effc;border:2px solid #3b6fd1;color:#1c2b33;border-radius:12px;padding:8px 14px;font-weight:700}
+.br{display:grid;grid-template-columns:130px 1fr;gap:8px;align-items:start}
+.br>.k{border:2px solid;border-radius:10px;padding:6px 10px;font-weight:700;text-align:center}
+.br ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.br li{border:1.5px solid;border-radius:9px;padding:5px 10px;font-size:14px;display:flex;gap:6px;flex-wrap:wrap}
+.br li span{color:var(--mute)}
+.b1 .k{border-color:var(--c1);background:var(--c1b)}.b1 li{border-color:var(--c1)}
+.b2 .k{border-color:var(--c2);background:var(--c2b)}.b2 li{border-color:var(--c2)}
+.b3 .k{border-color:var(--c3);background:var(--c3b)}.b3 li{border-color:var(--c3)}
+.b4 .k{border-color:var(--c4);background:var(--c4b)}.b4 li{border-color:var(--c4)}
+@media(max-width:520px){.br{grid-template-columns:1fr}.br>.k{justify-self:start}}
+.peel{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.peel div{border:2px solid;border-radius:10px;padding:8px 10px;font-size:13px}
+.peel b{display:block;font-size:13px}
+.peel .p{border-color:var(--c1);background:var(--c1b)}.peel .e1{border-color:var(--c2);background:var(--c2b)}
+.peel .e2{border-color:var(--c3);background:var(--c3b)}.peel .l{border-color:var(--c4);background:var(--c4b)}
+@media(max-width:620px){.peel{grid-template-columns:1fr 1fr}}
+.formula{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.formula span{border-radius:8px;padding:3px 10px;font-size:13px;font-weight:600}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;max-width:90vw;z-index:20}
+</style></head><body>
+<div class="wrap">
+  <header class="banner">
+    <small>Grow with English · Ms. Minh Thư</small>
+    <h1>IELTS Speaking · Topic 1: Time Management</h1>
+    <p>Forecast Quý 3/2026 · Band mục tiêu 7.0. Học từ vựng, tự nói và ghi âm, rồi mới so với bài mẫu.</p>
+  </header>
+  <nav class="tabs" id="tabs"></nav>
+  <main id="main" class="wrap"></main>
+</div>
+<div id="toast" hidden></div>
+<script>
+var T = {
+ vocab:[
+  ['put things off','/pʊt θɪŋz ɒf/','to delay doing something until later','trì hoãn, để việc lại sau'],
+  ['at the last minute','/æt ðə lɑːst ˈmɪnɪt/','at the latest possible time','vào phút chót'],
+  ['time-consuming','/ˈtaɪm kənˌsjuːmɪŋ/','taking a lot of time','tốn thời gian'],
+  ['prioritise','/praɪˈɒrətaɪz/','to decide which tasks are most important and do them first','ưu tiên'],
+  ['get into the habit of','/ɡet ˈɪntə ðə ˈhæbɪt əv/','to start doing something regularly','tạo thói quen làm gì'],
+  ['stick to sth','/stɪk tə ˈsʌmθɪŋ/','to continue following a plan or decision','bám sát, kiên trì theo'],
+  ['a game changer','/ə ˈɡeɪm ˌtʃeɪndʒə/','something that completely changes a situation in a positive way','điều tạo bước ngoặt'],
+  ['stay on top of sth','/steɪ ɒn tɒp əv ˈsʌmθɪŋ/','to manage something successfully and not fall behind','kiểm soát tốt, không bị tụt lại'],
+  ['free up time','/friː ʌp taɪm/','to make time available for other things','dành ra thời gian'],
+  ['pay off','/peɪ ɒf/','(of an effort) to bring good results','được đền đáp, có kết quả']
+ ],
+ quiz:[
+  ['I used to ___ until the last minute.',['put things off','pay off','stick to','free up'],0],
+  ['I wasted ages every day deciding what to do next, which was incredibly ___.',['a game changer','time-consuming','prioritise','at the last minute'],1],
+  ['Then I ___ my tasks, putting the most urgent ones first.',['put off','pay off','prioritise','stick to'],2],
+  ['It took me nearly a month to ___ doing it.',['stay on top of','get into the habit of','free up','put off'],1],
+  ['There were weeks when I couldn\'t ___ the plan because something unexpected came up.',['stick to','pay off','free up','prioritise'],0],
+  ['Now I think it\'s been a real ___ for me.',['time-consuming','last minute','game changer','habit'],2],
+  ['I can ___ my schoolwork much more easily.',['put off','stay on top of','pay off','get into'],1],
+  ['It has ___ a couple of hours each week for things I enjoy.',['freed up','put off','stuck to','prioritised'],0],
+  ['I\'m really glad the effort has ___.',['stuck to','freed up','paid off','put off'],2],
+  ['She always starts her essays ___, so she often feels stressed.',['at the last minute','a game changer','time-consuming','on top of'],0]
+ ],
+ p1:{title:'Morning routines',qs:[
+  ['Do you like to get up early in the morning?','Honestly, not really. I\'m more of a <b>night owl</b>. But on school days I <b>have no choice but to</b> be up by six, so I\'ve gradually <b>got used to it</b>. And I have to admit that when I do get up early, I feel <b>far more productive</b> for the rest of the day.'],
+  ['What is your morning routine?','It\'s <b>pretty straightforward</b>. Once my <b>alarm goes off</b>, I make my bed, have a quick shower and then <b>grab something to eat</b> before heading to school. I also spend about ten minutes <b>going over</b> my vocabulary on the bus, which helps me <b>make the most of</b> my journey.'],
+  ['Is breakfast important?','Absolutely, I\'d say it\'s <b>the most important meal of the day</b>. If I <b>skip breakfast</b>, I usually <b>run out of energy</b> by mid-morning and find it hard to concentrate in class. That\'s why my mum always <b>insists that</b> I eat at least a bowl of phở or a bánh mì before I leave.'],
+  ['What do you do right after getting up in the morning?','The first thing I do is drink a big glass of water, because it really helps me <b>wake up properly</b>. Then, to be honest, I <b>tend to</b> check my phone for a few minutes, which isn\'t a great habit. I\'m trying to <b>cut down on</b> it, since scrolling <b>first thing in the morning</b> can easily <b>eat into</b> my time.']
+ ]},
+ p2:{cue:'Describe a way/change that helps you save a lot of time.',say:['what it is','how you implement it','how difficult it is','and explain how you feel about the way/change'],
+  map:{root:'A change that saves me time',br:[
+   ['What it is',[['weekly planning','every Sunday evening'],['calendar app','free, from my cousin'],['before','put things off']]],
+   ['How I do it',[['list tasks','homework, tests, classes'],['prioritise','urgent tasks first'],['time slots','follow it every evening']]],
+   ['How difficult',[['a month','to get into the habit'],['plans broke','unexpected things'],['kept going','second nature']]],
+   ['Feel',[['game changer','stay on top of work'],['free time','badminton'],['less stressed','the effort paid off']]]]},
+  sample:['I\'d like to talk about a small change I made last year that has saved me a huge amount of time, which is planning my whole week every Sunday evening.',
+   'Before that, my studies were a bit of a mess. I used to <b>put things off</b> until <b>the last minute</b>, and I\'d waste ages every day just deciding what to do next, which was incredibly <b>time-consuming</b>. Then my cousin, who\'s at university, showed me how she uses a free calendar app, and I decided to give it a go.',
+   'So basically, every Sunday I spend about twenty minutes writing down all my homework, tests and extra classes for the coming week. Then I <b>prioritise</b> them, putting the most urgent tasks first, and give each one a specific time slot in the app. Every evening, I just open it and follow the plan.',
+   'To be honest, it wasn\'t easy at first. It took me nearly a month to <b>get into the habit of</b> doing it, and there were weeks when I couldn\'t <b>stick to</b> the plan because something unexpected came up. But I kept going, and eventually it became second nature.',
+   'Now I think it\'s been a real <b>game changer</b> for me. I can <b>stay on top of</b> my schoolwork much more easily, and it has <b>freed up</b> a couple of hours each week for things I enjoy, like playing badminton. I feel far less stressed, and I\'m really glad the effort has <b>paid off</b>.']},
+ p3:[
+  ['Is it necessary for children to learn time management?',['yes, the earlier the better','balance study and play; a skill for adulthood','brother\'s timetable on the fridge','a foundation for later success'],'Definitely, and I\'d say <b>the earlier, the better</b>. Children who learn to manage their time can <b>balance</b> schoolwork and play without feeling <b>overwhelmed</b>, and it\'s a skill they\'ll <b>carry into adulthood</b>. For example, my younger brother has a simple timetable on the fridge, and he finishes his homework before dinner without being reminded. So it\'s not just useful; it\'s <b>a foundation for</b> success later on.'],
+  ['What can schools do to help students learn time management?',['build it into the curriculum','break projects into steps with deadlines','form teacher checks our planners every Monday','turn advice into a habit'],'I think schools could <b>build it into</b> the curriculum rather than <b>leaving it to chance</b>. Teachers might show students how to <b>break</b> big projects <b>into</b> smaller steps and set a deadline for each stage. At my school, our form teacher asks us to keep a study planner and checks it every Monday, which has really <b>kept us on track</b>. In short, schools can turn time management into a habit instead of just a piece of advice.'],
+  ['What can people do to save time?',['cut out distractions','social media eats up hours; plan ahead, group tasks','dad prepares a week of meals on Sunday','work smarter, not harder'],'Well, the simplest way is probably to <b>cut out distractions</b>, especially social media, which can <b>eat up</b> hours without us noticing. People can also <b>plan ahead</b> and do similar tasks together, like answering all their messages at once. My dad, for instance, prepares meals for the whole week on Sunday, so he doesn\'t have to cook every evening. So it\'s mostly about <b>working smarter, not harder</b>.'],
+  ['Does technology help people save time? How and why?',['on the whole, yes','tasks done in seconds on a phone','paying bills, booking tickets, Grab delivery','a double-edged sword: use it wisely'],'<b>On the whole</b>, yes. Things that used to take hours, like paying bills or booking train tickets, can now be done <b>in a matter of seconds</b> on a smartphone. Delivery apps such as Grab also mean we don\'t have to queue at shops or restaurants. However, technology is <b>a double-edged sword</b>, because the same phone that saves us time can also waste it if we spend all evening scrolling. So it only saves time if we <b>use it wisely</b>.'],
+  ['Do you think parents should be responsible for teaching children to save time?',['to a large extent, yes','children copy the habits they see at home','mum lays out uniforms the night before','schools help, but parents matter most'],'<b>To a large extent</b>, yes, because children tend to copy what they see at home. If parents are organised and <b>set a good example</b>, kids will naturally <b>pick up</b> those habits. My mum, for example, always lays out our school uniforms the night before, and now I do the same thing without thinking. Of course, schools should <b>play a part</b> too, but I believe the main responsibility <b>lies with</b> parents.'],
+  ['Do people who can manage time well become successful more easily?',['a clear advantage, but no guarantee','meet deadlines, energy for new skills','friend: part-time job and a scholarship','one piece of the puzzle'],'I\'d say they have <b>a clear advantage</b>, although it\'s no guarantee. Good time managers can <b>meet deadlines</b> and still have energy left for learning new skills, which helps them <b>get ahead</b>. A good example is a friend of mine who balanced a part-time job with her studies and still won a scholarship. That said, success also depends on luck and talent, so time management is important, but it\'s only <b>one piece of the puzzle</b>.']
+ ]
+};
+
+var S={tab:'vocab',flip:{},qa:{},qdone:false,open:{},recs:{},notes:''};
+var $=function(id){return document.getElementById(id)};
+var L=['A','B','C','D'];
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function plain(t){return String(t).replace(/<[^>]+>/g,'')}
+function toast(m){var t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(function(){t.hidden=true},2800)}
+
+/* ---------- Đọc to bằng giọng máy (nếu trình duyệt hỗ trợ) ---------- */
+var TTS='speechSynthesis' in window;
+function speak(text,rate){
+  if(!TTS){toast('Trình duyệt này chưa hỗ trợ đọc to.');return}
+  speechSynthesis.cancel();
+  var u=new SpeechSynthesisUtterance(plain(text)); u.lang='en-GB'; u.rate=rate||0.95;
+  var v=speechSynthesis.getVoices().filter(function(x){return /^en-GB/i.test(x.lang)})[0]||speechSynthesis.getVoices().filter(function(x){return /^en/i.test(x.lang)})[0];
+  if(v) u.voice=v;
+  speechSynthesis.speak(u);
+}
+
+/* ---------- Ghi âm ---------- */
+var REC=null; // {id, mr, chunks, t0, iv}
+var CAN_REC=!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder);
+function startRec(id,onFail){
+  if(REC){stopRec();}
+  if(!CAN_REC){toast('Máy/trình duyệt này không ghi âm được. Em vẫn tự nói to rồi xem bài mẫu nhé.');if(onFail)onFail();return}
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+    var mr=new MediaRecorder(stream), r={id:id,mr:mr,chunks:[],t0:Date.now()};
+    mr.ondataavailable=function(e){if(e.data.size)r.chunks.push(e.data)};
+    mr.onstop=function(){
+      stream.getTracks().forEach(function(t){t.stop()});
+      var type=mr.mimeType||'audio/webm', blob=new Blob(r.chunks,{type:type});
+      if(S.recs[id]) URL.revokeObjectURL(S.recs[id].url);
+      S.recs[id]={url:URL.createObjectURL(blob),ext:/mp4|aac/.test(type)?'m4a':(/ogg/.test(type)?'ogg':'webm'),secs:Math.round((Date.now()-r.t0)/1000)};
+      S.open[id]=S.open[id]||false; render();
+    };
+    mr.start(); REC=r;
+    r.iv=setInterval(function(){var el=$('ri-'+id); if(el) el.textContent='● Đang ghi âm '+fmt((Date.now()-r.t0)/1000)},500);
+    render();
+  },function(){toast('Chưa có quyền dùng micro. Em bấm cho phép micro, hoặc tự nói to rồi xem bài mẫu.');if(onFail)onFail()});
+}
+function stopRec(){ if(!REC) return; clearInterval(REC.iv); var r=REC; REC=null; if(r.mr.state!=='inactive') r.mr.stop(); }
+function fmt(s){s=Math.max(0,Math.round(s));return Math.floor(s/60)+':'+('0'+s%60).slice(-2)}
+function recBlock(id){
+  var live=REC&&REC.id===id, r=S.recs[id], h='<div class="row">';
+  h+='<button class="btn ghost" data-act="say" data-id="'+id+'">🔊 Nghe câu hỏi</button>';
+  h+= live ? '<button class="btn rec" data-act="stop">■ Dừng ghi âm</button><span class="recinfo live" id="ri-'+id+'">● Đang ghi âm 0:00</span>'
+           : '<button class="btn rec" data-act="rec" data-id="'+id+'">● '+(r?'Ghi âm lại':'Ghi âm câu trả lời')+'</button>';
+  h+='</div>';
+  if(r && !live) h+='<div class="row"><audio controls src="'+r.url+'"></audio><a class="link" href="'+r.url+'" download="time-management-'+id+'.'+r.ext+'">Tải bản ghi âm</a><span class="recinfo">'+fmt(r.secs)+'</span></div>';
+  return h;
+}
+function revealBlock(id,inner){
+  if(S.open[id]) return inner;
+  var can=!!S.recs[id]||S.skip&&S.skip[id];
+  return '<div class="row"><button class="btn" data-act="open" data-id="'+id+'"'+(can?'':' disabled')+'>Xem câu trả lời mẫu</button>'+(can?'':'<button class="link" data-act="skip" data-id="'+id+'">Không ghi âm được? Bấm vào đây</button>')+'</div>';
+}
+
+/* ---------- Các phần ---------- */
+function tabsHTML(){
+  var p1=T.p1.qs.filter(function(q,i){return S.open['p1-'+i]}).length, p3=T.p3.filter(function(q,i){return S.open['p3-'+i]}).length;
+  var items=[['vocab','Từ vựng',S.qdone?'✓ '+quizScore()+'/10':'10 cụm từ'],['p1','Part 1',p1+'/'+T.p1.qs.length+' câu'],['p2','Part 2',S.open.p2?'✓ Đã xem mẫu':'Cue card 2 phút'],['p3','Part 3',p3+'/'+T.p3.length+' câu']];
+  return items.map(function(t){var done=(t[0]==='vocab'&&S.qdone)||(t[0]==='p1'&&p1===T.p1.qs.length)||(t[0]==='p2'&&S.open.p2)||(t[0]==='p3'&&p3===T.p3.length);
+    return '<button class="tab'+(S.tab===t[0]?' on':'')+(done?' done':'')+'" data-act="tab" data-id="'+t[0]+'"><b>'+t[1]+'</b><span>'+t[2]+'</span></button>'}).join('');
+}
+function quizScore(){return T.quiz.filter(function(q,i){return S.qa[i]===q[2]}).length}
+function vocabHTML(){
+  var h='<section class="card"><h2>Từ vựng & cụm từ</h2><p class="lead">Bấm vào thẻ để xem nghĩa tiếng Việt. Bấm 🔊 để nghe phát âm.</p><div class="cards" style="margin-top:12px">';
+  T.vocab.forEach(function(v,i){ var f=S.flip[i];
+    h+='<div class="fc'+(f?' flip':'')+'" role="button" tabindex="0" data-act="flip" data-i="'+i+'"><span class="w">'+esc(v[0])+'</span><span class="ipa">'+esc(v[1])+'</span>'+(f?'<span class="vi">'+esc(v[3])+'</span><span class="m">'+esc(v[2])+'</span>':'<span class="m" style="color:var(--mute)">Bấm để xem nghĩa</span>')+'<button class="say" data-act="sayw" data-i="'+i+'">🔊 Nghe</button></div>'; });
+  h+='</div></section>';
+  h+='<section class="card"><h2>Luyện nhanh</h2><p class="lead">Chọn cụm từ đúng cho mỗi câu (lấy từ bài mẫu Part 2). Làm đủ 10 câu rồi bấm Chấm điểm.</p>';
+  T.quiz.forEach(function(q,i){
+    h+='<div class="q"><p class="qt"><span class="qn">'+(i+1)+'</span>'+esc(q[0]).replace('___','<span class="blank"></span>')+'</p><div class="opts">';
+    q[1].forEach(function(o,oi){ var c='opt'; if(S.qdone){ if(oi===q[2]) c+=' right'; else if(S.qa[i]===oi) c+=' wrong'; } else if(S.qa[i]===oi) c+=' sel';
+      h+='<button class="'+c+'" data-act="pick" data-i="'+i+'" data-o="'+oi+'"'+(S.qdone?' disabled':'')+'><b style="color:var(--brand)">'+L[oi]+'.</b> '+esc(o)+'</button>'; });
+    h+='</div></div>';
+  });
+  var n=Object.keys(S.qa).length;
+  h+='<div class="row" style="margin-top:16px">'+(S.qdone?'<span class="score">'+quizScore()+'/10 câu đúng</span><button class="btn ghost" data-act="requiz">Làm lại</button>':'<button class="btn" data-act="grade"'+(n<10?' disabled':'')+'>Chấm điểm</button><span class="recinfo">Đã chọn '+n+'/10</span>')+'</div></section>';
+  return h;
+}
+function p1HTML(){
+  var h='<section class="card"><h2>Part 1 · '+esc(T.p1.title)+'</h2><p class="lead">Trả lời 2–4 câu cho mỗi câu hỏi.</p><div class="instr">Cách luyện: <b>Nghe câu hỏi</b> → bấm <b>Ghi âm</b>, tự trả lời trong khoảng 20–30 giây → nghe lại giọng mình → mở <b>câu trả lời mẫu</b> để so sánh và học cụm từ tô vàng.</div></section><section class="card">';
+  T.p1.qs.forEach(function(q,i){ var id='p1-'+i;
+    h+='<div class="q"><p class="qt"><span class="qn">'+(i+1)+'</span>'+esc(q[0])+'</p>'+recBlock(id);
+    h+=revealBlock(id,'<div class="sample"><span class="h">Câu trả lời mẫu · band 7.0</span><p>'+q[1]+'</p><div class="row" style="margin-top:4px"><button class="btn ghost" data-act="saytext" data-k="p1" data-i="'+i+'">🔊 Nghe bài mẫu</button></div></div>')+'</div>';
+  });
+  return h+'</section>';
+}
+var P2={phase:'idle',left:0,iv:null};
+function p2Start(skipPrep){
+  clearInterval(P2.iv); P2.phase=skipPrep?'speak':'prep'; P2.left=skipPrep?120:60;
+  if(skipPrep) startRec('p2');
+  P2.iv=setInterval(p2Tick,1000); render();
+}
+function p2Tick(){
+  P2.left--;
+  if(P2.left<=0){
+    if(P2.phase==='prep'){ P2.phase='speak'; P2.left=120; toast('Hết 1 phút chuẩn bị. Bắt đầu nói!'); startRec('p2'); }
+    else { clearInterval(P2.iv); P2.phase='done'; stopRec(); toast('Hết 2 phút. Em nghe lại bài nói rồi xem bài mẫu nhé.'); }
+    render(); return;
+  }
+  var c=$('clock'), b=$('tbar'); if(c) c.textContent=fmt(P2.left); if(b) b.style.width=(100-P2.left/(P2.phase==='prep'?60:120)*100)+'%';
+}
+function p2Stop(){ clearInterval(P2.iv); if(P2.phase==='speak') stopRec(); P2.phase='done'; render(); }
+function mindmap(){
+  var m=T.p2.map, h='<div class="mm"><div class="root">'+esc(m.root)+'</div>';
+  m.br.forEach(function(b,i){ h+='<div class="br b'+(i+1)+'"><div class="k">'+esc(b[0])+'</div><ul>'+b[1].map(function(x){return '<li><b>'+esc(x[0])+'</b><span>→ '+esc(x[1])+'</span></li>'}).join('')+'</ul></div>'; });
+  return h+'</div>';
+}
+function p2HTML(){
+  var p=T.p2, h='<section class="card"><h2>Part 2 · Cue card</h2><p class="lead">1 phút chuẩn bị (chỉ ghi từ khoá), 2 phút nói. Máy tự đếm giờ và tự ghi âm khi bắt đầu nói.</p>';
+  h+='<div class="cue" style="margin-top:12px"><h3>'+esc(p.cue)+'</h3>You should say:<ul>'+p.say.map(function(s){return '<li>'+esc(s)+'</li>'}).join('')+'</ul></div>';
+  var lbl={idle:'Sẵn sàng',prep:'Chuẩn bị – ghi từ khoá',speak:'Đang nói – máy đang ghi âm',done:'Đã xong'}[P2.phase];
+  var total=P2.phase==='prep'?60:120, shown=P2.phase==='idle'?60:(P2.phase==='done'?0:P2.left);
+  h+='<div class="timer"><span class="clock" id="clock">'+fmt(shown)+'</span><div style="flex:1 1 180px"><div class="phase">'+lbl+'</div><div class="bar" style="margin-top:6px"><i id="tbar" style="width:'+(P2.phase==='idle'?0:(P2.phase==='done'?100:100-P2.left/total*100))+'%"></i></div></div>';
+  if(P2.phase==='idle'||P2.phase==='done') h+='<button class="btn" data-act="p2go">▶ '+(P2.phase==='done'?'Làm lại':'Bắt đầu')+'</button><button class="btn ghost" data-act="p2now">Nói luôn</button>';
+  else h+='<button class="btn ghost" data-act="p2stop">■ Dừng</button>';
+  h+='</div>';
+  h+='<label style="display:block;margin-top:12px;font-weight:600;font-size:14px">Sơ đồ bài nói của em (từ khoá)<textarea id="notes" placeholder="VD: what – weekly planning / how – list tasks, prioritise / difficult – ... / feel – ...">'+esc(S.notes)+'</textarea></label>';
+  var r=S.recs.p2; if(r && P2.phase!=='speak') h+='<div class="row"><audio controls src="'+r.url+'"></audio><a class="link" href="'+r.url+'" download="time-management-part2.'+r.ext+'">Tải bản ghi âm</a><span class="recinfo">'+fmt(r.secs)+'</span></div>';
+  h+=revealBlock('p2','<div class="sample" style="background:var(--card);padding:0"><span class="h" style="color:var(--brand)">Sơ đồ tư duy mẫu</span>'+mindmap()+'</div><div class="sample"><span class="h">Bài mẫu · band 7.0</span>'+p.sample.map(function(x){return '<p>'+x+'</p>'}).join('')+'<div class="row"><button class="btn ghost" data-act="sayp2">🔊 Nghe bài mẫu</button></div></div>');
+  return h+'</section>';
+}
+function p3HTML(){
+  var h='<section class="card"><h2>Part 3 · Thảo luận</h2><p class="lead">Mỗi câu trả lời 3–5 câu theo công thức PEEL.</p><div class="formula"><span style="background:var(--c1b);border:1.5px solid var(--c1)">Point · quan điểm</span><span style="background:var(--c2b);border:1.5px solid var(--c2)">Explain · giải thích</span><span style="background:var(--c3b);border:1.5px solid var(--c3)">Example · ví dụ thực tế</span><span style="background:var(--c4b);border:1.5px solid var(--c4)">Link · chốt lại</span></div></section><section class="card">';
+  T.p3.forEach(function(q,i){ var id='p3-'+i;
+    h+='<div class="q"><p class="qt"><span class="qn">'+(i+1)+'</span>'+esc(q[0])+'</p>'+recBlock(id);
+    h+=revealBlock(id,'<div class="peel"><div class="p"><b>Point</b>'+esc(q[1][0])+'</div><div class="e1"><b>Explain</b>'+esc(q[1][1])+'</div><div class="e2"><b>Example</b>'+esc(q[1][2])+'</div><div class="l"><b>Link</b>'+esc(q[1][3])+'</div></div><div class="sample"><span class="h">Câu trả lời mẫu · band 7.0</span><p>'+q[2]+'</p><div class="row" style="margin-top:4px"><button class="btn ghost" data-act="saytext" data-k="p3" data-i="'+i+'">🔊 Nghe bài mẫu</button></div></div>')+'</div>';
+  });
+  return h+'</section>';
+}
+function render(){
+  $('tabs').innerHTML=tabsHTML();
+  $('main').innerHTML={vocab:vocabHTML,p1:p1HTML,p2:p2HTML,p3:p3HTML}[S.tab]();
+}
+function qText(id){ var p=id.split('-'); if(p[0]==='p1') return T.p1.qs[+p[1]][0]; if(p[0]==='p3') return T.p3[+p[1]][0]; return T.p2.cue }
+
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-act]'); if(!b) return;
+  var a=b.dataset.act, id=b.dataset.id, i=+b.dataset.i;
+  if(a==='tab'){ if(REC||P2.phase==='prep'||P2.phase==='speak'){ if(!confirm('Đang ghi âm/đếm giờ. Chuyển trang sẽ dừng lại. Tiếp tục?')) return; stopRec(); clearInterval(P2.iv); if(P2.phase!=='idle')P2.phase='done'; }
+    S.tab=id; render(); window.scrollTo({top:0}); }
+  else if(a==='flip'&&!e.target.closest('.say')){ S.flip[i]=!S.flip[i]; render(); }
+  else if(a==='sayw'){ e.stopPropagation(); speak(T.vocab[i][0].replace(' sth',' something'),0.85); }
+  else if(a==='pick'){ if(S.qdone) return; S.qa[i]=+b.dataset.o; render(); }
+  else if(a==='grade'){ S.qdone=true; render(); toast('Đúng '+quizScore()+'/10 câu.'); }
+  else if(a==='requiz'){ S.qa={}; S.qdone=false; render(); }
+  else if(a==='say'){ speak(qText(id)); }
+  else if(a==='saytext'){ speak(b.dataset.k==='p1'?T.p1.qs[i][1]:T.p3[i][2]); }
+  else if(a==='sayp2'){ speak(T.p2.sample.join(' ')); }
+  else if(a==='rec'){ startRec(id); }
+  else if(a==='stop'){ stopRec(); }
+  else if(a==='skip'){ S.skip=S.skip||{}; S.skip[id]=true; render(); }
+  else if(a==='open'){ S.open[id]=true; render(); }
+  else if(a==='p2go'){ p2Start(false); }
+  else if(a==='p2now'){ p2Start(true); }
+  else if(a==='p2stop'){ p2Stop(); }
+});
+document.addEventListener('keydown',function(e){ if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('fc')){e.preventDefault();e.target.click()} });
+document.addEventListener('input',function(e){ if(e.target.id==='notes') S.notes=e.target.value; });
+if(TTS) speechSynthesis.onvoiceschanged=function(){};
+render();
+</script>
+</body></html>
