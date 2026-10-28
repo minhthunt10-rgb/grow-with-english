@@ -69,12 +69,11 @@ h2{font:700 22px/1.2 var(--f-display);margin:0}
 .msg.ok{color:var(--ok);font-weight:600}
 .score{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
 .score .big{font:700 34px/1 var(--f-display);color:var(--brand)}
-table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
-th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
-th{font-size:12px;color:var(--mute);font-weight:600}
-td.got{color:var(--bad);text-decoration:line-through}
-td.ans{color:var(--ok);font-weight:600}
-.tw{overflow-x:auto}
+.wl{list-style:none;margin:8px 0 0;padding:0;font-size:14px}
+.wl li{padding:7px 0;border-bottom:1px solid var(--line)}
+.wl .got{color:var(--bad);text-decoration:line-through;overflow-wrap:anywhere}
+.wl .ans{color:var(--ok);font-weight:700}
+.wl .mean{display:block;color:var(--mute);font-size:13px;margin-left:40px}
 </style></head>
 <body><div class="wrap">
 <header class="banner">
@@ -176,9 +175,9 @@ function render(){
     h += '<div class="score" style="margin-top:8px"><span class="big">' + score + '/' + (r[1] - r[0]) + '</span><span class="msg">' + (s.review ? 'Lần ôn lại' : 'Lần nộp chính') + (s.first ? ' · Điểm lần đầu gửi cô: ' + s.first.score + '/' + s.first.max : '') + '</span></div>';
     h += '<p class="msg' + (s.sent ? ' ok' : '') + '" id="sendMsg">' + (s.sent ? '✓ Đã gửi kết quả và danh sách từ sai cho cô.' : (s.review ? '' : 'Đang gửi kết quả cho cô…')) + '</p>';
     if(wl.length){
-      h += '<h3 style="margin:12px 0 0;font-size:16px">Từ em làm sai (' + wl.length + ')</h3><div class="tw"><table><tr><th>Câu</th><th>Từ gốc</th><th>Em điền</th><th>Đáp án</th><th>Nghĩa</th></tr>';
-      wl.forEach(function(w){ h += '<tr><td>' + w.n + '</td><td>' + esc(w.root) + '</td><td class="got">' + esc(w.got) + '</td><td class="ans">' + esc(w.ans) + '</td><td>' + esc(w.mean) + '</td></tr>'; });
-      h += '</table></div>';
+      h += '<h3 style="margin:12px 0 0;font-size:16px">Từ em làm sai (' + wl.length + ')</h3><ul class="wl">';
+      wl.forEach(function(w){ h += '<li><span class="qn">' + w.n + '</span><b class="root">' + esc(w.root) + '</b> <span class="got">' + esc(w.got) + '</span> → <span class="ans">' + esc(w.ans) + '</span><span class="mean">' + esc(w.type) + ' · ' + esc(w.mean) + '</span></li>'; });
+      h += '</ul>';
     } else h += '<p class="msg ok">Tuyệt vời, em đúng hết cả mục!</p>';
     h += '<div class="row"><button class="btn ghost" data-act="redo">Làm lại để ôn</button>' + (k + 1 < NSEC ? '<button class="btn" data-act="next">Sang Mục ' + (k + 2) + ' →</button>' : '') + '</div>';
     h += '<h3 style="margin:18px 0 0;font-size:16px">Đáp án chi tiết</h3>';
