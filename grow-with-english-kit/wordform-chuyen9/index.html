@@ -69,23 +69,34 @@ h2{font:700 22px/1.2 var(--f-display);margin:0}
 .msg.ok{color:var(--ok);font-weight:600}
 .score{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
 .score .big{font:700 34px/1 var(--f-display);color:var(--brand)}
+.hub{display:grid;gap:10px}
+.mlink{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;text-decoration:none;color:var(--ink)}
+.mlink:hover{border-color:var(--brand)}
+.mlink .num{flex:0 0 auto;display:grid;place-items:center;width:46px;height:46px;border-radius:12px;background:var(--hi);color:var(--orange);font:700 22px/1 var(--f-display)}
+.mlink .t{flex:1;min-width:0}
+.mlink .t b{display:block;font:700 18px/1.25 var(--f-display);color:var(--brand)}
+.mlink .t span{display:block;font-size:13px;color:var(--mute)}
+.mlink .t span.ok{color:var(--ok);font-weight:600}
+.mlink .go{color:var(--brand);font-weight:700;font-size:20px}
+.part{font:700 18px/1.3 var(--f-display);margin:18px 0 0;padding-top:12px;border-top:2px solid var(--line);color:var(--orange)}
+.vq{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+.vq .mean{font-weight:600}
 </style></head>
 <body><div class="wrap">
 <header class="banner">
   <div class="brandrow"><img src="../logo.png" alt="Logo Grow with English"><span class="gwe">Grow with English</span><span class="msm">Tiếng Anh Ms. Minh Thư</span></div>
-  <a class="back" href="../#khoi-9">← Kho bài tập · Khối 9</a>
-  <h1>Word Form · Chuyên Anh 9</h1>
-  <p>Viết dạng đúng của từ in hoa trong ngoặc. Mỗi mục 30 câu.</p>
+  <a class="back" id="back" href="../#khoi-9">← Kho bài tập · Khối 9</a>
+  <h1 id="h1">Word Form · Chuyên Anh 9</h1>
+  <p id="sub">Mỗi mục là 1 bài: 30 câu Word Form + 20 câu viết từ tiếng Anh theo nghĩa.</p>
 </header>
 
-<section class="card info">
+<section class="card info" id="info" hidden>
   <label>Họ và tên học sinh *<input id="sName" autocomplete="name" placeholder="VD: Nguyễn Minh Anh"></label>
   <label>Lớp *<input id="sClass" placeholder="VD: 9 Chuyên Anh"></label>
-  <p class="rule">Điền đủ 30 câu mới nộp được. Lần nộp đầu tiên của mỗi mục được gửi cho cô (điểm và danh sách từ sai). Sau đó em có thể bấm <b>Làm lại để ôn</b> bao nhiêu lần tuỳ thích.</p>
+  <p class="rule">Điền đủ 50 câu mới nộp được. Lần nộp đầu tiên được gửi cho cô. Sau đó em có thể bấm <b>Làm lại để ôn</b> bao nhiêu lần tuỳ thích.</p>
 </section>
 
-<nav class="tabs" id="tabs" aria-label="Các mục"></nav>
-<section class="card" id="main"></section>
+<section id="main"></section>
 </div>
 
 <script src="../config.js"></script>
@@ -93,21 +104,23 @@ h2{font:700 22px/1.2 var(--f-display);margin:0}
 <script>
 var SHEET_URL = window.GWE_SHEET_URL || '';
 var UNIT = 'Word Form Chuyên Anh 9';
-var PER = 30;
+var PER = 30, NB = 20;              // mỗi mục: 30 câu Word Form + 20 câu nghĩa → từ (lấy trong 30 từ đó)
 var WF = window.WF || [];
 var NSEC = Math.ceil(WF.length / PER);
-var cur = 0;
-var S = {};   // S[sec] = {a:{idx:[..]}, done:bool, sent:bool, first:{score,max}, review:bool}
+var M = parseInt(new URLSearchParams(location.search).get('m'), 10);   // ?m=1, ?m=2 … ; không có → danh sách mục
+var K = (M >= 1 && M <= NSEC) ? M - 1 : -1;
+var S = null;   // {a:{i:[..]}, b:{i:'..'}, done, sent, first:{score,max,sa,sb}, review}
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function secRange(k){ return [k * PER, Math.min(WF.length, (k + 1) * PER)]; }
 
-/* ---------- lưu trên máy học sinh ---------- */
-function save(){ try{ localStorage.setItem('gwe-wordform-chuyen9', JSON.stringify({S:S, cur:cur})); }catch(e){} }
-function load(){ try{ var o = JSON.parse(localStorage.getItem('gwe-wordform-chuyen9') || 'null'); if(o){ S = o.S || {}; cur = Math.min(o.cur || 0, NSEC - 1); } }catch(e){} }
+/* ---------- lưu trên máy học sinh (mỗi mục một khoá) ---------- */
+function skey(k){ return 'gwe-wf9-m' + (k + 1); }
+function loadSec(k){ try{ return JSON.parse(localStorage.getItem(skey(k)) || 'null'); }catch(e){ return null; } }
+function save(){ try{ localStorage.setItem(skey(K), JSON.stringify(S)); }catch(e){} }
 function saveWho(){ try{ localStorage.setItem('gwe-who', JSON.stringify({n:$('sName').value, c:$('sClass').value})); }catch(e){} }
 function loadWho(){ try{ var o = JSON.parse(localStorage.getItem('gwe-who') || 'null'); if(o){ $('sName').value = o.n || ''; $('sClass').value = o.c || ''; } }catch(e){} }
-function st(k){ return S[k] || (S[k] = {a:{}, done:false, sent:false}); }
 
 /* ---------- chấm: bỏ hoa/thường, dấu gạch nối, khoảng trắng, chính tả Anh–Mỹ ---------- */
 function norm(s){
@@ -118,30 +131,36 @@ function norm(s){
 function blanks(q){ return q[0].split('___').length - 1; }
 function keys(q){ return blanks(q) > 1 ? q[1][0].split(/\s*,\s*/).map(function(x){ return [x]; }) : [q[1]]; }
 function isRight(q, got){
-  var ks = keys(q);
-  return ks.every(function(alts, j){ var g = norm(got[j] || ''); return g && alts.some(function(a){ return norm(a) === g; }); });
+  return keys(q).every(function(alts, j){ var g = norm(got[j] || ''); return g && alts.some(function(a){ return norm(a) === g; }); });
+}
+function isRightB(i, got){ var g = norm(got || ''); return !!g && WF[i][1].some(function(a){ return norm(a) === g; }); }
+
+/* ---------- 20 câu phần B: chọn cố định theo số mục (mọi HS cùng đề) ---------- */
+function pickB(k){
+  var r = secRange(k), pool = [], seed = (k + 1) * 7919;
+  for(var i = r[0]; i < r[1]; i++) if(blanks(WF[i]) === 1) pool.push(i);
+  function rnd(){ seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+  for(var j = pool.length - 1; j > 0; j--){ var t = Math.floor(rnd() * (j + 1)), x = pool[j]; pool[j] = pool[t]; pool[t] = x; }
+  return pool.slice(0, NB);
 }
 
-/* ---------- giao diện ---------- */
-function secRange(k){ return [k * PER, Math.min(WF.length, (k + 1) * PER)]; }
-function renderTabs(){
-  var h = '';
+/* ---------- danh sách mục ---------- */
+function renderHub(){
+  var h = '<div class="hub">';
   for(var k = 0; k < NSEC; k++){
-    var r = secRange(k), s = S[k], sub = s && s.first ? 'Đã nộp ' + s.first.score + '/' + s.first.max : 'Câu ' + (r[0] + 1) + '–' + r[1];
-    h += '<button class="tab' + (k === cur ? ' on' : '') + (s && s.first ? ' done' : '') + '" data-k="' + k + '"><b>Mục ' + (k + 1) + '</b><span>' + sub + '</span></button>';
+    var r = secRange(k), s = loadSec(k);
+    var st = s && s.first ? '<span class="ok">✓ Đã nộp: ' + s.first.score + '/' + s.first.max + '</span>' : '<span>Câu ' + (r[0] + 1) + '–' + r[1] + ' · 30 câu Word Form + ' + NB + ' câu nghĩa</span>';
+    h += '<a class="mlink" href="?m=' + (k + 1) + '"><span class="num">' + (k + 1) + '</span><span class="t"><b>Mục ' + (k + 1) + '</b>' + st + '</span><span class="go" aria-hidden="true">›</span></a>';
   }
-  $('tabs').innerHTML = h;
+  $('main').innerHTML = h + '</div>';
 }
 
-function qHtml(i, s){
-  var q = WF[i], got = s.a[i] || [], j = 0, show = s.done;
-  var right = show && isRight(q, got);
-  var parts = esc(q[0]).split('___');
-  var body = parts[0];
+/* ---------- một mục ---------- */
+function qHtml(i){
+  var q = WF[i], got = S.a[i] || [], show = S.done, right = show && isRight(q, got);
+  var parts = esc(q[0]).split('___'), body = parts[0];
   for(var p = 1; p < parts.length; p++){
-    var v = got[j] || '';
-    body += '<input class="blank' + (show ? (right ? ' ok' : ' bad') : '') + '" data-i="' + i + '" data-j="' + j + '" value="' + esc(v) + '" autocomplete="off" autocapitalize="off" spellcheck="false"' + (show ? ' readonly' : '') + ' aria-label="Câu ' + (i + 1) + ' chỗ trống ' + (j + 1) + '">' + parts[p];
-    j++;
+    body += '<input class="blank' + (show ? (right ? ' ok' : ' bad') : '') + '" data-i="' + i + '" data-j="' + (p - 1) + '" value="' + esc(got[p - 1] || '') + '" autocomplete="off" autocapitalize="off" spellcheck="false"' + (show ? ' readonly' : '') + ' aria-label="Câu ' + (i + 1) + '">' + parts[p];
   }
   var h = '<div class="q"><p class="qs"><span class="qn">' + (i + 1) + '</span>' + body + ' <span class="root">(' + esc(q[2]) + ')</span></p>';
   if(show){
@@ -151,66 +170,87 @@ function qHtml(i, s){
   }
   return h + '</div>';
 }
-
-function wrongList(k){
-  var r = secRange(k), s = st(k), out = [];
-  for(var i = r[0]; i < r[1]; i++){
-    var got = s.a[i] || [];
-    if(!isRight(WF[i], got)) out.push({n:i + 1, root:WF[i][2], got:got.join(', '), ans:WF[i][1].join(' / '), type:WF[i][3], mean:WF[i][4]});
-  }
-  return out;
+function bHtml(i, n){
+  var q = WF[i], got = S.b[i] || '', show = S.done, right = show && isRightB(i, got);
+  var h = '<div class="q"><p class="qs vq"><span class="qn">' + n + '</span><span class="tag">' + esc(q[3]) + '</span><span class="mean">' + esc(q[4]) + ':</span>'
+    + '<input class="blank vb' + (show ? (right ? ' ok' : ' bad') : '') + '" data-b="' + i + '" value="' + esc(got) + '" autocomplete="off" autocapitalize="off" spellcheck="false"' + (show ? ' readonly' : '') + ' aria-label="Nghĩa câu ' + n + '"></p>';
+  if(show) h += '<div class="ex' + (right ? '' : ' bad') + '"><p class="ans">' + (right ? '✓ Đúng: ' : '✗ Đáp án: ') + '<b>' + esc(q[1].join(' / ')) + '</b> <span class="msg">(câu ' + (i + 1) + ' phần A)</span></p></div>';
+  return h + '</div>';
 }
 
-function render(){
-  renderTabs();
-  var k = cur, s = st(k), r = secRange(k), h = '';
-  h += '<h2>Mục ' + (k + 1) + ' · Câu ' + (r[0] + 1) + '–' + r[1] + '</h2>';
-  if(s.done){
-    var wl = wrongList(k), score = (r[1] - r[0]) - wl.length;
-    h += '<div class="score" style="margin-top:8px"><span class="big">' + score + '/' + (r[1] - r[0]) + '</span><span class="msg">' + (s.review ? 'Lần ôn lại' : 'Lần nộp chính') + (s.first ? ' · Điểm lần đầu gửi cô: ' + s.first.score + '/' + s.first.max : '') + '</span></div>';
-    h += '<p class="msg' + (s.sent ? ' ok' : '') + '" id="sendMsg">' + (s.sent ? '✓ Đã gửi kết quả cho cô.' : (s.review ? '' : 'Đang gửi kết quả cho cô…')) + '</p>';
-    if(!wl.length) h += '<p class="msg ok">Tuyệt vời, em đúng hết cả mục!</p>';
-    h += '<div class="row"><button class="btn ghost" data-act="redo">Làm lại để ôn</button>' + (k + 1 < NSEC ? '<button class="btn" data-act="next">Sang Mục ' + (k + 2) + ' →</button>' : '') + '</div>';
-    h += '<h3 style="margin:18px 0 0;font-size:16px">Đáp án chi tiết</h3>';
-  } else {
-    h += '<p class="lead">Điền dạng đúng của từ in hoa. Không cần viết hoa; gạch nối và chính tả Anh–Mỹ (‑ise/‑ize, ‑our/‑or) đều được chấp nhận.</p>';
+function wrongList(){
+  var r = secRange(K), out = [];
+  for(var i = r[0]; i < r[1]; i++){
+    var got = S.a[i] || [];
+    if(!isRight(WF[i], got)) out.push({n:'A' + (i + 1), root:WF[i][2], got:got.join(', '), ans:WF[i][1].join(' / '), type:WF[i][3], mean:WF[i][4]});
   }
-  h += '<div id="qs">';
-  for(var i = r[0]; i < r[1]; i++) h += qHtml(i, s);
-  h += '</div>';
-  if(!s.done) h += '<div class="row"><button class="btn" data-act="submit">Nộp bài Mục ' + (k + 1) + '</button><span class="msg" id="subMsg"></span></div>';
-  $('main').innerHTML = h;
+  pickB(K).forEach(function(i, x){
+    if(!isRightB(i, S.b[i])) out.push({n:'B' + (x + 1), root:'Nghĩa: ' + WF[i][4], got:S.b[i] || '', ans:WF[i][1].join(' / '), type:WF[i][3], mean:WF[i][4]});
+  });
+  return out;
+}
+function scoreNow(){
+  var r = secRange(K), sa = 0, sb = 0;
+  for(var i = r[0]; i < r[1]; i++) if(isRight(WF[i], S.a[i] || [])) sa++;
+  pickB(K).forEach(function(i){ if(isRightB(i, S.b[i])) sb++; });
+  return {sa:sa, sb:sb, score:sa + sb, max:(r[1] - r[0]) + pickB(K).length};
+}
+
+function renderSec(){
+  var r = secRange(K), B = pickB(K), h = '<div class="card">';
+  h += '<h2>Mục ' + (K + 1) + ' · Câu ' + (r[0] + 1) + '–' + r[1] + '</h2>';
+  if(S.done){
+    var sc = scoreNow();
+    h += '<div class="score" style="margin-top:8px"><span class="big">' + sc.score + '/' + sc.max + '</span><span class="msg">Phần A: ' + sc.sa + '/' + (r[1] - r[0]) + ' · Phần B: ' + sc.sb + '/' + B.length + '<br>' + (S.review ? 'Lần ôn lại' : 'Lần nộp chính') + (S.first ? ' · Điểm lần đầu gửi cô: ' + S.first.score + '/' + S.first.max : '') + '</span></div>';
+    h += '<p class="msg' + (S.sent ? ' ok' : '') + '" id="sendMsg">' + (S.sent ? '✓ Đã gửi kết quả cho cô.' : (S.review ? '' : 'Đang gửi kết quả cho cô…')) + '</p>';
+    if(sc.score === sc.max) h += '<p class="msg ok">Tuyệt vời, em đúng hết cả mục!</p>';
+    h += '<div class="row"><button class="btn ghost" data-act="redo">Làm lại để ôn</button>' + (K + 1 < NSEC ? '<a class="btn" style="text-decoration:none" href="?m=' + (K + 2) + '">Sang Mục ' + (K + 2) + ' →</a>' : '') + '</div>';
+  }
+  h += '<h3 class="part">Phần A · Word Form (30 câu)</h3>';
+  h += '<p class="lead">Viết dạng đúng của từ in hoa trong ngoặc. Không cần viết hoa; gạch nối và chính tả Anh–Mỹ (‑ise/‑ize, ‑our/‑or) đều được chấp nhận.</p>';
+  for(var i = r[0]; i < r[1]; i++) h += qHtml(i);
+  h += '<h3 class="part">Phần B · Viết từ tiếng Anh theo nghĩa (' + B.length + ' câu)</h3>';
+  h += '<p class="lead">Các từ đều nằm trong 30 đáp án của phần A. Đọc nghĩa và loại từ, viết từ tiếng Anh vào ô.</p>';
+  B.forEach(function(i, x){ h += bHtml(i, x + 1); });
+  if(!S.done) h += '<div class="row"><button class="btn" data-act="submit">Nộp bài Mục ' + (K + 1) + '</button><span class="msg" id="subMsg"></span></div>';
+  $('main').innerHTML = h + '</div>';
 }
 
 /* ---------- gửi về Google Sheet ---------- */
-function send(k){
-  var s = st(k), r = secRange(k), wl = wrongList(k);
-  if(!SHEET_URL){ return; }
+function send(){
+  if(!SHEET_URL) return;
+  var r = secRange(K);
   var payload = {type:'wordform', name:$('sName').value.trim(), cls:$('sClass').value.trim(), unit:UNIT,
-    section:'Mục ' + (k + 1) + ' (câu ' + (r[0] + 1) + '–' + r[1] + ')', score:s.first.score, max:s.first.max, wrong:wl};
+    section:'Mục ' + (K + 1) + ' (câu ' + (r[0] + 1) + '–' + r[1] + ')', score:S.first.score, max:S.first.max, wrong:S.first.wrong};
   fetch(SHEET_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(payload)})
-    .then(function(){ s.sent = true; save(); var m = $('sendMsg'); if(m && cur === k){ m.className = 'msg ok'; m.textContent = '✓ Đã gửi kết quả cho cô.'; } })
-    .catch(function(){ var m = $('sendMsg'); if(m && cur === k){ m.className = 'msg warn'; m.innerHTML = 'Chưa gửi được (mất mạng?). <button class="btn ghost" data-act="resend">Gửi lại</button>'; } });
+    .then(function(){ S.sent = true; save(); var m = $('sendMsg'); if(m){ m.className = 'msg ok'; m.textContent = '✓ Đã gửi kết quả cho cô.'; } })
+    .catch(function(){ var m = $('sendMsg'); if(m){ m.className = 'msg warn'; m.innerHTML = 'Chưa gửi được (mất mạng?). <button class="btn ghost" data-act="resend">Gửi lại</button>'; } });
 }
 
 function submit(){
-  var k = cur, s = st(k), r = secRange(k), miss = [];
-  if(!$('sName').value.trim() || !$('sClass').value.trim()){ $('subMsg').className = 'msg warn'; $('subMsg').textContent = 'Em nhập họ tên và lớp ở trên trước nhé.'; $('sName').focus(); return; }
+  var r = secRange(K), miss = [], msg = $('subMsg');
+  if(!$('sName').value.trim() || !$('sClass').value.trim()){ msg.className = 'msg warn'; msg.textContent = 'Em nhập họ tên và lớp ở trên trước nhé.'; $('sName').focus(); return; }
   for(var i = r[0]; i < r[1]; i++){
-    var got = s.a[i] || [];
-    for(var j = 0; j < blanks(WF[i]); j++) if(!(got[j] || '').trim()){ miss.push(i + 1); break; }
+    var got = S.a[i] || [];
+    for(var j = 0; j < blanks(WF[i]); j++) if(!(got[j] || '').trim()){ miss.push('A' + (i + 1)); break; }
   }
-  if(miss.length){ $('subMsg').className = 'msg warn'; $('subMsg').textContent = 'Còn ' + miss.length + ' câu chưa điền: ' + miss.slice(0, 12).join(', ') + (miss.length > 12 ? '…' : ''); var el = document.querySelector('.blank[data-i="' + (miss[0] - 1) + '"]'); if(el) el.focus(); return; }
-  s.done = true;
-  var firstTime = !s.first;
-  if(firstTime){ var wl = wrongList(k); s.first = {score:(r[1] - r[0]) - wl.length, max:r[1] - r[0]}; s.review = false; }
-  save(); render(); window.scrollTo({top:$('main').offsetTop - 10, behavior:'smooth'});
-  if(firstTime) send(k);
+  pickB(K).forEach(function(i, x){ if(!(S.b[i] || '').trim()) miss.push('B' + (x + 1)); });
+  if(miss.length){
+    msg.className = 'msg warn'; msg.textContent = 'Còn ' + miss.length + ' câu chưa điền: ' + miss.slice(0, 12).join(', ') + (miss.length > 12 ? '…' : '');
+    var first = miss[0], el = first[0] === 'A' ? document.querySelector('.blank[data-i="' + (first.slice(1) - 1) + '"]') : document.querySelector('.blank[data-b="' + pickB(K)[first.slice(1) - 1] + '"]');
+    if(el) el.focus(); return;
+  }
+  S.done = true;
+  var firstTime = !S.first;
+  if(firstTime){ var sc = scoreNow(); S.first = {score:sc.score, max:sc.max, wrong:wrongList()}; S.review = false; }
+  save(); renderSec(); window.scrollTo({top:$('main').offsetTop - 10, behavior:'smooth'});
+  if(firstTime) send();
 }
 
 document.addEventListener('input', function(e){
   var t = e.target;
-  if(t.classList.contains('blank')){ var s = st(cur), i = +t.dataset.i; (s.a[i] = s.a[i] || [])[+t.dataset.j] = t.value; save(); }
+  if(t.dataset.i !== undefined){ var i = +t.dataset.i; (S.a[i] = S.a[i] || [])[+t.dataset.j] = t.value; save(); }
+  else if(t.dataset.b !== undefined){ S.b[+t.dataset.b] = t.value; save(); }
   if(t.id === 'sName' || t.id === 'sClass') saveWho();
 });
 document.addEventListener('keydown', function(e){
@@ -220,18 +260,27 @@ document.addEventListener('keydown', function(e){
   }
 });
 document.addEventListener('click', function(e){
-  var tab = e.target.closest('.tab');
-  if(tab){ cur = +tab.dataset.k; save(); render(); return; }
   var b = e.target.closest('[data-act]'); if(!b) return;
-  var a = b.dataset.act, s = st(cur);
+  var a = b.dataset.act;
   if(a === 'submit') submit();
-  else if(a === 'redo'){ s.a = {}; s.done = false; s.review = true; save(); render(); window.scrollTo({top:$('main').offsetTop - 10, behavior:'smooth'}); }
-  else if(a === 'next'){ cur++; save(); render(); window.scrollTo({top:$('tabs').offsetTop - 10, behavior:'smooth'}); }
-  else if(a === 'resend') send(cur);
+  else if(a === 'redo'){ S.a = {}; S.b = {}; S.done = false; S.review = true; save(); renderSec(); window.scrollTo({top:$('main').offsetTop - 10, behavior:'smooth'}); }
+  else if(a === 'resend') send();
 });
 
-load(); loadWho(); render();
-// lần nộp đầu chưa gửi được (mất mạng, đóng trang) → gửi lại khi mở trang
-for(var k0 = 0; k0 < NSEC; k0++){ if(S[k0] && S[k0].first && !S[k0].sent && $('sName').value.trim()) send(k0); }
+if(K < 0){
+  renderHub();
+} else {
+  var r0 = secRange(K);
+  S = loadSec(K) || {a:{}, b:{}, done:false, sent:false};
+  S.b = S.b || {};
+  document.title = 'Word Form Chuyên Anh 9 · Mục ' + (K + 1);
+  $('h1').textContent = 'Word Form · Chuyên Anh 9 · Mục ' + (K + 1);
+  $('sub').textContent = 'Câu ' + (r0[0] + 1) + '–' + r0[1] + ': 30 câu Word Form + ' + pickB(K).length + ' câu viết từ tiếng Anh theo nghĩa.';
+  $('back').href = './'; $('back').textContent = '← Tất cả mục Word Form';
+  $('info').hidden = false;
+  loadWho(); renderSec();
+  // lần nộp đầu chưa gửi được (mất mạng, đóng trang) → gửi lại khi mở trang
+  if(S.first && !S.sent && $('sName').value.trim()) send();
+}
 </script>
 </body></html>
