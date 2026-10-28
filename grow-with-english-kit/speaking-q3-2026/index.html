@@ -27,6 +27,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 var(--f-body);
 .banner h1{color:var(--brand);font:700 26px/1.2 var(--f-display);margin:4px 0 2px}
 .banner p{margin:0;color:var(--mute)}
 .back{display:inline-block;font-size:13px;font-weight:600;color:var(--brand);text-decoration:none}
+.back[hidden]{display:none}
 .list{display:grid;gap:10px}
 .topic{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;text-decoration:none;color:var(--ink);transition:border-color .15s}
 .topic:hover,.topic:focus-visible{border-color:var(--brand)}
@@ -46,7 +47,8 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 var(--f-body);
 <body><div class="wrap">
 <header class="banner">
   <div class="brandrow"><img src="../logo.png" alt="Logo Grow with English"><span class="gwe">Grow with English</span><span class="msm">Tiếng Anh Ms. Minh Thư</span></div>
-  <a class="back" href="../#ielts">← Kho bài tập · IELTS</a>
+  <a class="back" href="../#ielts" data-gv hidden>← Kho bài tập · IELTS</a>
+<script>try{if(localStorage.getItem("gwe-gv")==="1")[].forEach.call(document.querySelectorAll("[data-gv]"),function(a){a.hidden=false})}catch(e){}</script>
   <h1>IELTS Speaking · Forecast Q3/2026</h1>
   <p>File 01 · 5 topic. Chọn một topic để luyện Part 1, Part 2, Part 3.</p>
 </header>

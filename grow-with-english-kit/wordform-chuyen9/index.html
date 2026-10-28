@@ -30,6 +30,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 var(--f-body);
 .banner h1{color:var(--brand);font:700 26px/1.2 var(--f-display);margin:4px 0 2px}
 .banner p{margin:0;color:var(--mute)}
 .back{display:inline-block;font-size:13px;font-weight:600;color:var(--brand);text-decoration:none}
+.back[hidden]{display:none}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
 .info{display:grid;grid-template-columns:2fr 1fr;gap:10px}
 .info label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;min-width:0}
@@ -85,7 +86,8 @@ h2{font:700 22px/1.2 var(--f-display);margin:0}
 <body><div class="wrap">
 <header class="banner">
   <div class="brandrow"><img src="../logo.png" alt="Logo Grow with English"><span class="gwe">Grow with English</span><span class="msm">Tiếng Anh Ms. Minh Thư</span></div>
-  <a class="back" id="back" href="../#khoi-9">← Kho bài tập · Khối 9</a>
+  <a class="back" id="back" href="../#khoi-9" data-gv hidden>← Kho bài tập · Khối 9</a>
+<script>try{if(localStorage.getItem("gwe-gv")==="1")[].forEach.call(document.querySelectorAll("[data-gv]"),function(a){a.hidden=false})}catch(e){}</script>
   <h1 id="h1">Word Form · Chuyên Anh 9</h1>
   <p id="sub">Mỗi mục là 1 bài: 30 câu Word Form + 20 câu viết từ tiếng Anh theo nghĩa.</p>
 </header>
@@ -276,7 +278,7 @@ if(K < 0){
   document.title = 'Word Form Chuyên Anh 9 · Mục ' + (K + 1);
   $('h1').textContent = 'Word Form · Chuyên Anh 9 · Mục ' + (K + 1);
   $('sub').textContent = 'Câu ' + (r0[0] + 1) + '–' + r0[1] + ': 30 câu Word Form + ' + pickB(K).length + ' câu viết từ tiếng Anh theo nghĩa.';
-  $('back').href = './'; $('back').textContent = '← Tất cả mục Word Form';
+  $('back').href = './'; $('back').textContent = '← Tất cả mục Word Form'; $('back').hidden = false;
   $('info').hidden = false;
   loadWho(); renderSec();
   // lần nộp đầu chưa gửi được (mất mạng, đóng trang) → gửi lại khi mở trang

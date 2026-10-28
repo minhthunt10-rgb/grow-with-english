@@ -30,6 +30,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 var(--f-body);
 .banner h1{color:var(--brand);font:700 26px/1.2 var(--f-display);margin:4px 0 2px}
 .banner p{margin:0;color:var(--mute)}
 .back{display:inline-block;font-size:13px;font-weight:600;color:var(--brand);text-decoration:none}
+.back[hidden]{display:none}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
 .info{display:grid;grid-template-columns:2fr 1fr;gap:10px}
 .info label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;min-width:0}
@@ -95,7 +96,8 @@ h3.sub{font:700 17px/1.3 var(--f-display);margin:18px 0 6px;color:var(--orange)}
 <body><div class="wrap">
 <header class="banner">
   <div class="brandrow"><img src="../logo.png" alt="Logo Grow with English"><span class="gwe">Grow with English</span><span class="msm">Tiếng Anh Ms. Minh Thư</span></div>
-  <a class="back" href="../#khoi-12">← Kho bài tập · Khối 12</a>
+  <a class="back" href="../#khoi-12" data-gv hidden>← Kho bài tập · Khối 12</a>
+<script>try{if(localStorage.getItem("gwe-gv")==="1")[].forEach.call(document.querySelectorAll("[data-gv]"),function(a){a.hidden=false})}catch(e){}</script>
   <h1>Unit 3 – Green Living</h1>
   <p>Global Success 12 · Từ vựng: học bảng từ rồi làm 4 bài (50 câu).</p>
 </header>
