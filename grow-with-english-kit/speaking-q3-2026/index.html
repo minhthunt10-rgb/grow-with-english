@@ -31,6 +31,12 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 var(--f-body);
 .banner h1{font:700 26px/1.2 var(--f-display);margin:4px 0 2px}
 .banner p{margin:0;opacity:.9}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+.info{display:grid;grid-template-columns:2fr 1fr;gap:10px}
+.info label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;min-width:0}
+.info input{font:inherit;font-weight:400;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);min-width:0}
+.rule{grid-column:1/-1;margin:2px 0 0;color:var(--mute);font-size:13px}
+@media(max-width:560px){.info{grid-template-columns:1fr}}
+.sent{font-size:13px;color:var(--ok);font-weight:600}
 .tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
 .tab{flex:0 0 auto;text-align:left;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:8px 12px;font:inherit;cursor:pointer;min-width:104px}
 .tab b{display:block;font-size:13px}.tab span{font-size:12px;color:var(--mute)}
@@ -112,11 +118,20 @@ textarea{font:inherit;width:100%;min-height:90px;padding:9px 11px;border:1.5px s
     <h1>IELTS Speaking · Topic 1: Time Management</h1>
     <p>Forecast Quý 3/2026 · Band mục tiêu 7.0. Học từ vựng, tự nói và ghi âm, rồi mới so với bài mẫu.</p>
   </header>
+  <section class="card info">
+    <label for="sName">Họ và tên học sinh *<input id="sName" placeholder="VD: Nguyễn Minh Anh" autocomplete="off"></label>
+    <label for="sClass">Lớp *<input id="sClass" placeholder="VD: IELTS 7.0 – T3" autocomplete="off"></label>
+    <p class="rule" id="saveRule"></p>
+  </section>
   <nav class="tabs" id="tabs"></nav>
   <main id="main" class="wrap"></main>
 </div>
 <div id="toast" hidden></div>
+<script src="../config.js"></script>
 <script>
+var SHEET_URL = window.GWE_SHEET_URL || ''; // link nằm trong config.js (dùng chung mọi trang)
+var UNIT = 'IELTS Speaking Q3-2026 - Topic 1 Time Management';
+var PAGE = 'q3-2026-t1';
 var T = {
  vocab:[
   ['put things off','/pʊt θɪŋz ɒf/','to delay doing something until later','trì hoãn, để việc lại sau'],
@@ -176,6 +191,57 @@ function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp
 function plain(t){return String(t).replace(/<[^>]+>/g,'')}
 function toast(m){var t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(function(){t.hidden=true},2800)}
 
+/* ---------- Lưu trên máy học sinh: bản ghi âm (IndexedDB) + tiến độ (localStorage) ---------- */
+var DB=null;
+function dbOpen(cb){
+  try{
+    var rq=indexedDB.open('gwe-speaking',1);
+    rq.onupgradeneeded=function(){rq.result.createObjectStore('recs')};
+    rq.onsuccess=function(){DB=rq.result;cb()};
+    rq.onerror=function(){cb()};
+  }catch(e){cb()}
+}
+function dbPut(id,val){ if(!DB) return; try{DB.transaction('recs','readwrite').objectStore('recs').put(val,PAGE+'/'+id)}catch(e){} }
+function dbLoadAll(cb){
+  if(!DB) return cb();
+  try{
+    var st=DB.transaction('recs').objectStore('recs'), rq=st.openCursor();
+    rq.onsuccess=function(){var c=rq.result; if(!c) return cb();
+      var k=String(c.key); if(k.indexOf(PAGE+'/')===0){var v=c.value;S.recs[k.slice(PAGE.length+1)]={url:URL.createObjectURL(v.blob),blob:v.blob,ext:v.ext,secs:v.secs,sent:v.sent}}
+      c.continue()};
+    rq.onerror=function(){cb()};
+  }catch(e){cb()}
+}
+function saveState(){ try{localStorage.setItem('gwe-'+PAGE,JSON.stringify({qa:S.qa,qdone:S.qdone,open:S.open,skip:S.skip||{},notes:S.notes}))}catch(e){} }
+function loadState(){ try{var o=JSON.parse(localStorage.getItem('gwe-'+PAGE)||'null'); if(o){S.qa=o.qa||{};S.qdone=!!o.qdone;S.open=o.open||{};S.skip=o.skip||{};S.notes=o.notes||''}}catch(e){} }
+function saveWho(){ try{localStorage.setItem('gwe-who',JSON.stringify({n:$('sName').value,c:$('sClass').value}))}catch(e){} }
+function loadWho(){ try{var o=JSON.parse(localStorage.getItem('gwe-who')||'null'); if(o){$('sName').value=o.n||'';$('sClass').value=o.c||''}}catch(e){} }
+function who(){ return {name:$('sName').value.trim(),cls:$('sClass').value.trim()} }
+
+/* ---------- Gửi về cô: bài nói vào Google Drive, điểm từ vựng vào Google Sheet ---------- */
+function post(obj){ return fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(obj)}) }
+function sendAudio(id){
+  var r=S.recs[id], w=who();
+  if(!SHEET_URL){toast('Trang chưa gắn link gửi bài. Em bấm Tải bản ghi âm rồi gửi Zalo cho cô nhé.');return}
+  if(!w.name||!w.cls){toast('Em nhập Họ tên và Lớp ở đầu trang trước khi nộp nhé.');$('sName').focus();return}
+  if(!r||!r.blob) return;
+  r.sending=true; render();
+  var fr=new FileReader();
+  fr.onload=function(){
+    var data=String(fr.result).split(',')[1];
+    post({type:'audio',name:w.name,cls:w.cls,unit:UNIT,qid:qLabel(id),question:plain(qText(id)),secs:r.secs,ext:r.ext,mime:r.blob.type||'audio/webm',data:data})
+      .then(function(){r.sending=false;r.sent=true;dbPut(id,{blob:r.blob,ext:r.ext,secs:r.secs,sent:true});render();toast('Đã nộp bài nói cho cô.')},
+            function(){r.sending=false;render();toast('Chưa nộp được, em kiểm tra mạng rồi bấm lại nhé.')});
+  };
+  fr.readAsDataURL(r.blob);
+}
+function sendQuiz(){
+  var w=who(); if(!SHEET_URL||!w.name||!w.cls) return;
+  var sc=quizScore();
+  post({ts:new Date().toISOString(),name:w.name,cls:w.cls,unit:UNIT,latest:'vocab',sections:[{id:'vocab',title:'Từ vựng',score:sc,max:10}],total:sc,max:10,pct:sc*10,skills:[{k:'tv',n:'Từ vựng',got:sc,max:10}],comment:sc>=8?'Từ vựng tốt.':'Từ vựng: cần ôn lại các cụm từ của topic.'}).catch(function(){});
+}
+function qLabel(id){ var p=id.split('-'); return p[0]==='p2'?'Part 2':(p[0]==='p1'?'Part 1':'Part 3')+' câu '+(+p[1]+1) }
+
 /* ---------- Đọc to bằng giọng máy (nếu trình duyệt hỗ trợ) ---------- */
 var TTS='speechSynthesis' in window;
 function speak(text,rate){
@@ -200,8 +266,9 @@ function startRec(id,onFail){
       stream.getTracks().forEach(function(t){t.stop()});
       var type=mr.mimeType||'audio/webm', blob=new Blob(r.chunks,{type:type});
       if(S.recs[id]) URL.revokeObjectURL(S.recs[id].url);
-      S.recs[id]={url:URL.createObjectURL(blob),ext:/mp4|aac/.test(type)?'m4a':(/ogg/.test(type)?'ogg':'webm'),secs:Math.round((Date.now()-r.t0)/1000)};
-      S.open[id]=S.open[id]||false; render();
+      S.recs[id]={url:URL.createObjectURL(blob),blob:blob,ext:/mp4|aac/.test(type)?'m4a':(/ogg/.test(type)?'ogg':'webm'),secs:Math.round((Date.now()-r.t0)/1000),sent:false};
+      dbPut(id,{blob:blob,ext:S.recs[id].ext,secs:S.recs[id].secs,sent:false});
+      S.open[id]=S.open[id]||false; saveState(); render();
     };
     mr.start(); REC=r;
     r.iv=setInterval(function(){var el=$('ri-'+id); if(el) el.textContent='● Đang ghi âm '+fmt((Date.now()-r.t0)/1000)},500);
@@ -216,8 +283,14 @@ function recBlock(id){
   h+= live ? '<button class="btn rec" data-act="stop">■ Dừng ghi âm</button><span class="recinfo live" id="ri-'+id+'">● Đang ghi âm 0:00</span>'
            : '<button class="btn rec" data-act="rec" data-id="'+id+'">● '+(r?'Ghi âm lại':'Ghi âm câu trả lời')+'</button>';
   h+='</div>';
-  if(r && !live) h+='<div class="row"><audio controls src="'+r.url+'"></audio><a class="link" href="'+r.url+'" download="time-management-'+id+'.'+r.ext+'">Tải bản ghi âm</a><span class="recinfo">'+fmt(r.secs)+'</span></div>';
+  if(r && !live) h+=playBlock(id);
   return h;
+}
+function playBlock(id){
+  var r=S.recs[id];
+  var h='<div class="row"><audio controls src="'+r.url+'"></audio><span class="recinfo">'+fmt(r.secs)+'</span></div><div class="row">';
+  if(SHEET_URL) h+= r.sending?'<span class="recinfo">Đang nộp…</span>':(r.sent?'<span class="sent">✓ Đã nộp cho cô</span><button class="link" data-act="send" data-id="'+id+'">Nộp lại</button>':'<button class="btn" data-act="send" data-id="'+id+'">📤 Nộp bài nói cho cô</button>');
+  return h+'<a class="link" href="'+r.url+'" download="time-management-'+id+'.'+r.ext+'">Tải bản ghi âm về máy</a></div>';
 }
 function revealBlock(id,inner){
   if(S.open[id]) return inner;
@@ -288,7 +361,7 @@ function p2HTML(){
   else h+='<button class="btn ghost" data-act="p2stop">■ Dừng</button>';
   h+='</div>';
   h+='<label style="display:block;margin-top:12px;font-weight:600;font-size:14px">Sơ đồ bài nói của em (từ khoá)<textarea id="notes" placeholder="VD: what – weekly planning / how – list tasks, prioritise / difficult – ... / feel – ...">'+esc(S.notes)+'</textarea></label>';
-  var r=S.recs.p2; if(r && P2.phase!=='speak') h+='<div class="row"><audio controls src="'+r.url+'"></audio><a class="link" href="'+r.url+'" download="time-management-part2.'+r.ext+'">Tải bản ghi âm</a><span class="recinfo">'+fmt(r.secs)+'</span></div>';
+  var r=S.recs.p2; if(r && P2.phase!=='speak') h+=playBlock('p2');
   h+=revealBlock('p2','<div class="sample" style="background:var(--card);padding:0"><span class="h" style="color:var(--brand)">Sơ đồ tư duy mẫu</span>'+mindmap()+'</div><div class="sample"><span class="h">Bài mẫu · band 7.0</span>'+p.sample.map(function(x){return '<p>'+x+'</p>'}).join('')+'<div class="row"><button class="btn ghost" data-act="sayp2">🔊 Nghe bài mẫu</button></div></div>');
   return h+'</section>';
 }
@@ -313,23 +386,26 @@ document.addEventListener('click',function(e){
     S.tab=id; render(); window.scrollTo({top:0}); }
   else if(a==='flip'&&!e.target.closest('.say')){ S.flip[i]=!S.flip[i]; render(); }
   else if(a==='sayw'){ e.stopPropagation(); speak(T.vocab[i][0].replace(' sth',' something'),0.85); }
-  else if(a==='pick'){ if(S.qdone) return; S.qa[i]=+b.dataset.o; render(); }
-  else if(a==='grade'){ S.qdone=true; render(); toast('Đúng '+quizScore()+'/10 câu.'); }
-  else if(a==='requiz'){ S.qa={}; S.qdone=false; render(); }
+  else if(a==='pick'){ if(S.qdone) return; S.qa[i]=+b.dataset.o; saveState(); render(); }
+  else if(a==='grade'){ S.qdone=true; saveState(); render(); toast('Đúng '+quizScore()+'/10 câu.'); sendQuiz(); }
+  else if(a==='requiz'){ S.qa={}; S.qdone=false; saveState(); render(); }
+  else if(a==='send'){ sendAudio(id); }
   else if(a==='say'){ speak(qText(id)); }
   else if(a==='saytext'){ speak(b.dataset.k==='p1'?T.p1.qs[i][1]:T.p3[i][2]); }
   else if(a==='sayp2'){ speak(T.p2.sample.join(' ')); }
   else if(a==='rec'){ startRec(id); }
   else if(a==='stop'){ stopRec(); }
-  else if(a==='skip'){ S.skip=S.skip||{}; S.skip[id]=true; render(); }
-  else if(a==='open'){ S.open[id]=true; render(); }
+  else if(a==='skip'){ S.skip=S.skip||{}; S.skip[id]=true; saveState(); render(); }
+  else if(a==='open'){ S.open[id]=true; saveState(); render(); }
   else if(a==='p2go'){ p2Start(false); }
   else if(a==='p2now'){ p2Start(true); }
   else if(a==='p2stop'){ p2Stop(); }
 });
 document.addEventListener('keydown',function(e){ if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('fc')){e.preventDefault();e.target.click()} });
-document.addEventListener('input',function(e){ if(e.target.id==='notes') S.notes=e.target.value; });
+document.addEventListener('input',function(e){ if(e.target.id==='notes'){S.notes=e.target.value;saveState()} else if(e.target.id==='sName'||e.target.id==='sClass') saveWho(); });
 if(TTS) speechSynthesis.onvoiceschanged=function(){};
-render();
+$('saveRule').innerHTML='Bản ghi âm và bài làm được <b>giữ lại trên máy này</b>, tải lại trang vẫn còn. '+(SHEET_URL?'Bấm <b>📤 Nộp bài nói cho cô</b> dưới mỗi bản ghi để gửi bài nói về cho cô.':'Muốn gửi cô, em bấm <b>Tải bản ghi âm về máy</b> rồi gửi Zalo.');
+loadWho(); loadState(); render();
+dbOpen(function(){ dbLoadAll(render) });
 </script>
 </body></html>

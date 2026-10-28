@@ -125,9 +125,10 @@ textarea.rep{width:100%;min-height:200px;font:13px/1.5 ui-monospace,Menlo,Consol
 </div>
 <div id="toast" hidden></div>
 
+<script src="../config.js"></script>
 <script>
 /*DATA*/
-var SHEET_URL = ''; // Dán link Web app của Google Apps Script vào đây khi đưa bài lên mạng
+var SHEET_URL = window.GWE_SHEET_URL || ''; // link nằm trong config.js (dùng chung mọi trang)
 var UNIT = 'Global Success 12 - Unit 6';
 var SECTIONS = DATA.secs, VOCAB = DATA.vocab;
 var SKILLS = {

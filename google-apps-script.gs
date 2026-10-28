@@ -4,7 +4,11 @@
  *  - "Tong quan": mỗi học sinh + lớp + bài = 1 dòng, luôn cập nhật điểm mới nhất của từng bài, % kỹ năng và nhận xét.
  *  - "Chi tiet": mỗi lần học sinh nộp 1 bài = 1 dòng (lịch sử nộp bài).
  * Cột điểm từng bài được tự thêm khi có bài mới, nên dùng được cho mọi unit.
+ * Bài nói (trang Speaking, type 'audio'): lưu file ghi âm vào Drive, thư mục
+ * "Grow with English - Bài nói" / <tên bài>, và ghi 1 dòng có link file vào sheet "Bai noi".
  */
+var AUDIO_ROOT = 'Grow with English - Bài nói';
+var AUDIO_HEAD = ['Thời gian', 'Họ tên', 'Lớp', 'Bài', 'Câu', 'Câu hỏi', 'Thời lượng (giây)', 'File ghi âm'];
 var SK_IDS = ['pa', 'tv', 'np', 'gt', 'rd', 'wr', 'ls'];
 var OVERVIEW_HEAD = ['Họ tên', 'Lớp', 'Bài', 'Cập nhật', 'Tổng điểm', 'Tổng tối đa', '% chung',
   'Phát âm', 'Từ vựng', 'Ngữ pháp', 'Giao tiếp', 'Đọc hiểu', 'Viết', 'Nghe', 'Nhận xét'];
@@ -40,6 +44,7 @@ function doPost(e) {
   try {
     var d = JSON.parse(e.postData.contents);
     var ss = SpreadsheetApp.getActiveSpreadsheet();
+    if (d.type === 'audio') return saveAudio_(ss, d);
     var now = new Date();
     var pct = (d.pct || 0) / 100;
     var secs = d.sections || [];
@@ -82,6 +87,25 @@ function doPost(e) {
   } finally {
     lock.releaseLock();
   }
+}
+
+// Thư mục con theo tên; chưa có thì tạo
+function folder_(parent, name) {
+  var it = parent.getFoldersByName(name);
+  return it.hasNext() ? it.next() : parent.createFolder(name);
+}
+
+// Lưu bài nói: Drive/<AUDIO_ROOT>/<bài>/<lớp - họ tên - câu - thời gian>.<đuôi>
+function saveAudio_(ss, d) {
+  var now = new Date();
+  var dir = folder_(folder_(DriveApp.getRootFolder(), AUDIO_ROOT), d.unit || 'Khác');
+  var stamp = Utilities.formatDate(now, Session.getScriptTimeZone(), 'yyyy-MM-dd HH.mm');
+  var name = [d.cls, d.name, d.qid, stamp].join(' - ').replace(/[\/\\:*?"<>|]/g, '_') + '.' + (d.ext || 'webm');
+  var file = dir.createFile(Utilities.newBlob(Utilities.base64Decode(d.data), d.mime || 'audio/webm', name));
+  var sh = getSheet_(ss, 'Bai noi', AUDIO_HEAD);
+  sh.appendRow([now, d.name, d.cls, d.unit, d.qid, d.question, d.secs, file.getUrl()]);
+  sh.getRange(sh.getLastRow(), 1).setNumberFormat('dd/MM/yyyy HH:mm');
+  return ContentService.createTextOutput('ok');
 }
 
 // Tô màu ô kỹ năng: >=80% xanh, 50-79% vàng, <50% đỏ

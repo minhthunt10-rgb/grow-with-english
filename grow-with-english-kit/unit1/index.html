@@ -120,6 +120,7 @@ textarea{width:100%;min-height:180px;font:13px/1.5 ui-monospace,Menlo,Consolas,m
 </div>
 <div id="toast" hidden></div>
 
+<script src="../config.js"></script>
 <script>
 var SECTIONS = [
  {id:'ph', title:'I. Phonetics', sub:'Ngữ âm', instr:'Exercise 1. Mark the letter A, B, C, or D to indicate the word whose underlined part differs from the other three in pronunciation.',
@@ -177,7 +178,7 @@ var SECTIONS = [
   ]}
 ];
 
-var SHEET_URL = ''; // Dán link Web app của Google Apps Script vào đây khi đưa bài lên mạng
+var SHEET_URL = window.GWE_SHEET_URL || ''; // link nằm trong config.js (dùng chung mọi trang)
 var UNIT = 'Global Success 9 - Unit 1';
 var META = {
  ph:[['pa','chữ u: /ʌ/ và /juː/'],['pa','chữ a: /ɑː/ và /æ/'],['pa','đuôi -ed: /t/ và /ɪd/'],['pa','âm /θ/ và /ð/']],
