@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Reading Quest 1 · Lớp 9</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap">
+<style>
+/* Một cột hẹp như tờ bài tập; 5 chặng là 5 tab, mỗi chặng nộp một lần rồi khóa; bài đọc luôn mở được ở chặng 2–4 */
+:root{
+  --bg:#f7f6f0; --card:#ffffff; --ink:#22301c; --mute:#5d6957; --line:#e2e4d8;
+  --brand:#3f6e2a; --brand-ink:#ffffff; --hi:#fde5d3; --hi-line:#e8a274; --green:#5a923f; --orange:#e8742f;
+  --ok:#17703f; --ok-bg:#e3f1dc; --bad:#b0391a; --bad-bg:#fde8e3; --chip:#eef4e8;
+  --f-display:"Baloo 2","Be Vietnam Pro",system-ui,sans-serif;
+  --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#131a11; --card:#1b2418; --ink:#e7eee2; --mute:#a3b09b; --line:#2e3a29;
+  --brand:#8cc56b; --brand-ink:#0f1f08; --hi:#3e2b1d; --hi-line:#a8643a; --green:#8cc56b; --orange:#f0965c;
+  --ok:#8fd99b; --ok-bg:#1b3a22; --bad:#ffa593; --bad-bg:#3d1f1a; --chip:#232f1f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#131a11; --card:#1b2418; --ink:#e7eee2; --mute:#a3b09b; --line:#2e3a29;
+  --brand:#8cc56b; --brand-ink:#0f1f08; --hi:#3e2b1d; --hi-line:#a8643a; --green:#8cc56b; --orange:#f0965c;
+  --ok:#8fd99b; --ok-bg:#1b3a22; --bad:#ffa593; --bad-bg:#3d1f1a; --chip:#232f1f; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--f-body);
+  padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.back{color:var(--brand);font-weight:600;text-decoration:none;font-size:14px}
+.banner{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 20px 18px}
+.brandrow{display:flex;align-items:center;gap:10px;padding-bottom:8px;margin-bottom:10px;border-bottom:3px solid var(--orange);font:italic 700 15px/1.2 "Times New Roman",Georgia,serif}
+.brandrow img{width:40px;height:40px;object-fit:contain;border-radius:8px;flex:0 0 auto}
+.brandrow .gwe{color:var(--green)} .brandrow .msm{color:var(--orange);margin-left:auto;text-align:right}
+.banner h1{color:var(--brand);font:700 26px/1.2 var(--f-display);margin:4px 0 2px;text-wrap:balance}
+.banner p{margin:0;color:var(--mute)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+.info{display:grid;grid-template-columns:2fr 1fr;gap:10px}
+.info label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;min-width:0}
+.info input{font:inherit;font-weight:400;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);min-width:0}
+.rule{grid-column:1/-1;margin:2px 0 0;color:var(--mute);font-size:13px}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+@media(max-width:560px){.info{grid-template-columns:1fr}}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.tab{flex:0 0 auto;text-align:left;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:8px 12px;font:inherit;cursor:pointer;min-width:112px}
+.tab b{display:block;font-size:13px}
+.tab span{font-size:12px;color:var(--mute)}
+.tab.on{border-color:var(--brand);box-shadow:inset 0 0 0 1px var(--brand)}
+.tab.done span{color:var(--ok);font-weight:600}
+.sechead h2{font:700 22px/1.2 var(--f-display);margin:0}
+.sechead p{margin:2px 0 0;color:var(--mute);font-size:13px}
+.instr{background:var(--chip);border-radius:10px;padding:10px 12px;font-size:14px;margin-top:10px}
+.sub{font:700 16px var(--f-display);margin:18px 0 0}
+.q{border-top:1px dashed var(--line);padding-top:14px;margin-top:14px}
+.q.miss{border:1.5px solid var(--bad);border-radius:10px;padding:10px;background:var(--bad-bg)}
+.qn{display:inline-grid;place-items:center;min-width:26px;height:26px;border-radius:8px;background:var(--hi);font-weight:700;font-size:13px;margin-right:8px;padding:0 4px;color:var(--ink)}
+.qt{margin:0 0 8px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{font:inherit;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 12px;cursor:pointer;text-align:left;min-width:0;max-width:100%}
+.opt b{color:var(--brand);margin-right:4px}
+.opt:hover:not(:disabled){border-color:var(--brand)}
+.opt.sel{border-color:var(--brand);background:var(--chip)}
+.opt.right{border-color:var(--ok);background:var(--ok-bg)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg);text-decoration:line-through}
+.opt:disabled{cursor:default}
+u{text-underline-offset:3px}
+.fb{margin-top:10px;border-radius:10px;padding:10px 12px;font-size:14px;display:flex;flex-direction:column;gap:3px}
+.fb.ok{background:var(--ok-bg);color:var(--ok)} .fb.no{background:var(--bad-bg);color:var(--bad)} .fb.neu{background:var(--chip);color:var(--ink)}
+.fb div{color:var(--ink)} .fb strong{font-size:14px}
+.fb .ev{color:var(--mute);font-style:italic}
+.passage{background:var(--chip);border-radius:12px;padding:4px 14px 10px}
+.passage summary{cursor:pointer;font:700 16px var(--f-display);padding:8px 0;color:var(--brand)}
+.passage p{margin:6px 0;text-align:justify}
+.passage .pn{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;background:var(--card);border:1px solid var(--line);font-size:12px;font-weight:700;margin-right:6px}
+.passage .pvi{color:var(--mute);font-style:italic;font-size:14px;border-top:1px dashed var(--line);margin-top:8px;padding-top:6px}
+.passage.blur .ptext{filter:blur(5px);user-select:none;pointer-events:none}
+.vocab{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:4px 14px;font-size:13px;margin-top:8px;border-top:1px dashed var(--line);padding-top:8px}
+.vocab span{color:var(--mute)}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:6px 18px;margin-top:10px}
+.match .m{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.meanings{background:var(--chip);border-radius:10px;padding:8px 12px;margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:2px 18px;font-size:14px}
+@media(max-width:560px){.match,.meanings{grid-template-columns:1fr}}
+.txt{font:inherit;width:100%;max-width:340px;padding:8px 10px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+select.txt{width:auto;min-width:72px}
+textarea.txt{max-width:none;min-height:64px;resize:vertical}
+.txt:disabled{opacity:1;color:var(--ink)}
+.txt.right{border-color:var(--ok);background:var(--ok-bg)} .txt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.ok-t{color:var(--ok);font-weight:600;font-size:13px} .bad-t{color:var(--bad);font-weight:600;font-size:13px}
+.phr{display:grid;gap:6px}
+.phr .row{border-top:1px dashed var(--line);padding-top:12px;margin-top:12px;display:grid;gap:6px}
+.phr .vi{font-weight:600}
+.timer{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:10px}
+.clock{font:700 30px/1 var(--f-display);color:var(--orange);font-variant-numeric:tabular-nums;min-width:84px}
+.code{width:100%;border-collapse:collapse;margin-top:10px}
+.code th,.code td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-variant-numeric:tabular-nums}
+.code th{font-size:12px;color:var(--mute)}
+.code td.me{font-weight:700}
+.code td.hit{background:var(--ok-bg);color:var(--ok)} .code td.miss{background:var(--bad-bg);color:var(--bad)}
+.word{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 4px}
+.word span{display:grid;place-items:center;width:36px;height:42px;border-radius:9px;border:2px solid var(--line);font:700 22px var(--f-display);background:var(--card);opacity:0;transform:translateY(8px);transition:opacity .35s,transform .35s}
+.word span.in{opacity:1;transform:none}
+.word span.hit{border-color:var(--ok);color:var(--ok)} .word span.miss{border-color:var(--bad);color:var(--bad)}
+@media (prefers-reduced-motion: reduce){.word span{transition:none}}
+.actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px}
+.btn{font:600 15px var(--f-body);background:var(--brand);color:var(--brand-ink);border:0;border-radius:10px;padding:10px 18px;cursor:pointer}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.ghost{background:transparent;color:var(--brand);border:1.5px solid var(--brand)}
+.note{color:var(--mute);font-size:13px}
+.score{font:700 20px var(--f-display);color:var(--brand)}
+.sk{padding:10px 0;border-top:1px dashed var(--line)}
+.skh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.skh b{flex:1 1 90px}
+.pill{font-size:12px;font-weight:600;padding:2px 10px;border-radius:999px}
+.pill.ok{background:var(--ok-bg);color:var(--ok)} .pill.mid{background:var(--hi);color:var(--ink)} .pill.no{background:var(--bad-bg);color:var(--bad)}
+.bar{height:8px;background:var(--chip);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--brand)}
+.bar.ok i{background:var(--ok)} .bar.mid i{background:var(--hi-line)} .bar.no i{background:var(--bad)}
+.sum{background:var(--chip);border-radius:10px;padding:10px 12px;margin:10px 0 4px;font-size:14px}
+.badge{display:inline-block;font:700 18px var(--f-display);padding:4px 14px;border-radius:999px;background:var(--hi);border:1px solid var(--hi-line);margin-top:6px}
+.srow{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;max-width:90vw;z-index:20}
+</style></head><body>
+
+<div class="wrap">
+  <a class="back" href="../#khoi-9" data-gv hidden>← Kho bài tập · Khối 9</a>
+  <header class="banner">
+    <div class="brandrow"><img src="../logo.png" alt="Logo Grow with English"><span class="gwe">Grow with English</span><span class="msm">Tiếng Anh Ms. Minh Thư</span></div>
+    <h1>Reading Quest 1 · Somerset Levels</h1>
+    <p>Lớp 9 · Unit 1: Local Community · Nhiệm vụ: khám phá nghề đan giỏ liễu. Vượt 5 chặng, giải mật mã ở cuối.</p>
+  </header>
+
+  <section class="card info">
+    <label for="sName">Họ và tên học sinh *<input id="sName" placeholder="VD: Nguyễn Minh Anh" autocomplete="off"></label>
+    <label for="sClass">Lớp *<input id="sClass" placeholder="VD: 9A1" autocomplete="off"></label>
+    <p class="rule">Làm đủ mọi câu của chặng thì mới bấm được <b>Nộp chặng này</b>. Mỗi chặng chỉ nộp 1 lần. Điểm và nhận xét tự gửi cho cô.</p>
+  </section>
+
+  <nav class="tabs" id="tabs" aria-label="Các chặng"></nav>
+  <main id="main" class="card"></main>
+</div>
+<div id="toast" hidden></div>
+<script>try{if(localStorage.getItem("gwe-gv")==="1")[].forEach.call(document.querySelectorAll("[data-gv]"),function(a){a.hidden=false})}catch(e){}</script>
+<script src="../config.js"></script>
+<script>
+/* Bài đọc: "20 ĐỀ CUỐI KỲ G9", đề 20, phần V (giữ nguyên văn). Câu hỏi soạn mới, giống bản Word READING QUEST - BÀI 1. */
+var UNIT = 'Reading Quest 1 - Lớp 9 (Somerset Levels)';
+var SHEET_URL = window.GWE_SHEET_URL || '';
+var STORE = 'gwe-rq9-1';
+var PASSAGE = [
+ 'Last year I visited the Somerset Levels, a coastal <b>plain</b> and <b>wetland</b> area in Somerset, South West England. This area is home to one of Somerset\'s oldest traditional crafts – <b>willow</b> basket making. Basket making began in the area a long time ago. At the beginning of the 19th century, more than three thousand <b>acres</b> of willow trees were planted <b>commercially</b> there because the area provided an excellent natural <b>habitat</b> for <b><u>their</u></b> <b>cultivation</b>.',
+ 'I\'d seen willow baskets before I visited the Levels, but I was still amazed at the variety of products made by the basket makers there. They make <b>lobster</b> pots, bread trays, and even passenger baskets for hot air balloons.',
+ 'Although the arrival of plastics in the 1950s caused the basket making industry to <b>decline</b>, willow growing and basket making have continued to play a <b><u>significant</u></b> role in Somerset\'s <b>rural</b> economy. Willow growers and basket makers have dealt with this challenge by finding new markets and <b>innovative</b> ways of using willow. They make willow <b>charcoal</b> for artists, and <b>bower</b> seats for gardens. Some even weave willow <b>coffins</b>. Therefore, people here can still live on the craft that their great-grandparents passed down to them.'];
+var PASSAGE_VI = 'Năm ngoái tôi đến thăm Somerset Levels, một vùng đồng bằng ven biển và đất ngập nước ở Somerset, Tây Nam nước Anh. Đây là quê hương của một trong những nghề thủ công truyền thống lâu đời nhất của Somerset – đan giỏ liễu. Nghề đan giỏ bắt đầu ở đây từ rất lâu. Đầu thế kỷ 19, hơn ba nghìn mẫu Anh cây liễu được trồng để kinh doanh vì vùng này có môi trường tự nhiên rất tốt để trồng liễu. Tôi từng thấy giỏ liễu trước khi đến đây, nhưng vẫn ngạc nhiên trước sự đa dạng của sản phẩm do thợ đan giỏ làm ra. Họ làm lờ bắt tôm hùm, khay bánh mì, thậm chí cả giỏ chở khách cho khinh khí cầu. Dù sự xuất hiện của đồ nhựa vào những năm 1950 khiến nghề đan giỏ suy giảm, việc trồng liễu và đan giỏ vẫn giữ vai trò quan trọng trong kinh tế nông thôn của Somerset. Người trồng liễu và thợ đan giỏ đã vượt qua thử thách bằng cách tìm thị trường mới và những cách sử dụng liễu sáng tạo. Họ làm than liễu cho họa sĩ và ghế vòm cho khu vườn. Một số người còn đan cả quan tài bằng liễu. Nhờ vậy, người dân nơi đây vẫn có thể sống bằng nghề mà ông bà cố truyền lại.';
+var VOCAB = [['plain','(n) đồng bằng'],['wetland','(n) vùng đất ngập nước'],['willow','(n) cây liễu'],['acre','(n) mẫu Anh ≈ 4.047 m²'],['commercially','(adv) vì mục đích thương mại'],['habitat','(n) môi trường sống'],['cultivation','(n) sự trồng trọt'],['lobster','(n) tôm hùm'],['decline','(v) suy giảm'],['significant','(adj) quan trọng'],['rural','(adj) thuộc nông thôn'],['innovative','(adj) sáng tạo, đổi mới'],['charcoal','(n) than (vẽ)'],['bower','(n) vòm cây, giàn'],['coffin','(n) quan tài']];
+
+function M(n,p,o,a,ex,ev){return {t:'mcq',n:n,p:p,o:o,a:'ABCD'.indexOf(a),ex:ex,ev:ev||''}}
+function TF(n,p,a,ex,ev){return {t:'tf',n:n,p:p,o:['T','F','NG'],a:['T','F','NG'].indexOf(a),ex:ex,ev:ev||''}}
+function SEL(n,p,o,a,ex){return {t:'sel',n:n,p:p,o:o,a:a,ex:ex}}
+
+var MATCH_W = ['wetland (n)','willow (n)','craft (n)','habitat (n)','cultivation (n)','decline (v)','innovative (adj)','pass down (phr. v)'];
+var MATCH_M = ['a. môi trường sống','b. nghề thủ công','c. suy giảm, đi xuống','d. truyền lại (cho thế hệ sau)','e. cây liễu','f. vùng đất ngập nước','g. sáng tạo, đổi mới','h. sự trồng trọt'];
+var MATCH_A = 'febahcgd';
+
+var STAGES = [
+ {id:'c1',name:'Chặng 1',title:'Trang bị từ khoá',sk:'tv',intro:'Nối từ với nghĩa, rồi làm "Thám tử ngữ cảnh": đoán nghĩa từ in đậm trong câu trích từ bài.',
+  qs:[].concat(MATCH_W.map(function(w,i){return SEL('m'+(i+1),w,'abcdefgh'.split(''),MATCH_A[i],MATCH_M['abcdefgh'.indexOf(MATCH_A[i])])}),[
+  M(1,'"… the area provided an excellent natural habitat for their <b><u>cultivation</u></b>." The word <b>cultivation</b> is closest in meaning to ________.',['selling','growing','cutting','painting'],'B','cultivation = sự trồng trọt → growing. Gợi ý ngữ cảnh: "willow trees were planted".'),
+  M(2,'"… the arrival of plastics in the 1950s caused the basket making industry to <b><u>decline</u></b>." The word <b>decline</b> means ________.',['become smaller or weaker','become more popular','move to a new place','stay the same'],'A','decline = suy giảm. "Although" cho biết vế sau trái ngược: nghề vẫn "continued to play a significant role" → vế trước phải là điều xấu.'),
+  M(3,'"… finding new markets and <b><u>innovative</u></b> ways of using willow." The word <b>innovative</b> means ________.',['old and traditional','cheap and easy','new and creative','slow and careful'],'C','innovative = sáng tạo, đổi mới. Đi cùng "new markets" và các ví dụ mới lạ phía sau (than vẽ, ghế vườn).')])},
+ {id:'c2',name:'Chặng 2',title:'Đọc lướt – Thử thách 2 phút',sk:'rd',timer:true,intro:'Bấm "Bắt đầu" để mở bài đọc. Em có 2 phút: chỉ đọc câu đầu và câu cuối mỗi đoạn. Hết giờ bài đọc sẽ mờ đi, em trả lời theo những gì đã đọc.',
+  qs:[M(4,'What is the passage mainly about?',['How to plant willow trees in England','A traditional craft that has survived in Somerset','Why plastic products are better than baskets','A balloon trip over South West England'],'B','Cả 3 đoạn đều nói về nghề đan giỏ liễu: nguồn gốc (đoạn 1), sản phẩm (đoạn 2), cách nghề tồn tại đến nay (đoạn 3). A, D chỉ là chi tiết nhỏ; C trái với bài.'),
+  SEL(5,'Paragraph 1',['A','B','C','D'],'C','Đoạn 1 nói nghề bắt đầu ở đâu và vì sao trồng liễu ở đây (habitat) → C.'),
+  SEL(6,'Paragraph 2',['A','B','C','D'],'A','Đoạn 2: "the variety of products" → A.'),
+  SEL(7,'Paragraph 3',['A','B','C','D'],'B','Đoạn 3: nghề vượt qua khó khăn khi đồ nhựa xuất hiện → B. D là ý thừa: bài không nhắc đến giá.')],
+  headings:['A. The variety of willow products','B. How the craft has survived until today','C. Where the craft began and why','D. The price of willow baskets']},
+ {id:'c3',name:'Chặng 3',title:'Đọc hiểu chi tiết – Dạng bài thi vào 10',sk:'rd',passage:true,intro:'Đọc kỹ bài, gạch chân từ khoá trong câu hỏi rồi tìm câu tương ứng trong bài.',
+  qs:[M(8,'The word "<b><u>their</u></b>" in paragraph 1 refers to ________.',['willow trees','acres','basket makers','traditional crafts'],'A','"their cultivation" = sự trồng trọt của cây liễu. Mẹo: tìm danh từ số nhiều đứng trước gần nhất và thử thay vào: "habitat for willow trees\' cultivation".','Đoạn 1: "… the area provided an excellent natural habitat for their cultivation."'),
+  M(9,'According to paragraph 2, the writer was amazed because ________.',['the writer had never seen a willow basket before','willow baskets were very expensive there','the basket makers made many different products','the writer could ride in a hot air balloon'],'C','"amazed at the variety of products". A sai: tác giả đã từng thấy giỏ liễu ("I\'d seen willow baskets before"). B, D không có trong bài.','Đoạn 2: "… but I was still amazed at the variety of products made by the basket makers there."'),
+  M(10,'The word "<b><u>significant</u></b>" in paragraph 3 is closest in meaning to ________.',['important','small','strange','dangerous'],'A','significant = quan trọng, đáng kể → important. "play a significant role" = đóng vai trò quan trọng.','Đoạn 3: "… have continued to play a significant role in Somerset\'s rural economy."'),
+  M(11,'Which of the following is NOT mentioned as a willow product?',['lobster pots','bread trays','seats for gardens','school bags'],'D','A, B ở đoạn 2; C = "bower seats for gardens" ở đoạn 3. Bài không nhắc đến cặp sách.','Đoạn 2: "They make lobster pots, bread trays …"; Đoạn 3: "… bower seats for gardens."'),
+  M(12,'How did willow growers and basket makers deal with the arrival of plastics?',['They stopped growing willow trees.','They moved their business to the city.','They started making plastic baskets.','They found new markets and new ways of using willow.'],'D','"dealt with this challenge by finding new markets and innovative ways of using willow". "this challenge" chính là việc đồ nhựa xuất hiện ở câu trước.','Đoạn 3: "Willow growers and basket makers have dealt with this challenge by finding new markets and innovative ways of using willow."'),
+  M(13,'What can be inferred from the passage?',['Basket making is no longer important in Somerset.','The craft will probably continue in the future.','Plastic baskets are now made in the Somerset Levels.','Only old people in Somerset make baskets.'],'B','Câu suy luận: người dân "can still live on the craft" và tìm được thị trường mới → nghề có khả năng tiếp tục. A trái với "significant role"; C, D không có căn cứ.','Đoạn 3: "Therefore, people here can still live on the craft …"'),
+  TF(14,'Basket making in the Somerset Levels started only a few years ago.','F','Bài nói nghề bắt đầu "a long time ago".','Đoạn 1: "Basket making began in the area a long time ago."'),
+  TF(15,'The writer had seen willow baskets before the trip.','T','"I\'d seen willow baskets before I visited the Levels".','Đoạn 2: "I\'d seen willow baskets before I visited the Levels …"'),
+  TF(16,'Willow baskets are cheaper than plastic baskets.','NG','Bài không so sánh giá giỏ liễu với giỏ nhựa → Not Given. Chỉ dựa vào bài, đừng dùng hiểu biết riêng.'),
+  TF(17,'Willow growing still plays an important role in Somerset\'s rural economy.','T','"have continued to play a significant role in Somerset\'s rural economy" (significant = important).','Đoạn 3: "… have continued to play a significant role in Somerset\'s rural economy."')]},
+ {id:'c4',name:'Chặng 4',title:'Săn cụm từ',sk:'tv',passage:true,intro:'Tìm trong bài cụm tiếng Anh có nghĩa như dòng in đậm, gõ vào ô thứ nhất. Rồi dùng lại cụm đó để hoàn thành câu ví dụ (chú ý chia động từ).',
+  qs:[
+  {t:'phr',n:1,vi:'nghề thủ công truyền thống',a:['traditional crafts','traditional craft'],ex1:'Pottery making in Bat Trang is one of Viet Nam\'s',ex2:'.',a2:['traditional crafts']},
+  {t:'phr',n:2,vi:'môi trường sống tự nhiên',a:['natural habitat','a natural habitat'],ex1:'Wetlands are a',ex2:'for many kinds of birds.',a2:['natural habitat']},
+  {t:'phr',n:3,vi:'sự đa dạng của sản phẩm',a:['the variety of products','variety of products'],ex1:'Tourists love',ex2:'at the night market.',a2:['the variety of products']},
+  {t:'phr',n:4,vi:'đóng vai trò quan trọng',a:['play a significant role','plays a significant role','to play a significant role'],ex1:'Tourism can',ex2:'in a village\'s economy.',a2:['play a significant role']},
+  {t:'phr',n:5,vi:'kinh tế nông thôn',a:['rural economy','the rural economy'],ex1:'Farming is still important to the',ex2:'of my province.',a2:['rural economy']},
+  {t:'phr',n:6,vi:'đối phó với thử thách',a:['deal with this challenge','deal with the challenge','dealt with this challenge','deal with challenge'],ex1:'The villagers',ex2:'by selling their products online.',a2:['dealt with the challenge','dealt with this challenge'],note:'Câu ví dụ ở quá khứ → dealt.'},
+  {t:'phr',n:7,vi:'sống bằng (nghề gì)',a:['live on'],ex1:'Many families in my village',ex2:'weaving baskets.',a2:['live on']},
+  {t:'phr',n:8,vi:'truyền lại cho ai',a:['pass down to','passed down to','pass down','passed down'],ex1:'My grandmother',ex2:'her cooking secrets to my mother.',a2:['passed down'],note:'Câu ví dụ ở quá khứ → passed down.'}]},
+ {id:'c5',name:'Chặng 5',title:'Mật mã bí ẩn',code:true,intro:'Mỗi đáp án em chọn ở Question 1–4 và 8–13 ứng với một chữ cái. Ghép các chữ cái lại để tìm từ khoá bí mật 10 chữ cái. Nộp xong Chặng 1, 2 và 3 thì mật mã mới mở.',qs:[]}
+];
+var CODE = [[1,'MTKP'],[2,'RLEW'],[3,'OHAU'],[4,'GDSY'],[8,'IEBM'],[9,'FUTK'],[10,'IOLP'],[11,'EHWO'],[12,'CRYN'],[13,'GSVE']];
+var SKILLS = {tv:'Từ vựng',rd:'Đọc hiểu'};
+
+var S = {cur:'c1', ans:{}, done:{}, score:{}, t0:0, tUsed:{}, bonus:''};
+var $ = function(id){return document.getElementById(id)};
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function norm(t){return String(t||'').toLowerCase().replace(/[’']/g,"'").replace(/[.,!?;:"]/g,'').replace(/\s+/g,' ').trim()}
+function toast(m){var t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(function(){t.hidden=true},2600)}
+function stage(id){return STAGES.filter(function(s){return s.id===id})[0]}
+function k(s,i,p){return s+'-'+i+(p||'')}
+function save(){try{localStorage.setItem(STORE,JSON.stringify({S:S,name:$('sName').value,cls:$('sClass').value}))}catch(e){}}
+function load(){try{var d=JSON.parse(localStorage.getItem(STORE)||'null');if(d){S=d.S;S.t0=0;$('sName').value=d.name||'';$('sClass').value=d.cls||''}}catch(e){}}
+
+/* Số điểm: mỗi câu/ô 1 điểm; chặng 4 có 2 ô mỗi dòng */
+function items(st){var r=[];st.qs.forEach(function(q,i){ if(q.t==='phr'){r.push([i,'a']);r.push([i,'b'])} else r.push([i,'']) });return r}
+function filled(st,i,p){var v=S.ans[k(st.id,i,p)];return st.qs[i].t==='mcq'||st.qs[i].t==='tf'?v!==undefined&&v!==null:norm(v)!==''}
+function right(st,i,p){
+  var q=st.qs[i], v=S.ans[k(st.id,i,p)];
+  if(q.t==='mcq'||q.t==='tf') return v===q.a;
+  if(q.t==='sel') return v===q.a;
+  var list=p==='b'?q.a2:q.a; return list.some(function(x){return norm(x)===norm(v)});
+}
+function maxOf(st){return items(st).length}
+
+function renderTabs(){
+  var h='';
+  STAGES.forEach(function(s){
+    var d=S.done[s.id], sub=s.code?(d?'✓ Đã giải':(unlocked()?'Đã mở':'Chưa mở')):(d?'✓ '+S.score[s.id]+'/'+maxOf(s):'chưa nộp');
+    h+='<button class="tab'+(S.cur===s.id?' on':'')+(d?' done':'')+'" data-act="tab" data-id="'+s.id+'"><b>'+s.name+'</b><span>'+esc(s.title.split(' – ')[0])+' · '+sub+'</span></button>';
+  });
+  h+='<button class="tab'+(S.cur==='sum'?' on':'')+'" data-act="tab" data-id="sum"><b>Tổng kết</b><span>Điểm và cấp độ</span></button>';
+  $('tabs').innerHTML=h;
+}
+function passageHTML(open,blur,showVi){
+  var h='<details class="passage'+(blur?' blur':'')+'"'+(open?' open':'')+'><summary>Bài đọc'+(blur?' · hết 2 phút':'')+'</summary><div class="ptext">';
+  PASSAGE.forEach(function(p,i){h+='<p><span class="pn">'+(i+1)+'</span>'+p+'</p>'});
+  h+='</div>';
+  if(showVi) h+='<div class="pvi"><b>Dịch bài đọc:</b> '+esc(PASSAGE_VI)+'</div><div class="vocab">'+VOCAB.map(function(v){return '<div><b>'+v[0]+'</b> <span>'+v[1]+'</span></div>'}).join('')+'</div>';
+  return h+'</details>';
+}
+function optsHTML(st,q,i){
+  var v=S.ans[k(st.id,i)], d=S.done[st.id], h='<div class="opts">';
+  q.o.forEach(function(o,j){
+    var c='opt'; if(v===j)c+=' sel'; if(d){ if(j===q.a)c+=' right'; else if(v===j)c+=' wrong'; }
+    h+='<button class="'+c+'" data-act="pick" data-i="'+i+'" data-j="'+j+'"'+(d?' disabled':'')+'>'+(q.t==='mcq'?'<b>'+'ABCD'[j]+'.</b>':'')+o+'</button>';
+  });
+  return h+'</div>';
+}
+function fbHTML(ok,txt,ev,ans){
+  return '<div class="fb '+(ok?'ok':'no')+'"><strong>'+(ok?'Đúng rồi!':'Chưa đúng'+(ans?' · Đáp án: '+ans:''))+'</strong><div>'+txt+'</div>'+(ev?'<div class="ev">'+ev+'</div>':'')+'</div>';
+}
+function stageHTML(st){
+  var d=S.done[st.id], h='<div class="sechead"><h2>'+st.name+'. '+esc(st.title)+'</h2><p>'+(d?'Đã nộp · '+S.score[st.id]+'/'+maxOf(st)+' điểm':maxOf(st)+' điểm')+'</p></div><div class="instr">'+st.intro+'</div>';
+  if(st.timer){
+    var used=S.tUsed[st.id], running=S.t0&&!d, over=running&&(Date.now()-S.t0)>=120000;
+    if(!S.t0&&!d&&used===undefined) return h+'<div class="timer"><span class="clock">2:00</span><button class="btn" data-act="start">Bắt đầu 2 phút</button></div>';
+    h+='<div class="timer"><span class="clock" id="clock">'+(d||used!==undefined?fmt(used||0):'2:00')+'</span><span class="note" id="clocknote">'+(d?'Thời gian em đọc':'Đang tính giờ')+'</span></div>';
+    h+='<div style="margin-top:10px">'+passageHTML(true,!d&&(used!==undefined||over),false)+'</div>';
+    h+='<p class="sub">Question 4</p>';
+  }
+  if(st.passage) h+='<div style="margin-top:12px">'+passageHTML(!d,false,st.id==='c3'&&d)+'</div>';
+  if(st.id==='c1') h+='<p class="sub">A. Nối từ với nghĩa đúng</p><div class="meanings">'+MATCH_M.map(function(m){return '<div>'+m+'</div>'}).join('')+'</div><div class="match">';
+  st.qs.forEach(function(q,i){
+    var v=S.ans[k(st.id,i)], miss=S.warn&&!d&&!filled(st,i,'')&&q.t!=='phr';
+    if(q.t==='sel'&&st.id==='c1'){
+      h+='<div class="m'+(miss?' q miss':'')+'"><span class="qn">'+(i+1)+'</span>'+q.p+' → <select class="txt'+(d?(right(st,i)?' right':' wrong'):'')+'" data-act="sel" data-i="'+i+'"'+(d?' disabled':'')+'><option value="">—</option>'+q.o.map(function(o){return '<option'+(v===o?' selected':'')+'>'+o+'</option>'}).join('')+'</select>'+(d&&!right(st,i)?'<span class="bad-t">đúng: '+q.a+' ('+esc(q.ex.slice(3))+')</span>':'')+'</div>';
+      if(i===7) h+='</div><p class="sub">B. Thám tử ngữ cảnh</p>';
+      return;
+    }
+    if(q.t==='sel'){
+      if(q.n===5) h+='<p class="sub">Ghép mỗi đoạn với ý chính (có MỘT ý thừa)</p><div class="meanings" style="grid-template-columns:1fr">'+st.headings.map(function(x){return '<div>'+x+'</div>'}).join('')+'</div>';
+      h+='<div class="q'+(miss?' miss':'')+'"><span class="qn">'+q.n+'</span>'+q.p+' → <select class="txt'+(d?(right(st,i)?' right':' wrong'):'')+'" data-act="sel" data-i="'+i+'"'+(d?' disabled':'')+'><option value="">—</option>'+q.o.map(function(o){return '<option'+(v===o?' selected':'')+'>'+o+'</option>'}).join('')+'</select>'+(d?fbHTML(right(st,i),q.ex,'',q.a):'')+'</div>';
+      return;
+    }
+    if(q.t==='phr'){
+      var va=S.ans[k(st.id,i,'a')]||'', vb=S.ans[k(st.id,i,'b')]||'', ma=S.warn&&!d&&(!norm(va)||!norm(vb));
+      h+='<div class="phr"><div class="row'+(ma?' q miss':'')+'"><div class="vi"><span class="qn">'+q.n+'</span>'+esc(q.vi)+'</div>';
+      h+='<input class="txt'+(d?(right(st,i,'a')?' right':' wrong'):'')+'" data-act="txt" data-i="'+i+'" data-p="a" value="'+esc(va)+'" placeholder="Cụm từ trong bài"'+(d?' disabled':'')+'>';
+      h+='<div>'+esc(q.ex1)+' <input class="txt'+(d?(right(st,i,'b')?' right':' wrong'):'')+'" style="max-width:240px" data-act="txt" data-i="'+i+'" data-p="b" value="'+esc(vb)+'" placeholder="…"'+(d?' disabled':'')+'> '+esc(q.ex2)+'</div>';
+      if(d) h+='<div class="'+(right(st,i,'a')&&right(st,i,'b')?'ok-t':'bad-t')+'">Đáp án: '+esc(q.a[0])+' · câu ví dụ: '+esc(q.a2[0])+(q.note?' ('+esc(q.note)+')':'')+'</div>';
+      h+='</div></div>';
+      return;
+    }
+    if(q.t==='tf'&&q.n===14) h+='<p class="sub">B. True (T), False (F) hay Not Given (NG)?</p>';
+    if(q.n===8) h+='<p class="sub">A. Chọn đáp án đúng</p>';
+    h+='<div class="q'+(miss?' miss':'')+'"><p class="qt"><span class="qn">'+q.n+'</span>'+q.p+'</p>'+optsHTML(st,q,i);
+    if(d) h+=fbHTML(right(st,i),q.ex,q.ev?'Dẫn chứng – '+q.ev:'',q.t==='mcq'?'ABCD'[q.a]:q.o[q.a]);
+    h+='</div>';
+  });
+  if(!d) h+='<div class="actions"><button class="btn" data-act="submit">Nộp chặng này</button><span class="note">Đã làm '+items(st).filter(function(x){return filled(st,x[0],x[1])}).length+'/'+maxOf(st)+'</span></div>';
+  else if(st.id==='c3') h+='<p class="note" style="margin-top:12px">Bản dịch và bảng từ đã mở ở phần Bài đọc phía trên.</p>';
+  return h;
+}
+function unlocked(){return S.done.c1&&S.done.c2&&S.done.c3}
+function chosenLetter(row){
+  var st=row[0]<=3?stage('c1'):(row[0]===4?stage('c2'):stage('c3'));
+  var i=-1; st.qs.forEach(function(q,j){if(q.n===row[0]&&q.t==='mcq')i=j});
+  var v=S.ans[k(st.id,i)]; return {me:v===undefined?'?':row[1][v], ok:v===st.qs[i].a, right:row[1][st.qs[i].a]};
+}
+function codeHTML(st){
+  var h='<div class="sechead"><h2>'+st.name+'. '+esc(st.title)+'</h2><p>Phần thưởng cho người đọc giỏi</p></div><div class="instr">'+st.intro+'</div>';
+  if(!unlocked()) return h+'<p class="note" style="margin-top:12px">Mật mã đang khoá. Em còn phải nộp: '+['c1','c2','c3'].filter(function(x){return !S.done[x]}).map(function(x){return stage(x).name}).join(', ')+'.</p>';
+  h+='<div style="overflow-x:auto"><table class="code"><tr><th>Câu</th><th>A</th><th>B</th><th>C</th><th>D</th><th>Em chọn</th></tr>';
+  var res=CODE.map(chosenLetter);
+  CODE.forEach(function(r,i){ h+='<tr><td>Question '+r[0]+'</td>'+r[1].split('').map(function(c){return '<td>'+c+'</td>'}).join('')+'<td class="me '+(res[i].ok?'hit':'miss')+'">'+res[i].me+'</td></tr>' });
+  h+='</table></div><p class="sub">Từ khoá của em</p><div class="word" id="word">'+res.map(function(r){return '<span class="'+(r.ok?'hit':'miss')+'" title="'+(r.ok?'đúng':'đúng phải là '+r.right)+'">'+r.me+'</span>'}).join('')+'</div>';
+  var all=res.every(function(r){return r.ok});
+  h+='<p id="codemsg" class="note" hidden>'+(all?'<b class="ok-t">Tuyệt vời! Từ khoá là TRADITIONS (những truyền thống).</b>':'Chữ đỏ là chỗ em chọn sai. Từ khoá đúng là <b>'+res.map(function(r){return r.right}).join('')+'</b>. Xem lại các câu đó ở Chặng 1–3 nhé.')+'</p>';
+  h+='<p class="sub">Câu hỏi thưởng</p><p class="qt">Viết 1 câu tiếng Anh có từ <b>traditions</b> (hoặc <b>tradition</b>).</p><textarea class="txt" id="bonus" data-act="bonus" placeholder="VD: …">'+esc(S.bonus||'')+'</textarea>';
+  h+='<div class="actions"><button class="btn ghost" data-act="model">Xem câu mẫu</button></div><div id="model" class="fb neu" hidden><strong>Câu mẫu</strong><div>Basket making is one of the oldest traditions in Somerset. / My family keeps many Tet traditions, such as making banh chung.</div></div>';
+  return h;
+}
+function badge(t,m){var p=t/m;return p>=0.85?'GOLD READER':p>=0.65?'SILVER READER':p>=0.5?'BRONZE READER':'Cố lên! Làm lại các câu sai nhé'}
+function totals(){var t=0,m=0,sk={};STAGES.forEach(function(s){if(s.code||!S.done[s.id])return;t+=S.score[s.id];m+=maxOf(s);var o=sk[s.sk]=sk[s.sk]||{got:0,max:0};o.got+=S.score[s.id];o.max+=maxOf(s)});return {t:t,m:m,sk:sk}}
+function lvl(p){return p>=80?['Tốt','ok']:(p>=50?['Khá, cần ôn thêm','mid']:['Cần cải thiện','no'])}
+function comment(){var T=totals(),a=[];for(var x in T.sk){var p=Math.round(T.sk[x].got/T.sk[x].max*100);a.push(SKILLS[x]+' '+p+'% ('+lvl(p)[0]+')')}var c=a.join('; ');if(S.tUsed.c2!==undefined)c+='. Đọc lướt: '+fmt(S.tUsed.c2);if(S.done.c5||unlocked()){var ok=CODE.map(chosenLetter).filter(function(r){return r.ok}).length;c+='. Mật mã: '+ok+'/10 chữ đúng'}return c}
+function sumHTML(){
+  var T=totals(), h='<div class="sechead"><h2>Tổng kết</h2><p>'+(T.m?'':'Nộp ít nhất một chặng để xem điểm.')+'</p></div>';
+  if(!T.m) return h;
+  h+='<p class="score">'+T.t+'/'+T.m+' điểm</p><span class="badge">'+badge(T.t,T.m)+'</span><div style="margin-top:12px">';
+  STAGES.forEach(function(s){ if(!s.code) h+='<div class="srow"><span>'+s.name+'. '+esc(s.title)+'</span><b>'+(S.done[s.id]?S.score[s.id]+'/'+maxOf(s):'chưa nộp')+'</b></div>' });
+  h+='</div><div class="sum">'+esc(comment())+'</div>';
+  for(var x in T.sk){var p=Math.round(T.sk[x].got/T.sk[x].max*100),l=lvl(p);h+='<div class="sk"><div class="skh"><b>'+SKILLS[x]+'</b><span class="pill '+l[1]+'">'+l[0]+'</span><span>'+T.sk[x].got+'/'+T.sk[x].max+'</span></div><div class="bar '+l[1]+'"><i style="width:'+p+'%"></i></div></div>'}
+  h+='<div class="actions"><button class="btn" data-act="send">Gửi lại kết quả cho cô</button><button class="btn ghost" data-act="copy">Sao chép kết quả</button></div>';
+  return h;
+}
+function fmt(ms){var s=Math.round(ms/1000);return Math.floor(s/60)+':'+('0'+s%60).slice(-2)}
+function render(){
+  renderTabs();
+  var st=stage(S.cur);
+  $('main').innerHTML=S.cur==='sum'?sumHTML():(st.code?codeHTML(st):stageHTML(st));
+  if(st&&st.code&&unlocked()) reveal();
+  S.warn=false;
+}
+function reveal(){
+  var sp=[].slice.call(document.querySelectorAll('#word span'));
+  sp.forEach(function(s,i){setTimeout(function(){s.classList.add('in')},150+i*180)});
+  setTimeout(function(){var m=$('codemsg');if(m)m.hidden=false},250+sp.length*180);
+  if(!S.done.c5){S.done.c5=true;save();setTimeout(function(){renderTabs();send('c5')},400)}
+}
+var tick=null;
+function startClock(){
+  clearInterval(tick);
+  tick=setInterval(function(){
+    var c=$('clock'); if(!c||S.done.c2||!S.t0){return}
+    var left=120000-(Date.now()-S.t0);
+    if(left<=0){c.textContent='0:00';if(S.tUsed.c2===undefined){S.tUsed.c2=120000;save();render();toast('Hết 2 phút! Trả lời theo những gì em đã đọc.')}clearInterval(tick);return}
+    c.textContent=fmt(left);
+  },250);
+}
+
+function payload(latest){
+  var T=totals(), secs=[];
+  STAGES.forEach(function(s){ if(!s.code&&S.done[s.id]) secs.push({id:s.id,title:s.name+' - '+s.title,score:S.score[s.id],max:maxOf(s)}) });
+  var sk=[]; for(var x in T.sk) sk.push({k:x,n:SKILLS[x],got:T.sk[x].got,max:T.sk[x].max});
+  return {ts:new Date().toISOString(),name:$('sName').value.trim(),cls:$('sClass').value.trim(),unit:UNIT,latest:latest==='c5'?null:latest,sections:secs,total:T.t,max:T.m,pct:T.m?Math.round(T.t/T.m*100):0,skills:sk,comment:comment()};
+}
+function send(latest,manual){
+  if(!SHEET_URL){ if(manual) toast('Bản xem thử chưa gắn Google Sheet. Em dùng Sao chép kết quả nhé.'); return }
+  try{ fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload(latest))})
+    .then(function(){toast('Đã gửi kết quả cho cô.')},function(){toast('Chưa gửi được. Em bấm Sao chép kết quả rồi gửi Zalo nhé.')}); }
+  catch(e){toast('Chưa gửi được. Em bấm Sao chép kết quả rồi gửi Zalo nhé.')}
+}
+
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-act]'); if(!b) return;
+  var a=b.dataset.act, st=stage(S.cur);
+  if(a==='tab'){S.cur=b.dataset.id;render();window.scrollTo(0,0);if(S.cur==='c2'&&S.t0&&!S.done.c2)startClock();return}
+  if(a==='pick'){S.ans[k(st.id,+b.dataset.i)]=+b.dataset.j;save();render();return}
+  if(a==='start'){S.t0=Date.now();render();startClock();return}
+  if(a==='model'){$('model').hidden=false;return}
+  if(a==='copy'){var p=payload(null),t='Reading Quest 1 – '+p.name+' ('+p.cls+'): '+p.total+'/'+p.max+' điểm. '+p.comment;
+    (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){toast('Đã sao chép. Em dán vào Zalo gửi cô nhé.')},function(){window.prompt('Sao chép kết quả:',t)});return}
+  if(a==='send'){ if(!$('sName').value.trim()||!$('sClass').value.trim()){toast('Em nhập họ tên và lớp trước nhé.');return} send(null,true);return}
+  if(a==='submit'){
+    if(!$('sName').value.trim()||!$('sClass').value.trim()){toast('Em nhập họ tên và lớp ở trên trước nhé.');$('sName').focus();return}
+    var miss=items(st).filter(function(x){return !filled(st,x[0],x[1])}).length;
+    if(miss){S.warn=true;render();toast('Còn '+miss+' ô chưa làm (viền đỏ).');return}
+    if(st.timer&&S.tUsed.c2===undefined) S.tUsed.c2=Date.now()-S.t0;
+    S.done[st.id]=true; S.score[st.id]=items(st).filter(function(x){return right(st,x[0],x[1])}).length;
+    save(); render(); window.scrollTo(0,0); send(st.id);
+    toast(st.name+': '+S.score[st.id]+'/'+maxOf(st)+' điểm.'+(unlocked()&&!S.done.c5?' Mật mã đã mở!':''));
+  }
+});
+document.addEventListener('change',function(e){var t=e.target; if(t.dataset.act==='sel'){S.ans[k(S.cur,+t.dataset.i)]=t.value||undefined;save();renderTabs()}});
+document.addEventListener('input',function(e){var t=e.target;
+  if(t.dataset.act==='txt'){S.ans[k(S.cur,+t.dataset.i,t.dataset.p)]=t.value;save()}
+  if(t.dataset.act==='bonus'){S.bonus=t.value;save()}
+  if(t.id==='sName'||t.id==='sClass') save();
+});
+load(); render();
+</script>
+</body></html>
