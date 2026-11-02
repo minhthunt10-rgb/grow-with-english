@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><link rel="icon" href="/favicon.ico?v=2"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ôn thi IELTS 28 ngày</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap">
+<style>
+/* Checklist kế hoạch ôn IELTS 28 ngày (02/11 – 29/11/2026), tick lưu localStorage trên máy HS */
+:root{
+  --bg:#f7f6f0; --card:#ffffff; --ink:#22301c; --mute:#5d6957; --line:#e2e4d8;
+  --brand:#3f6e2a; --hi:#fde5d3; --green:#5a923f; --orange:#e8742f; --ok:#17703f; --ok-bg:#e3f1dc; --chip:#eef4e8;
+  --f-display:"Baloo 2","Be Vietnam Pro",system-ui,sans-serif;
+  --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#131a11; --card:#1b2418; --ink:#e7eee2; --mute:#a3b09b; --line:#2e3a29;
+  --brand:#8cc56b; --hi:#3e2b1d; --green:#8cc56b; --orange:#f0965c; --ok:#8fd99b; --ok-bg:#1b3a22; --chip:#232f1f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#131a11; --card:#1b2418; --ink:#e7eee2; --mute:#a3b09b; --line:#2e3a29;
+  --brand:#8cc56b; --hi:#3e2b1d; --green:#8cc56b; --orange:#f0965c; --ok:#8fd99b; --ok-bg:#1b3a22; --chip:#232f1f; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 var(--f-body);
+  padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.banner{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 20px 18px}
+.brandrow{display:flex;align-items:center;gap:10px;padding-bottom:8px;margin-bottom:10px;border-bottom:3px solid var(--orange);font:italic 700 15px/1.2 "Times New Roman",Georgia,serif}
+.brandrow img{width:40px;height:40px;object-fit:contain;border-radius:8px;flex:0 0 auto}
+.brandrow .gwe{color:var(--green)} .brandrow .msm{color:var(--orange);margin-left:auto;text-align:right}
+.banner h1{color:var(--brand);font:700 26px/1.2 var(--f-display);margin:4px 0 2px}
+.banner p{margin:0;color:var(--mute)}
+.back{display:inline-block;font-size:13px;font-weight:600;color:var(--brand);text-decoration:none}
+.back[hidden]{display:none}
+.total{margin-top:12px}
+.bar{height:10px;border-radius:5px;background:var(--chip);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--green);border-radius:5px;transition:width .3s}
+.total .txt{display:flex;justify-content:space-between;font-size:13px;color:var(--mute);margin-top:4px}
+.total .txt b{color:var(--ok)}
+.week h2{font:700 19px/1.2 var(--f-display);color:var(--brand);margin:6px 0 8px}
+.days{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.day{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.day.today{border:2px solid var(--orange)}
+.day.done{background:var(--ok-bg);border-color:var(--ok)}
+.dh{display:flex;align-items:baseline;gap:8px;margin-bottom:6px}
+.dh b{font:700 18px/1 var(--f-display);color:var(--orange)}
+.dh span{font-size:13px;color:var(--mute)}
+.dh em{margin-left:auto;font-style:normal;font-size:12px;font-weight:600;color:var(--mute)}
+.day.done .dh em{color:var(--ok)}
+.tag{font-size:11px;font-weight:700;color:#fff;background:var(--orange);border-radius:6px;padding:1px 6px}
+label{display:flex;align-items:flex-start;gap:8px;padding:5px 0;cursor:pointer;font-size:14px;line-height:1.4}
+label+label{border-top:1px dashed var(--line)}
+input[type=checkbox]{flex:0 0 auto;width:20px;height:20px;margin:0;accent-color:var(--green)}
+label .t{flex:1}
+label .m{flex:0 0 auto;font-size:12px;color:var(--mute)}
+input:checked~.t{text-decoration:line-through;color:var(--mute)}
+.note{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px;font-size:13px;color:var(--mute)}
+</style></head>
+<body><div class="wrap">
+<header class="banner">
+  <div class="brandrow"><img src="../logo.png" alt="Logo Grow with English"><span class="gwe">Grow with English</span><span class="msm">Tiếng Anh Ms. Minh Thư</span></div>
+  <a class="back" href="../#ielts" data-gv hidden>← Kho bài tập · IELTS</a>
+<script>try{if(localStorage.getItem("gwe-gv")==="1")[].forEach.call(document.querySelectorAll("[data-gv]"),function(a){a.hidden=false})}catch(e){}</script>
+  <h1>Kế hoạch ôn thi IELTS 28 ngày</h1>
+  <p>02/11 – 29/11/2026. Làm xong việc nào thì tick vào ô việc đó nhé!</p>
+  <div class="total"><div class="bar"><i id="bar"></i></div><div class="txt"><span id="cnt"></span><b id="pct"></b></div></div>
+</header>
+<main id="main"></main>
+<p class="note">Dấu tick được lưu ngay trên điện thoại/máy tính này. Mở bằng đúng máy và trình duyệt đã dùng để giữ tiến độ.</p>
+</div>
+<script>
+// Lịch 1 tuần, lặp lại 4 tuần: [tên việc, số phút]
+var WEEK = [
+  [['Listening: luyện đề',30],['Sửa đề Listening',20],['Speaking',15]],
+  [['Reading full 1 đề',60],['Sửa đề Reading',45]],
+  [['Writing Task 1',20],['Listening theo dạng',20],['Sửa bài Listening',10]],
+  [['Writing Task 2',40],['Speaking Part 2',15],['Học từ mới Writing Task 2',20]],
+  [['Listening: luyện đề',30],['Sửa đề Listening',20],['Học từ mới Writing Task 2',20]],
+  [['Reading full 1 đề',60],['Sửa đề Reading',45]],
+  [['Reading theo dạng',20],['Sửa Reading',20],['Speaking Part 3',20]]
+];
+var THU = ['Chủ nhật','Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7'];
+var KEY = 'gwe-onthi-28-2026-11', START = new Date(2026, 10, 2);
+var st = {};
+try{ st = JSON.parse(localStorage.getItem(KEY)) || {}; }catch(e){}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
+function pad(n){ return (n < 10 ? '0' : '') + n; }
+
+var now = new Date(), todayKey = pad(now.getDate()) + '/' + pad(now.getMonth() + 1), h = '';
+for (var w = 0; w < 4; w++){
+  h += '<section class="week"><h2>Tuần ' + (w + 1) + '</h2><div class="days">';
+  for (var d = 0; d < 7; d++){
+    var dt = new Date(START.getFullYear(), START.getMonth(), START.getDate() + w * 7 + d),
+        k = pad(dt.getDate()) + '/' + pad(dt.getMonth() + 1), tasks = WEEK[d], mins = 0;
+    h += '<article class="day' + (k === todayKey ? ' today' : '') + '" data-day="' + k + '"><div class="dh"><b>' + k + '</b><span>' + THU[dt.getDay()] + '</span>' + (k === todayKey ? '<span class="tag">Hôm nay</span>' : '') + '<em></em></div>';
+    tasks.forEach(function(t, i){
+      var id = k + '#' + i; mins += t[1];
+      h += '<label><input type="checkbox" data-id="' + id + '"' + (st[id] ? ' checked' : '') + '><span class="t">' + t[0] + '</span><span class="m">' + t[1] + ' phút</span></label>';
+    });
+    h += '</article>';
+  }
+  h += '</div></section>';
+}
+document.getElementById('main').innerHTML = h;
+
+function refresh(){
+  var all = 0, done = 0;
+  [].forEach.call(document.querySelectorAll('.day'), function(el){
+    var boxes = el.querySelectorAll('input'), n = 0;
+    [].forEach.call(boxes, function(b){ if (b.checked) n++; });
+    all += boxes.length; done += n;
+    el.classList.toggle('done', n === boxes.length);
+    el.querySelector('em').textContent = n === boxes.length ? '✓ Xong' : n + '/' + boxes.length;
+  });
+  var p = Math.round(done * 100 / all);
+  document.getElementById('bar').style.width = p + '%';
+  document.getElementById('cnt').textContent = 'Đã làm ' + done + '/' + all + ' việc';
+  document.getElementById('pct').textContent = p + '%';
+}
+document.getElementById('main').addEventListener('change', function(e){
+  var id = e.target.getAttribute('data-id'); if (!id) return;
+  if (e.target.checked) st[id] = 1; else delete st[id];
+  save(); refresh();
+});
+refresh();
+var td = document.querySelector('.day.today');
+if (td) td.scrollIntoView({block:'center'});
+</script>
+</body></html>
