@@ -3,37 +3,44 @@
 <title>Ôn thi IELTS 28 ngày</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap">
 <style>
-/* Checklist kế hoạch ôn IELTS 28 ngày (02/11 – 29/11/2026), tick lưu localStorage trên máy HS */
+/* Checklist ôn IELTS 28 ngày (02/11 – 29/11/2026): HS tick → "Chờ duyệt", trợ giảng (#tg) duyệt. Dữ liệu ở Google Sheet qua Apps Script (CK_URL) */
 :root{
   --bg:#f7f6f0; --card:#ffffff; --ink:#22301c; --mute:#5d6957; --line:#e2e4d8;
   --brand:#3f6e2a; --hi:#fde5d3; --green:#5a923f; --orange:#e8742f; --ok:#17703f; --ok-bg:#e3f1dc; --chip:#eef4e8;
+  --bad:#b3261e; --bad-bg:#fbe4e1; --wait:#9a5a12; --wait-bg:#fdf0dc;
   --f-display:"Baloo 2","Be Vietnam Pro",system-ui,sans-serif;
   --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#131a11; --card:#1b2418; --ink:#e7eee2; --mute:#a3b09b; --line:#2e3a29;
-  --brand:#8cc56b; --hi:#3e2b1d; --green:#8cc56b; --orange:#f0965c; --ok:#8fd99b; --ok-bg:#1b3a22; --chip:#232f1f; color-scheme:dark}}
+  --brand:#8cc56b; --hi:#3e2b1d; --green:#8cc56b; --orange:#f0965c; --ok:#8fd99b; --ok-bg:#1b3a22; --chip:#232f1f;
+  --bad:#f2a49c; --bad-bg:#3d1f1c; --wait:#f0c27a; --wait-bg:#3a2d17; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#131a11; --card:#1b2418; --ink:#e7eee2; --mute:#a3b09b; --line:#2e3a29;
-  --brand:#8cc56b; --hi:#3e2b1d; --green:#8cc56b; --orange:#f0965c; --ok:#8fd99b; --ok-bg:#1b3a22; --chip:#232f1f; color-scheme:dark}
+  --brand:#8cc56b; --hi:#3e2b1d; --green:#8cc56b; --orange:#f0965c; --ok:#8fd99b; --ok-bg:#1b3a22; --chip:#232f1f;
+  --bad:#f2a49c; --bad-bg:#3d1f1c; --wait:#f0c27a; --wait-bg:#3a2d17; color-scheme:dark}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 var(--f-body);
   padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
-.banner{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 20px 18px}
+.banner,.box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 20px 18px}
 .brandrow{display:flex;align-items:center;gap:10px;padding-bottom:8px;margin-bottom:10px;border-bottom:3px solid var(--orange);font:italic 700 15px/1.2 "Times New Roman",Georgia,serif}
 .brandrow img{width:40px;height:40px;object-fit:contain;border-radius:8px;flex:0 0 auto}
 .brandrow .gwe{color:var(--green)} .brandrow .msm{color:var(--orange);margin-left:auto;text-align:right}
 .banner h1{color:var(--brand);font:700 26px/1.2 var(--f-display);margin:4px 0 2px}
 .banner p{margin:0;color:var(--mute)}
 .back{display:inline-block;font-size:13px;font-weight:600;color:var(--brand);text-decoration:none}
-.back[hidden]{display:none}
+.back[hidden],[hidden]{display:none!important}
+.mode{display:inline-block;font-size:12px;font-weight:700;color:#fff;background:var(--brand);border-radius:6px;padding:2px 8px;margin-top:6px}
 .total{margin-top:12px}
 .bar{height:10px;border-radius:5px;background:var(--chip);overflow:hidden}
 .bar i{display:block;height:100%;width:0;background:var(--green);border-radius:5px;transition:width .3s}
-.total .txt{display:flex;justify-content:space-between;font-size:13px;color:var(--mute);margin-top:4px}
+.total .txt{display:flex;justify-content:space-between;gap:8px;font-size:13px;color:var(--mute);margin-top:4px}
 .total .txt b{color:var(--ok)}
-.week h2{font:700 19px/1.2 var(--f-display);color:var(--brand);margin:6px 0 8px}
+.msg{font-size:13px;color:var(--mute);margin:8px 0 0}
+.msg.err{color:var(--bad);font-weight:600}
+.box h2,.week h2{font:700 19px/1.2 var(--f-display);color:var(--brand);margin:6px 0 8px}
+.week h2{margin-left:2px}
 .days{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
 .day{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
 .day.today{border:2px solid var(--orange)}
@@ -43,14 +50,33 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 var(--f-body);
 .dh span{font-size:13px;color:var(--mute)}
 .dh em{margin-left:auto;font-style:normal;font-size:12px;font-weight:600;color:var(--mute)}
 .day.done .dh em{color:var(--ok)}
-.tag{font-size:11px;font-weight:700;color:#fff;background:var(--orange);border-radius:6px;padding:1px 6px}
-label{display:flex;align-items:flex-start;gap:8px;padding:5px 0;cursor:pointer;font-size:14px;line-height:1.4}
-label+label{border-top:1px dashed var(--line)}
-input[type=checkbox]{flex:0 0 auto;width:20px;height:20px;margin:0;accent-color:var(--green)}
-label .t{flex:1}
-label .m{flex:0 0 auto;font-size:12px;color:var(--mute)}
-input:checked~.t{text-decoration:line-through;color:var(--mute)}
+.tag{font-size:11px;font-weight:700;color:#fff!important;background:var(--orange);border-radius:6px;padding:1px 6px}
+.task{padding:6px 0}
+.task+.task{border-top:1px dashed var(--line)}
+.task label{display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:14px;line-height:1.4}
+.task input{flex:0 0 auto;width:20px;height:20px;margin:0;accent-color:var(--green)}
+.task input:disabled{cursor:default}
+.task .t{flex:1}
+.task .m{flex:0 0 auto;font-size:12px;color:var(--mute)}
+.task.ok .t{text-decoration:line-through;color:var(--mute)}
+.st{display:block;margin:4px 0 0 28px;font-size:12px;font-weight:600;border-radius:6px;padding:2px 8px;width:fit-content}
+.st.wait{color:var(--wait);background:var(--wait-bg)}
+.st.ok{color:var(--ok);background:var(--ok-bg)}
+.st.bad{color:var(--bad);background:var(--bad-bg)}
+.acts{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 0 28px}
+button{font:600 13px/1 var(--f-body);border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 12px;cursor:pointer}
+button.yes{background:var(--green);border-color:var(--green);color:#fff}
+button.no{color:var(--bad);border-color:var(--bad)}
+button:disabled{opacity:.5;cursor:default}
+.pend{display:grid;gap:8px}
+.pend .row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.pend .row b{color:var(--orange);font-family:var(--f-display);font-size:16px}
+.pend .row span{flex:1;min-width:140px}
+.pend .row small{color:var(--mute);width:100%}
+.login{display:flex;flex-wrap:wrap;gap:8px}
+.login input{flex:1;min-width:160px;font:15px var(--f-body);padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
 .note{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px;font-size:13px;color:var(--mute)}
+.note p{margin:0}
 </style></head>
 <body><div class="wrap">
 <header class="banner">
@@ -58,13 +84,28 @@ input:checked~.t{text-decoration:line-through;color:var(--mute)}
   <a class="back" href="../#ielts" data-gv hidden>← Kho bài tập · IELTS</a>
 <script>try{if(localStorage.getItem("gwe-gv")==="1")[].forEach.call(document.querySelectorAll("[data-gv]"),function(a){a.hidden=false})}catch(e){}</script>
   <h1>Kế hoạch ôn thi IELTS 28 ngày</h1>
-  <p>02/11 – 29/11/2026. Làm xong việc nào thì tick vào ô việc đó nhé!</p>
-  <div class="total"><div class="bar"><i id="bar"></i></div><div class="txt"><span id="cnt"></span><b id="pct"></b></div></div>
+  <p id="sub">02/11 – 29/11/2026. Làm xong việc nào thì tick vào ô việc đó, rồi gửi bằng chứng cho trợ giảng nhé!</p>
+  <span class="mode" id="mode" hidden>Chế độ trợ giảng</span>
+  <div class="total"><div class="bar"><i id="bar"></i></div><div class="txt"><span id="cnt">Đang tải…</span><b id="pct"></b></div></div>
+  <p class="msg" id="msg" hidden></p>
 </header>
+<section class="box" id="loginBox" hidden>
+  <h2>Đăng nhập trợ giảng</h2>
+  <form class="login" id="loginForm"><input type="password" id="pw" placeholder="Mật khẩu trợ giảng" autocomplete="current-password"><button class="yes">Vào duyệt</button></form>
+</section>
+<section class="box" id="pendBox" hidden>
+  <h2 id="pendH">Việc chờ duyệt</h2>
+  <div class="pend" id="pend"></div>
+  <p class="msg" style="margin-top:10px"><button id="reload" type="button">↻ Tải lại</button></p>
+</section>
 <main id="main"></main>
-<p class="note">Dấu tick được lưu ngay trên điện thoại/máy tính này. Mở bằng đúng máy và trình duyệt đã dùng để giữ tiến độ.</p>
+<div class="note"><p id="howHS"><b>Cách dùng:</b> làm xong việc nào thì tick ô đó → việc chuyển sang <b>“Chờ duyệt”</b> → gửi ảnh/bài làm cho trợ giảng qua Zalo. Trợ giảng duyệt xong thì việc mới được tính hoàn thành. Nếu “Chưa đạt”, đọc lý do, làm lại rồi tick lại.</p>
+<p id="howTG" hidden><b>Trợ giảng:</b> đối chiếu bằng chứng HS gửi rồi bấm <b>Duyệt</b> hoặc <b>Chưa đạt</b> (ghi lý do). Bấm nhầm thì “Bỏ duyệt” để đưa việc về chờ duyệt.</p></div>
 </div>
 <script>
+// Link Web app của Apps Script "on-thi-checklist.gs". Để trống = chế độ thử (lưu trên máy, MK trợ giảng 1234)
+var CK_URL = '';
+var PLAN = 'on-thi-28-2026-11', START = new Date(2026, 10, 2), TG_KEY = 'gwe-onthi-tg';
 // Lịch 1 tuần, lặp lại 4 tuần: [tên việc, số phút]
 var WEEK = [
   [['Listening: luyện đề',30],['Sửa đề Listening',20],['Speaking',15]],
@@ -76,50 +117,121 @@ var WEEK = [
   [['Reading theo dạng',20],['Sửa Reading',20],['Speaking Part 3',20]]
 ];
 var THU = ['Chủ nhật','Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7'];
-var KEY = 'gwe-onthi-28-2026-11', START = new Date(2026, 10, 2);
-var st = {};
-try{ st = JSON.parse(localStorage.getItem(KEY)) || {}; }catch(e){}
-function save(){ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
+var isTG = location.hash === '#tg', tgPw = '', items = {}, busy = false;
+try{ tgPw = sessionStorage.getItem(TG_KEY) || ''; }catch(e){}
+function $(id){ return document.getElementById(id); }
 function pad(n){ return (n < 10 ? '0' : '') + n; }
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function msg(t, err){ var m = $('msg'); m.hidden = !t; m.textContent = t || ''; m.className = 'msg' + (err ? ' err' : ''); }
 
-var now = new Date(), todayKey = pad(now.getDate()) + '/' + pad(now.getMonth() + 1), h = '';
-for (var w = 0; w < 4; w++){
-  h += '<section class="week"><h2>Tuần ' + (w + 1) + '</h2><div class="days">';
-  for (var d = 0; d < 7; d++){
-    var dt = new Date(START.getFullYear(), START.getMonth(), START.getDate() + w * 7 + d),
-        k = pad(dt.getDate()) + '/' + pad(dt.getMonth() + 1), tasks = WEEK[d], mins = 0;
-    h += '<article class="day' + (k === todayKey ? ' today' : '') + '" data-day="' + k + '"><div class="dh"><b>' + k + '</b><span>' + THU[dt.getDay()] + '</span>' + (k === todayKey ? '<span class="tag">Hôm nay</span>' : '') + '<em></em></div>';
-    tasks.forEach(function(t, i){
-      var id = k + '#' + i; mins += t[1];
-      h += '<label><input type="checkbox" data-id="' + id + '"' + (st[id] ? ' checked' : '') + '><span class="t">' + t[0] + '</span><span class="m">' + t[1] + ' phút</span></label>';
+// Danh sách 28 ngày: {key:'02/11', thu, tasks:[{id, name, min}]}
+var DAYS = [], TASK = {};
+for (var n = 0; n < 28; n++){
+  var dt = new Date(START.getFullYear(), START.getMonth(), START.getDate() + n), k = pad(dt.getDate()) + '/' + pad(dt.getMonth() + 1);
+  DAYS.push({ key: k, thu: THU[dt.getDay()], tasks: WEEK[n % 7].map(function(t, i){
+    var o = { id: k + '#' + i, name: t[0], min: t[1], day: k }; TASK[o.id] = o; return o; }) });
+}
+
+// ---- Máy chủ (Apps Script) hoặc chế độ thử ----
+function api(data){
+  data.plan = PLAN;
+  if (!CK_URL) return new Promise(function(ok){ ok(demo(data)); });
+  return fetch(CK_URL, { method: 'POST', body: JSON.stringify(data) }).then(function(r){ return r.json(); })
+    .then(function(r){ if (!r.ok) throw new Error(r.error || 'Lỗi máy chủ'); return r; });
+}
+function demo(d){
+  var db = {}; try{ db = JSON.parse(localStorage.getItem('gwe-onthi-demo')) || {}; }catch(e){}
+  function now(){ var x = new Date(); return pad(x.getDate()) + '/' + pad(x.getMonth() + 1) + ' ' + pad(x.getHours()) + ':' + pad(x.getMinutes()); }
+  if (d.action !== 'list' && d.action !== 'tick' && d.action !== 'untick' && d.pw !== '1234') throw new Error('Sai mật khẩu trợ giảng.');
+  if (d.action === 'tick'){ if (db[d.id] && db[d.id].status === 'Đã duyệt') throw new Error('Việc này đã được duyệt rồi.'); db[d.id] = { status: 'Chờ duyệt', sent: now(), reviewed: '', reason: '' }; }
+  if (d.action === 'untick'){ if (db[d.id] && db[d.id].status !== 'Chờ duyệt') throw new Error('Việc đã được trợ giảng xem, không bỏ tick được.'); delete db[d.id]; }
+  if (d.action === 'review'){ var r = db[d.id]; r.status = d.status; r.reviewed = d.status === 'Chờ duyệt' ? '' : now(); r.reason = d.reason || ''; }
+  try{ localStorage.setItem('gwe-onthi-demo', JSON.stringify(db)); }catch(e){}
+  return { ok: true, items: db };
+}
+
+// ---- Vẽ trang ----
+var todayKey = (function(){ var x = new Date(); return pad(x.getDate()) + '/' + pad(x.getMonth() + 1); })();
+function stHTML(it){
+  if (!it) return '';
+  if (it.status === 'Đã duyệt') return '<span class="st ok">✓ Đã duyệt</span>';
+  if (it.status === 'Chưa đạt') return '<span class="st bad">✗ Chưa đạt' + (it.reason ? ': ' + esc(it.reason) : '') + (isTG ? '' : ' · làm lại rồi tick lại') + '</span>';
+  return '<span class="st wait">⏳ Chờ duyệt' + (it.sent ? ' · tick lúc ' + esc(it.sent) : '') + '</span>';
+}
+function actsHTML(id, it){
+  if (!isTG || !tgPw || !it) return '';
+  if (it.status === 'Chờ duyệt') return '<div class="acts"><button class="yes" data-act="Đã duyệt" data-id="' + id + '">Duyệt</button><button class="no" data-act="Chưa đạt" data-id="' + id + '">Chưa đạt</button></div>';
+  return '<div class="acts"><button data-act="Chờ duyệt" data-id="' + id + '">Bỏ duyệt</button></div>';
+}
+function render(){
+  var h = '', all = 0, ok = 0, wait = 0, pend = [];
+  for (var w = 0; w < 4; w++){
+    h += '<section class="week"><h2>Tuần ' + (w + 1) + '</h2><div class="days">';
+    DAYS.slice(w * 7, w * 7 + 7).forEach(function(d){
+      var dOk = 0, body = '', full;
+      d.tasks.forEach(function(t){
+        var it = items[t.id], s = it && it.status, lock = isTG || s === 'Đã duyệt' || busy;
+        all++; if (s === 'Đã duyệt'){ ok++; dOk++; } if (s === 'Chờ duyệt'){ wait++; pend.push(t); }
+        body += '<div class="task' + (s === 'Đã duyệt' ? ' ok' : '') + '"><label><input type="checkbox" data-id="' + t.id + '"' + (s === 'Đã duyệt' || s === 'Chờ duyệt' ? ' checked' : '') + (lock ? ' disabled' : '') + '><span class="t">' + t.name + '</span><span class="m">' + t.min + ' phút</span></label>' + stHTML(it) + actsHTML(t.id, it) + '</div>';
+      });
+      full = dOk === d.tasks.length;
+      h += '<article class="day' + (d.key === todayKey ? ' today' : '') + (full ? ' done' : '') + '"><div class="dh"><b>' + d.key + '</b><span>' + d.thu + '</span>' + (d.key === todayKey ? '<span class="tag">Hôm nay</span>' : '')
+        + '<em>' + (full ? '✓ Xong' : dOk + '/' + d.tasks.length + ' đã duyệt') + '</em></div>' + body + '</article>';
     });
-    h += '</article>';
+    h += '</div></section>';
   }
-  h += '</div></section>';
+  $('main').innerHTML = h;
+  var p = Math.round(ok * 100 / all);
+  $('bar').style.width = p + '%';
+  $('cnt').textContent = 'Đã duyệt ' + ok + '/' + all + ' việc' + (wait ? ' · ' + wait + ' chờ duyệt' : '');
+  $('pct').textContent = p + '%';
+  if (isTG && tgPw){
+    $('pendBox').hidden = false;
+    $('pendH').textContent = 'Việc chờ duyệt (' + pend.length + ')';
+    $('pend').innerHTML = pend.length ? pend.map(function(t){
+      return '<div class="row"><b>' + t.day + '</b><span>' + t.name + '</span><button class="yes" data-act="Đã duyệt" data-id="' + t.id + '">Duyệt</button><button class="no" data-act="Chưa đạt" data-id="' + t.id + '">Chưa đạt</button><small>HS tick lúc ' + esc(items[t.id].sent || '') + '</small></div>';
+    }).join('') : '<p class="msg">Không còn việc nào chờ duyệt.</p>';
+  }
 }
-document.getElementById('main').innerHTML = h;
+function load(){
+  return api({ action: 'list' }).then(function(r){ items = r.items || {}; msg(CK_URL ? '' : 'Đang chạy chế độ thử: dữ liệu chỉ lưu trên máy này.'); render(); })
+    .catch(function(e){ msg('Không tải được dữ liệu: ' + e.message + '. Kiểm tra mạng rồi tải lại trang.', true); render(); });
+}
+function run(data, done){
+  busy = true; render();
+  api(data).then(function(){ return load(); }).catch(function(e){ msg(e.message, true); return load(); })
+    .then(function(){ busy = false; render(); if (done) done(); });
+}
 
-function refresh(){
-  var all = 0, done = 0;
-  [].forEach.call(document.querySelectorAll('.day'), function(el){
-    var boxes = el.querySelectorAll('input'), n = 0;
-    [].forEach.call(boxes, function(b){ if (b.checked) n++; });
-    all += boxes.length; done += n;
-    el.classList.toggle('done', n === boxes.length);
-    el.querySelector('em').textContent = n === boxes.length ? '✓ Xong' : n + '/' + boxes.length;
-  });
-  var p = Math.round(done * 100 / all);
-  document.getElementById('bar').style.width = p + '%';
-  document.getElementById('cnt').textContent = 'Đã làm ' + done + '/' + all + ' việc';
-  document.getElementById('pct').textContent = p + '%';
-}
-document.getElementById('main').addEventListener('change', function(e){
-  var id = e.target.getAttribute('data-id'); if (!id) return;
-  if (e.target.checked) st[id] = 1; else delete st[id];
-  save(); refresh();
+// HS tick / bỏ tick
+$('main').addEventListener('change', function(e){
+  var id = e.target.getAttribute('data-id'); if (!id || isTG) return;
+  var t = TASK[id];
+  run(e.target.checked ? { action: 'tick', id: id, date: t.day, task: t.name } : { action: 'untick', id: id });
 });
-refresh();
-var td = document.querySelector('.day.today');
-if (td) td.scrollIntoView({block:'center'});
+// Trợ giảng duyệt
+document.addEventListener('click', function(e){
+  var b = e.target.closest('button[data-act]'); if (!b || busy) return;
+  var st = b.getAttribute('data-act'), reason = '';
+  if (st === 'Chưa đạt'){ reason = prompt('Lý do chưa đạt (HS sẽ thấy):', 'Chưa gửi bằng chứng'); if (reason === null) return; }
+  run({ action: 'review', pw: tgPw, id: b.getAttribute('data-id'), status: st, reason: reason });
+});
+$('reload').addEventListener('click', function(){ msg('Đang tải…'); load(); });
+$('loginForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  var pw = $('pw').value;
+  api({ action: 'login', pw: pw }).then(function(){
+    tgPw = pw; try{ sessionStorage.setItem(TG_KEY, pw); }catch(x){}
+    $('loginBox').hidden = true; msg(''); render();
+  }).catch(function(x){ msg(x.message, true); });
+});
+
+if (isTG){
+  $('mode').hidden = false; $('howHS').hidden = true; $('howTG').hidden = false;
+  $('sub').textContent = '02/11 – 29/11/2026. Trợ giảng duyệt việc HS đã tick sau khi xem bằng chứng.';
+  if (!tgPw) $('loginBox').hidden = false;
+}
+render();
+load().then(function(){ var td = document.querySelector('.day.today'); if (td && !isTG) td.scrollIntoView({ block: 'center' }); });
 </script>
 </body></html>
