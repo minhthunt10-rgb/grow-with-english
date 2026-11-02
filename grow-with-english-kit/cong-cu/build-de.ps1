@@ -10,7 +10,7 @@ $t = $t.Replace('<title>Unit 6 Artificial Intelligence</title>', "<title>$Title<
 $t = $t.Replace('<h1>Global Success 12 · Unit 6 · Artificial Intelligence</h1>', "<h1>$Title</h1>")
 $t = $t.Replace('<p>Từ vựng, ngữ pháp và đề luyện thi. Nộp từng bài để xem đáp án, giải thích, bản dịch và nhận xét kỹ năng.</p>', "<p>$Sub</p>")
 $t = $t.Replace("var UNIT = 'Global Success 12 - Unit 6';", "var UNIT = '$Unit';")
-$doc = "<!doctype html>`n<html lang=`"vi`"><head><meta charset=`"utf-8`"><meta name=`"viewport`" content=`"width=device-width,initial-scale=1,viewport-fit=cover`"><style>body{margin:0}</style></head><body>`n" + $t + "`n</body></html>`n"
+$doc = "<!doctype html>`n<html lang=`"vi`"><head><meta charset=`"utf-8`"><link rel=`"icon`" href=`"/favicon.ico?v=2`"><link rel=`"apple-touch-icon`" href=`"/apple-touch-icon.png`"><meta name=`"viewport`" content=`"width=device-width,initial-scale=1,viewport-fit=cover`"><style>body{margin:0}</style></head><body>`n" + $t + "`n</body></html>`n"
 $outPath = Join-Path $here $Out
 New-Item -ItemType Directory -Force (Split-Path -Parent $outPath) | Out-Null
 [IO.File]::WriteAllText($outPath, $doc, $enc)
