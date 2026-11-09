@@ -325,7 +325,7 @@ function cwGrid(){
   return h + '</div>';
 }
 function renderPart(p){
-  var h = '<h3 class="part">Phần ' + p.key + ' · ' + esc(p.name) + ' (' + p.qs.length + ' câu)</h3><span class="src">' + esc(p.src) + '</span><p class="lead">' + p.lead + '</p>';
+  var h = '<h3 class="part">Phần ' + p.key + ' · ' + esc(p.name) + ' (' + p.qs.length + ' câu)</h3><p class="lead">' + p.lead + '</p>';
   if(p.kind === 'ws') return h + renderWS(p);
   if(p.kind === 'cw'){ CWP = p; h += cwGrid(); }
   if(p.bank){
