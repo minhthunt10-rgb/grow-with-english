@@ -34,6 +34,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 var(--f-body);
 .banner h1{color:var(--brand);font:700 26px/1.2 var(--f-display);margin:4px 0 2px}
 .banner p{margin:0;color:var(--mute)}
 .back{display:inline-block;font-size:13px;font-weight:600;color:var(--brand);text-decoration:none;margin-bottom:2px}
+.back[hidden]{display:none}
 .pager{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .pager a{color:var(--brand);font-weight:600;text-decoration:none}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
@@ -121,7 +122,9 @@ textarea{font:inherit;width:100%;min-height:90px;padding:9px 11px;border:1.5px s
 <div class="wrap">
   <header class="banner">
     <div class="brandrow"><img src="../logo.png" alt="Logo Grow with English"><span class="gwe">Grow with English</span><span class="msm">Tiếng Anh Ms. Minh Thư</span></div>
-    <a class="back" href="./">← Tất cả topic</a>
+    <a class="back" href="./" data-gv hidden>← Tất cả topic</a>
+<script>try{if(localStorage.getItem("gwe-gv")==="1")[].forEach.call(document.querySelectorAll("[data-gv]"),function(a){a.hidden=false})}catch(e){}</script>
+<script>var GV=false;try{GV=localStorage.getItem("gwe-gv")==="1"}catch(e){}</script>
     <h1 id="h1">IELTS Speaking</h1>
     <p>Forecast Quý 3/2026 · Band mục tiêu 7.0. Học từ vựng, tự nói và ghi âm, rồi mới so với bài mẫu.</p>
   </header>
@@ -369,7 +372,7 @@ document.addEventListener('keydown',function(e){ if((e.key==='Enter'||e.key===' 
 document.addEventListener('input',function(e){ if(e.target.id==='notes'){S.notes=e.target.value;saveState()} else if(e.target.id==='sName'||e.target.id==='sClass') saveWho(); });
 if(TTS) speechSynthesis.onvoiceschanged=function(){};
 $('saveRule').innerHTML='Bản ghi âm và bài làm được <b>giữ lại trên máy này</b>, tải lại trang vẫn còn. '+(SHEET_URL?'Bấm <b>📤 Nộp bài nói cho cô</b> dưới mỗi bản ghi để gửi bài nói về cho cô.':'Muốn gửi cô, em bấm <b>Tải bản ghi âm về máy</b> rồi gửi Zalo.');
-$('pager').innerHTML=(T.n>1?'<a href="topic.html?t='+(T.n-1)+'">← Topic '+(T.n-1)+'</a>':'<a href="./">← Tất cả topic</a>')+(T.n<5?'<a href="topic.html?t='+(T.n+1)+'">Topic '+(T.n+1)+' →</a>':'<a href="./">Tất cả topic →</a>');
+if(GV) $('pager').innerHTML=(T.n>1?'<a href="topic.html?t='+(T.n-1)+'">← Topic '+(T.n-1)+'</a>':'<a href="./">← Tất cả topic</a>')+(T.n<5?'<a href="topic.html?t='+(T.n+1)+'">Topic '+(T.n+1)+' →</a>':'<a href="./">Tất cả topic →</a>');
 loadWho(); loadState(); render();
 dbOpen(function(){ dbLoadAll(render) });
 </script>

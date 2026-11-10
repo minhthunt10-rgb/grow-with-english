@@ -118,6 +118,7 @@ h2{font:700 22px/1.2 var(--f-display);margin:0}
   <div class="brandrow"><img src="../logo.png" alt="Logo Grow with English"><span class="gwe">Grow with English</span><span class="msm">Tiếng Anh Ms. Minh Thư</span></div>
   <a class="back" href="../#khoi-11" data-gv hidden>← Kho bài tập · Khối 11</a><a class="back" id="toList" href="./" hidden>← Danh sách 4 bài</a>
 <script>try{if(localStorage.getItem("gwe-gv")==="1")[].forEach.call(document.querySelectorAll("[data-gv]"),function(a){a.hidden=false})}catch(e){}</script>
+<script>var GV=false;try{GV=localStorage.getItem("gwe-gv")==="1"}catch(e){}</script>
   <h1 id="h1">Từ vựng SGK + SBT · Unit 4–5 · Lớp 11</h1>
   <p id="sub">Tiếng Anh 11 Global Success · bài tập từ vựng trong Sách giáo khoa và Sách bài tập, Unit 4 và Unit 5.</p>
 </header>
@@ -343,7 +344,7 @@ function render(){
     h += '<div class="score" style="margin-top:10px"><span class="big">' + sc.score + '/' + sc.max + '</span><span class="msg">' + sc.by.join(' · ') + '<br>' + (S.review ? 'Lần ôn lại' : 'Lần nộp chính') + (S.first ? ' · Điểm lần đầu gửi cô: ' + S.first.score + '/' + S.first.max : '') + '</span></div>';
     h += '<p class="msg' + (S.sent ? ' ok' : '') + '" id="sendMsg">' + (S.sent ? '✓ Đã gửi kết quả cho cô.' : (S.review ? '' : 'Đang gửi kết quả cho cô…')) + '</p>';
     if(sc.score === sc.max) h += '<p class="msg ok">Tuyệt vời, em đúng hết cả bài!</p>';
-    h += '<div class="row"><button class="btn ghost" data-act="redo">Làm lại để ôn</button>' + (B < NB ? '<a class="btn" href="?b=' + (B + 1) + '">Sang Bài ' + (B + 1) + ' →</a>' : '') + '</div>';
+    h += '<div class="row"><button class="btn ghost" data-act="redo">Làm lại để ôn</button>' + (GV && B < NB ? '<a class="btn" href="?b=' + (B + 1) + '">Sang Bài ' + (B + 1) + ' →</a>' : '') + '</div>';
   } else {
     h += '<p class="lead">' + esc(BK.sub) + ' · ' + n + ' câu, ' + PARTS.length + ' phần. Làm xong tất cả rồi bấm Nộp bài ở cuối trang.</p>';
   }
@@ -434,7 +435,7 @@ if(!B){ hub(); }
 else {
   var inf = load('gwe-tv11u45-info') || {};
   $('sName').value = inf.n || ''; $('sClass').value = inf.c || '';
-  $('info').hidden = false; $('toList').hidden = false;
+  $('info').hidden = false; $('toList').hidden = !GV;
   build();
   S = load(KEY) || {a:{}, done:false, first:null, sent:false, review:false};
   $('h1').textContent = title();
