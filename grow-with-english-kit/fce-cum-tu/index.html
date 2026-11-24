@@ -256,10 +256,20 @@ function confetti(){
   document.body.appendChild(box); setTimeout(function(){ box.remove(); }, 3200);
 }
 /* câu khen / động viên: chọn cố định theo mã câu để không đổi mỗi lần vẽ lại */
-var PRAISE = ['Giỏi quá! 🌟','Chính xác! 👏','Tuyệt vời! 🎉','Đúng rồi, nhớ lâu nhé! 💪','Xuất sắc! ⭐','Em làm tốt lắm! 👍','Quá đỉnh! 🔥','Chuẩn không cần chỉnh! ✅'];
-var COMFORT = ['Không sao, câu sau sẽ đúng! 💪','Sai một chút thôi, đọc lại đáp án để nhớ nhé! 📖','Cố lên em, ai cũng từng sai! 🌱','Nghe lại và nhớ cụm này nhé! 🎧','Lần sau em sẽ nhớ! 😊'];
-var MILE = ['Cố lên, em đi được một chặng dài rồi! 🚀','Tuyệt! Giữ nhịp này nhé! 🏃','Em đang tiến bộ từng câu đấy! 📈'];
-function pick(arr, key){ var h = 0; for(var i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) | 0; return arr[Math.abs(h) % arr.length]; }
+/* {n} = tên gọi của HS (chữ cuối trong họ tên); chưa có tên thì bỏ cả ", {n}" */
+var PRAISE = ['Giỏi quá, {n}! 🌟','Chính xác, {n}! 👏','Tuyệt vời, {n}! 🎉','Đúng rồi, {n} nhớ lâu nhé! 💪','Xuất sắc, {n}! ⭐','{n} làm tốt lắm! 👍','Quá đỉnh, {n}! 🔥','Chuẩn không cần chỉnh, {n}! ✅'];
+var COMFORT = ['Không sao đâu {n}, câu sau sẽ đúng! 💪','Sai một chút thôi, {n} đọc lại đáp án để nhớ nhé! 📖','Cố lên {n}, ai cũng từng sai! 🌱','{n} nghe lại và nhớ cụm này nhé! 🎧','Lần sau {n} sẽ nhớ! 😊'];
+var MILE = ['Cố lên {n}, em đi được một chặng dài rồi! 🚀','Tuyệt! {n} giữ nhịp này nhé! 🏃','{n} đang tiến bộ từng câu đấy! 📈'];
+var STREAK = [[10,'{n} đang bất bại! 👑'],[7,'Không ai cản nổi {n}! ⚡'],[5,'{n} đang vào phong độ! 🚀'],[3,'Chuỗi đẹp quá, {n}!']];
+function nick(){
+  var n = ((info && info().n) || '').trim().split(/\s+/).pop() || '';
+  return n ? n.charAt(0).toUpperCase() + n.slice(1) : '';
+}
+function withName(s){
+  var n = esc(nick()) || 'em';
+  return s.replace(/\{n\}/g, n).replace(/^./, function(c){ return c.toUpperCase(); });
+}
+function pick(arr, key){ var h = 0; for(var i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) | 0; return withName(arr[Math.abs(h) % arr.length]); }
 function sayBtn(text, cls){ return '<button class="say' + (cls ? ' ' + cls : '') + '" data-say="' + esc(text) + '" aria-label="Nghe: ' + esc(text) + '" title="Nghe">' + ICON + '</button>'; }
 function bare(it){ return it.p.replace(/\s*\([^)]*\)/g, ''); }
 function spoken(it){ return bare(it).replace(/\bsb\b/g, 'somebody').replace(/\bsth\b/g, 'something').replace(/\//g, ' or '); }
@@ -378,7 +388,7 @@ function dotsHtml(p, cur){
 function partEnd(p, i){
   var ps = partScore(p), next = STEPS[i + 1], pct = ps ? ps[0] / ps[1] : 1;
   var em = pct === 1 ? '🏆' : pct >= .8 ? '🎉' : pct >= .5 ? '👍' : '💪';
-  var msg = pct === 1 ? 'Xuất sắc, đúng hết!' : pct >= .8 ? 'Rất tốt!' : pct >= .5 ? 'Khá rồi, cố thêm chút nữa nhé!' : 'Đừng nản, ôn lại thẻ từ rồi làm tiếp nhé!';
+  var msg = withName(pct === 1 ? 'Xuất sắc, {n} đúng hết rồi!' : pct >= .8 ? 'Rất tốt, {n}!' : pct >= .5 ? 'Khá rồi {n}, cố thêm chút nữa nhé!' : 'Đừng nản nha {n}, ôn lại thẻ từ rồi làm tiếp nhé!');
   return '<div class="qcard done"><div class="em">' + em + '</div><h3 style="margin-top:8px">Xong phần ' + p.key + ' · ' + esc(p.name) + '</h3>' +
     (ps ? '<p class="big" style="margin:8px 0">' + ps[0] + '/' + ps[1] + '</p>' : '') + '<p class="lead">' + msg + '</p>' +
     '<button class="btn" data-step="' + (i + 1) + '">' + (next.key === 'res' ? 'Xem kết quả 🏆' : 'Sang phần ' + next.key + ' · ' + esc(next.name) + ' →') + '</button></div>';
@@ -403,9 +413,13 @@ function qOneHtml(p, i){
   return h + '</div>';
 }
 function streakAt(p, pos){ var n = 0; for(var i = pos; i >= 0 && qDone(p.qs[i]) && right(p.qs[i]); i--) n++; return n; }
+function streakLine(st){
+  for(var i = 0; i < STREAK.length; i++) if(st >= STREAK[i][0]) return '<br><small>' + withName(STREAK[i][1]) + '</small>';
+  return '';
+}
 function cheerHtml(p, pos){
   var q = p.qs[pos], ok = right(q), h = '', st = streakAt(p, pos);
-  h += '<div class="cheer' + (ok ? '' : ' soft') + '">' + (ok ? pick(PRAISE, q.id) : pick(COMFORT, q.id)) + (ok && st >= 3 ? '<span class="streak">🔥 ' + st + ' câu đúng liên tiếp</span>' : '') + '</div>';
+  h += '<div class="cheer' + (ok ? '' : ' soft') + '">' + (ok ? pick(PRAISE, q.id) : pick(COMFORT, q.id)) + (ok && st >= 3 ? '<span class="streak">🔥 ' + st + ' câu đúng liên tiếp</span>' + streakLine(st) : '') + '</div>';
   var n = pos + 1;
   if(n % 10 === 0 && n < p.qs.length){
     var g = 0; for(var i = 0; i < n; i++) if(right(p.qs[i])) g++;
@@ -540,7 +554,7 @@ function cardsHtml(){
 }
 /* ----- kết quả ----- */
 function resultHtml(){
-  var sc = scoreNow(), h = '<div class="qcard done"><div class="em">🏆</div><h3 style="margin-top:6px">Kết quả Bài ' + B + '</h3><p class="big" style="margin:8px 0">' + sc.score + '/' + sc.max + '</p>';
+  var sc = scoreNow(), h = '<div class="qcard done"><div class="em">🏆</div><h3 style="margin-top:6px">' + (nick() ? 'Chúc mừng ' + esc(nick()) + '! · ' : '') + 'Kết quả Bài ' + B + '</h3><p class="big" style="margin:8px 0">' + sc.score + '/' + sc.max + '</p>';
   h += '<p class="msg">' + (S.review ? 'Lần ôn lại' : 'Lần làm chính') + (S.first ? ' · Điểm lần đầu gửi cô: ' + S.first.score + '/' + S.first.max : '') + '</p>';
   h += '<p class="msg' + (S.sent ? ' ok' : '') + '" id="sendMsg">' + (S.sent ? '✓ Đã gửi kết quả cho cô.' : (S.review ? '' : 'Đang gửi kết quả cho cô…')) + '</p></div>';
   var sk = {};
