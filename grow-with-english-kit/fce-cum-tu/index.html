@@ -176,7 +176,7 @@ h3{font:700 20px/1.3 var(--f-display);margin:0;color:var(--orange)}
 .tblwrap{max-height:420px;overflow:auto}
 </style>
 <script src="../config.js"></script>
-<script src="data.js"></script>
+<script src="data.js?v=20261124b"></script>
 </head>
 <body><div class="wrap">
 <header class="banner">
@@ -280,7 +280,9 @@ function build(){
 
   add({key:'A', kind:'listen', name:'Nghe và chọn', icon:'🎧', skill:'Nghe', lead:'Bấm loa để nghe (bấm <b>Chậm</b> để nghe chậm), rồi chọn cụm từ em nghe được. Chú ý tiểu từ / giới từ ở cuối.',
     qs:setA.map(function(i){
-      var it = IT[i], ph = bare(it), wrong = distract(it, POOL[it.k], 3, r).map(function(x){ return it.k === 'coll' ? ph.replace(new RegExp('^' + it.x + '\\b'), x) : it.h + ' ' + x; });
+      /* phương án nhiễu: thay đúng phần đáp án (tiểu từ / giới từ / động từ) trong cụm bằng từ khác */
+      var it = IT[i], ph = bare(it), re = new RegExp('\\b' + it.x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b'),
+          wrong = distract(it, POOL[it.k], 3, r).map(function(x){ return ph.replace(re, x); });
       var o = shuffle([ph].concat(wrong), r);
       return {it:it, o:o, a:o.indexOf(ph)};
     })});
