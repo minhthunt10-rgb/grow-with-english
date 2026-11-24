@@ -1,0 +1,5 @@
+# File gốc / đáp án / bản nén: chỉ giữ trên máy, không đưa lên web
+*.docx
+*.doc
+*.pdf
+*.zip
