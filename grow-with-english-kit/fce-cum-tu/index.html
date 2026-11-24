@@ -549,7 +549,7 @@ function resultHtml(){
     sc.wrong.forEach(function(w){ h += '<div><span class="qn">' + w.n + '</span> <b>' + esc(w.root) + '</b> = ' + esc(w.mean) + ' <span class="hint">(em chọn: ' + esc(w.got || '—') + ')</span></div>'; });
     h += '</div>';
   } else h += '<p class="msg ok" style="text-align:center">Tuyệt vời, em đúng hết cả bài!</p>';
-  h += '<div class="nav"><button class="btn ghost" data-act="redo">Làm lại để ôn</button>' + (B < LESSONS.length && LESSONS[B].items.length ? '<a class="btn" href="?b=' + (B + 1) + '">Sang Bài ' + (B + 1) + ' →</a>' : '<a class="btn" href="./">Danh sách bài</a>') + '</div>';
+  h += '<div class="nav"><button class="btn ghost" data-act="redo">Làm lại để ôn</button>' + (B < LESSONS.length && LESSONS[B].items.length ? '<a class="btn" href="?b=' + (B + 1) + '">Sang Bài ' + (B + 1) + ' →</a>' : '') + '</div>';
   return h;
 }
 function title(){ return 'Bài ' + B + ' · ' + LS.t; }
@@ -654,7 +654,7 @@ function send(){
 
 if(!B){ hub(); }
 else {
-  $('toList').hidden = false;
+  try{ $('toList').hidden = localStorage.getItem('gwe-gv') !== '1'; }catch(e){}
   build();
   KEY = 'gwe-fce2-b' + B;
   S = load(KEY) || fresh();
