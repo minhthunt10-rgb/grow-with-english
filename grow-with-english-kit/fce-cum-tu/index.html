@@ -442,7 +442,12 @@ function speakQ(q){
   if(s.ok) h += '<div class="ex"><p>✓ Chuẩn rồi! +1 điểm</p></div>';
   else if(s.t >= MAX_TRY) h += '<div class="ex bad"><p>Hết 3 lần thử. Em bấm loa nghe lại và đọc theo nhiều lần cho quen nhé.</p></div>';
   else if(s.t) h += '<p class="msg warn" style="margin-top:8px">Chưa khớp (từ đỏ là từ máy chưa nghe ra). Em nghe mẫu rồi thử lại.</p>';
-  return h + '</div><p class="msg" id="micMsg" style="text-align:center"></p>';
+  h += '</div><p class="msg" id="micMsg" style="text-align:center"></p>';
+  h += '<div class="warnbox" id="micHelp"' + ((S.micErr || 0) >= 2 || WEAK_BROWSER ? '' : ' hidden') + '>' +
+    (WEAK_BROWSER ? '<b>Trình duyệt em đang dùng thường không nhận được giọng nói.</b> ' : '<b>Máy chưa nghe được giọng em?</b> ') +
+    'Phần nói chạy tốt nhất trên <b>Google Chrome</b> (máy tính, Android) hoặc <b>Safari</b> (iPhone), và cần cho phép dùng micro. ' +
+    'Nếu vẫn không được, em có thể <button class="btn ghost sm" data-act="nospeak">Bỏ qua phần nói</button> — phần này sẽ không tính điểm và cô sẽ biết em chưa làm phần nói.</div>';
+  return h;
 }
 function speakIntro(p){
   if(SR && !S.noSpeak) return '';
@@ -450,25 +455,49 @@ function speakIntro(p){
     p.qs.map(function(q){ return '<div style="padding:6px 0;border-top:1px dashed var(--line)">' + sayBtn(spoken(q.it)) + ' <b>' + esc(bare(q.it)) + '</b> <span class="hint">' + esc(q.it.vi) + '</span></div>'; }).join('') +
     '<div class="nav"><span></span><button class="btn" data-step="' + (STEPS.indexOf(p) + 1) + '">Xem kết quả 🏆</button></div></div>';
 }
-function listenMic(i){
-  var it = IT[i], rec = new SR(), btn = $('mic'), out = $('micMsg');
-  rec.lang = 'en-GB'; rec.maxAlternatives = 5; rec.interimResults = false; rec.continuous = false;
-  var got = false;
-  btn.classList.add('rec'); btn.textContent = '● Đang nghe… nói đi em';
-  rec.onresult = function(e){
-    got = true;
+/* Giữ một đối tượng nghe dùng chung (Chrome có thể tự huỷ đối tượng cục bộ → lỗi "aborted"),
+   không cho hai lượt nghe chồng nhau, tự thử lại một lần khi bị ngắt. */
+var REC = null, LISTENING = false, STOPPED = false;
+var WEAK_BROWSER = /coc_coc|OPR\/|Opera/i.test(navigator.userAgent) || !!navigator.brave;
+function micMsg(cls, text){ var out = $('micMsg'); if(out){ out.className = 'msg ' + cls; out.innerHTML = text; } }
+function micIdle(){ LISTENING = false; var b = $('mic'); if(b){ b.classList.remove('rec'); b.textContent = '🎤 Bấm để nói'; } }
+function micFail(text){
+  S.micErr = (S.micErr || 0) + 1; save();
+  micMsg('warn', text);
+  if(S.micErr >= 2){ var box = $('micHelp'); if(box) box.hidden = false; }
+}
+function listenMic(i, retry){
+  if(LISTENING){ STOPPED = true; try{ REC.stop(); }catch(e){} return; }
+  if(CAN_SPEAK) speechSynthesis.cancel();
+  var it = IT[i], btn = $('mic'), got = false;
+  STOPPED = false;
+  REC = new SR();
+  REC.lang = 'en-GB'; REC.maxAlternatives = 5; REC.interimResults = false; REC.continuous = false;
+  REC.onstart = function(){ LISTENING = true; micMsg('', ''); };
+  REC.onresult = function(e){
+    got = true; S.micErr = 0;
     var alts = [].map.call(e.results[0], function(a){ return a.transcript; });
     var j = judge(spoken(it), alts), s = S.sp[i] || {t:0};
     s.t++; s.h = j.ok ? j.heard : alts[0]; s.hit = j.hit; if(j.ok) s.ok = 1;
-    S.sp[i] = s; save(); render(); sfx(j.ok ? 'ok' : 'bad');
+    S.sp[i] = s; save(); LISTENING = false; render(); sfx(j.ok ? 'ok' : 'bad');
   };
-  rec.onerror = function(e){
-    if(e.error === 'not-allowed' || e.error === 'service-not-allowed'){
-      if(confirm('Máy chưa cho dùng micro. Bấm OK để bỏ qua phần nói (không tính điểm), hoặc Huỷ để cho phép micro rồi thử lại.')){ S.noSpeak = true; save(); render(); }
-    } else if(out){ out.className = 'msg warn'; out.textContent = e.error === 'no-speech' ? 'Máy chưa nghe thấy gì. Em bấm lại và nói to, rõ hơn nhé.' : 'Có lỗi khi nghe (' + e.error + '). Em thử lại nhé.'; }
+  REC.onerror = function(e){
+    var er = e.error;
+    if(er === 'aborted'){
+      if(STOPPED) return;
+      if(!retry){ setTimeout(function(){ micIdle(); listenMic(i, true); }, 350); got = true; return; }
+      return micFail('Máy bị ngắt khi đang nghe. Em đợi loa đọc xong, rồi bấm <b>một lần</b> và nói nhé.');
+    }
+    if(er === 'no-speech') return micMsg('warn', 'Máy chưa nghe thấy gì. Em bấm lại, đưa máy gần miệng và nói to, rõ hơn nhé.');
+    if(er === 'audio-capture') return micFail('Máy không tìm thấy micro. Em kiểm tra tai nghe / micro rồi thử lại.');
+    if(er === 'not-allowed' || er === 'service-not-allowed') return micFail('Trình duyệt chưa cho dùng micro. Em bấm biểu tượng 🔒 cạnh địa chỉ trang → cho phép <b>Micro</b>, rồi tải lại trang.');
+    if(er === 'network') return micFail('Trình duyệt này không kết nối được dịch vụ nhận giọng nói. Em mở bài bằng <b>Google Chrome</b> (hoặc Safari trên iPhone) nhé.');
+    micFail('Có lỗi khi nghe (' + esc(er) + '). Em thử lại nhé.');
   };
-  rec.onend = function(){ if(!got && btn){ btn.classList.remove('rec'); btn.textContent = '🎤 Bấm để nói'; } };
-  try{ rec.start(); }catch(err){}
+  REC.onend = function(){ if(!got) micIdle(); else LISTENING = false; };
+  btn.classList.add('rec'); btn.textContent = '● Đang nghe… nói đi em';
+  LISTENING = true;
+  try{ REC.start(); }catch(err){ micIdle(); micFail('Chưa bật được micro. Em bấm lại sau 1 giây nhé.'); }
 }
 /* ----- ghép đôi ----- */
 function matchHtml(p, i){
@@ -576,6 +605,7 @@ document.addEventListener('click', function(e){
   if(t.dataset.card !== undefined){ var c = +t.dataset.card; S.c[c] = S.c[c] ? 0 : 1; if(S.c[c]) speak(spoken(IT[c])); save(); return render(); }
   if(t.dataset.act === 'start') return start();
   if(t.dataset.act === 'redo') return redo();
+  if(t.dataset.act === 'nospeak'){ if(confirm('Bỏ qua phần nói? Phần này sẽ không tính điểm.')){ if(LISTENING){ STOPPED = true; try{ REC.abort(); }catch(e){} } S.noSpeak = true; save(); render(); } return; }
   if(t.dataset.act === 'sfx'){ SFX = !SFX; try{ localStorage.setItem('gwe-fce-sfx', SFX ? '1' : '0'); }catch(e){} if(SFX) sfx('ok'); return render(); }
   if(t.dataset.act === 'resend') return send();
   if(t.dataset.mic !== undefined) return listenMic(+t.dataset.mic);
